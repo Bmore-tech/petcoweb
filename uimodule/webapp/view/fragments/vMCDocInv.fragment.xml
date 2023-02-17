@@ -1,0 +1,75 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Dialog id="ODialogvMCDocInv" contentWidth="55%" horizontalScrolling="false" showHeader="true" state="None" stretch="false" title="Seleccionar Documento de Inventario" type="Standard" verticalScrolling="true">
+        <content>
+            <Table id="oTableDialogDocInv" items="{path: 'oModel>/'}" sticky="ColumnHeaders,HeaderToolbar" fixedLayout="false" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar id="_IDGenToolbar1DialogDocInv" width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label id="_IDGenLabel1DialogDocInv" text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar1DialogDocInv" width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <ToolbarSpacer id="_IDGenToolbarSpacer1DialogDocInv" width=""/>
+                            <SearchField id="fSearchDialogDocInv" search="loadDocInvDialogDocInv" placeholder="Número de documento" showSearchButton="true" visible="true" width="auto"/>
+                            <OverflowToolbarButton id="_IDGenOverflowToolbarButton1DialogDocInv" text="Group" type="Transparent" icon="sap-icon://eraser" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="_IDGenColumn1DialogDocInv" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText1DialogDocInv" text="Id. Doc." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn2DialogDocInv" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText2DialogDocInv" text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn3DialogDocInv" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText3DialogDocInv" text="Centro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn4DialogDocInv" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText4DialogDocInv" text="Fecha de creación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn5DialogDocInv" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText5DialogDocInv" text="Creado por" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem1DialogDocInv" press="selectDocument" type="Active">
+                        <cells>
+                            <Text  text="{oModel>id}" tooltip="{oModel>id}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text  text="{oModel>desc}" tooltip="{oModel>desc}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text  text="{oModel>werks}" tooltip="{oModel>werks}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text  text="{oModel>createdDate}" tooltip="{oModel>createdDate}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text  text="{oModel>createdBy}" tooltip="{oModel>createdBy}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <beginButton/>
+        <buttons>
+            <Button text="Cerrar" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_dialogvMCDocInvClose"/>
+        </buttons>
+        <customHeader/>
+        <endButton/>
+        <subHeader/>
+    </Dialog>
+</core:FragmentDefinition>

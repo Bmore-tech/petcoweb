@@ -1,0 +1,107 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout"
+	xmlns:form="sap.ui.layout.form">
+	<Dialog id="oDialogTypeWarehouse" contentWidth="45%" horizontalScrolling="true" showHeader="true" state="None" stretch="false" title="Seleccionar Tipo de Almacén" type="Standard" verticalScrolling="true">
+		<content>
+			<VBox>
+				<items>
+					<Panel id="pFilter" height="auto" width="100%" headerText="Filtrar por..." expandable="true" expanded="true" expandAnimation="true" backgroundDesign="Solid">
+						<content>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title>
+									<core:Title text="" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Sociedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<ComboBox id="bukrsFrg" change="loadWerksFragment" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Centro" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<ComboBox id="werksFrg" change="loadLgortFragment" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Almacén" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<ComboBox id="lgortFrg" change="cleanTableFragment" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Tipo de Almacén" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<SearchField id="fSearchLgtyp" search="getLgTypOnly" />
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+						</content>
+					</Panel>
+					<Panel id="pTable" expanded="false" height="auto" width="100%" headerText="Resultados" expandable="true" expandAnimation="true" backgroundDesign="Solid">
+						<content>
+							<Table id="oTableLgTyp" selectionChange="select" items="{path: 'oModel>/'}" width="auto" noDataText="No data" mode="SingleSelectMaster" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+								<infoToolbar>
+									<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+										<content>
+											<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</content>
+									</Toolbar>
+								</infoToolbar>
+								<headerToolbar/>
+								<columns>
+									<Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Id de T. de Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem type="Active">
+										<cells>
+											<Text text="{oModel>lgTyp}" tooltip="{oModel>lgTyp}" />
+											<Text text="{oModel>ltypt}" tooltip="{oModel>ltypt}"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</content>
+					</Panel>
+				</items>
+			</VBox>
+		</content>
+		<beginButton/>
+		<buttons>
+			<Button press="_closeDialogTypeWareHouse" text="Cerrar" type="Transparent" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+		</buttons>
+		<customHeader/>
+		<endButton/>
+		<subHeader/>
+	</Dialog>
+</core:FragmentDefinition>

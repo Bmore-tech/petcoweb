@@ -1,0 +1,212 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vZone" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout">
+    <Page id="pZone" showHeader="true" showFooter="false" showNavButton="true" navButtonPress="returnAction">
+        <customHeader>
+			<Bar>
+				<contentLeft>
+					<Toolbar>
+						<Button id="bBack" enabled="true" type="Back" press="returnAction"
+							tooltip="Atrás" />
+                        <Button id="bNew" text="Nuevo" icon="sap-icon://create" enabled="true"
+							press="newRecord" tooltip="Nuevo" />
+						<Button id="bEdit" text="Editar" icon="sap-icon://request" enabled="false"
+							press="editRecord" tooltip="Editar" />
+						<Button id="bCancel" text="Cancelar" icon="sap-icon://cancel" enabled="false"
+							press="cancelEdition" tooltip="Cancelar" />
+						<Button id="bSave" text="Guardar" icon="sap-icon://save" enabled="false"
+							press="saveEdition" tooltip="Guardar" />
+						<Button id="bDelete" text="Borrar" icon="sap-icon://delete" enabled="false"
+							press="deleteRecord" tooltip="Eliminar" />
+						<Button text="Plantilla" icon="sap-icon://excel-attachment" enabled="true"
+							press="downloadTemplate" tooltip="Descargar plantilla" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label design="Bold" text="Zona" class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <content>
+            <VBox id="vbFrame" visible="false">
+				<VBox id="messagesBox" class="sapUiContentPadding">
+				</VBox>
+			</VBox>
+            <layout:BlockLayout background="Default" visible="true">
+                <layout:content>
+                    <layout:BlockLayoutRow scrollable="false">
+                        <layout:content>
+                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                <layout:content>
+                                    <form:Form width="100%" editable="true" visible="true">
+                                        <form:title>
+                                            <core:Title text="Datos para Zona" level="Auto"/>
+                                        </form:title>
+                                        <form:formContainers>
+                                            <form:FormContainer visible="true">
+                                                <form:formElements>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Id Zona" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <Input autocomplete="false" id="zoneId" type="Number" valueHelpRequest="showModalZones" showValueHelp="true" enabled="true" visible="true" width="auto" valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0" placeholder="Consulta Zona"/>
+                                </form:fields>
+                            </form:FormElement>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Descripción" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <TextArea id="description" rows="2" cols="20" maxLength="0" wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
+                                </form:fields>
+                            </form:FormElement>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Sociedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <ComboBox id="bukrs" change="loadWerks" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                </form:fields>
+                            </form:FormElement>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Centro" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <ComboBox id="werks" change="loadLgort" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                </form:fields>
+                            </form:FormElement>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Almacén" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <ComboBox id="lgort" change="setfocusOnAddPos" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                </form:fields>
+                            </form:FormElement>
+                        </form:formElements>
+                                                <form:title/>
+                                            </form:FormContainer>
+                                        </form:formContainers>
+                                        <form:layout>
+                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                        </form:layout>
+                                    </form:Form>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                <layout:content>
+                                    <form:Form width="100%" editable="true" visible="true">
+                                        <form:title>
+                                            <core:Title text="Datos de Edición" level="Auto" class="sapUiResponsiveMargin"/>
+                                        </form:title>
+                                        <form:formContainers>
+                                            <form:FormContainer visible="true">
+                                                <form:formElements>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Creado por" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <Input autocomplete="false" id="createdBy" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                </form:fields>
+                            </form:FormElement>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Modificado por" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <Input autocomplete="false" id="modifiedBy" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                </form:fields>
+                            </form:FormElement>
+                        </form:formElements>
+                                                <form:title/>
+                                            </form:FormContainer>
+                                        </form:formContainers>
+                                        <form:layout>
+                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                        </form:layout>
+                                    </form:Form>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                        </layout:content>
+                    </layout:BlockLayoutRow>
+                </layout:content>
+            </layout:BlockLayout>
+            <core:HTML
+					content='&lt;input type="file" id="fileZone"
+					style="position: fixed; top: -100em" multiple="false"
+					onchange="sap.ui.getCore().byId(&apos;container-inveweb---vZone&apos;).getController().uploadTemplate();"
+					&gt;'>
+				</core:HTML>
+            <Table id="oTable" items="{path: 'modelTable>/'}" sticky="ColumnHeaders,HeaderToolbar" fixedLayout="false" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar>
+                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <Title text="Posiciones" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                            <ToolbarSpacer width=""/>
+                            <OverflowToolbarButton id="bExport" text="Sort" type="Transparent" icon="sap-icon://download" tooltip="Descargar datos" press="exportData" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bUpload" text="Filter" type="Transparent" icon="sap-icon://upload" tooltip="Cargar plantilla" press="openFilePicker" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bAddPosition" text="Group" type="Accept" icon="sap-icon://add" tooltip="Agregar posición" press="addPosition" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bDeletePosition" text="Settings" type="Reject" icon="sap-icon://less" tooltip="Borrar posiciones" press="removePosition" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Tipo Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Ubicación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Indicador IM/WM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Secuencia" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem press="pressRowTable" type="Navigation">
+                        <cells>
+                            <Text text="{modelTable>lgtyp}" tooltip="{modelTable>lgtypDesc}" />
+                            <Text text="{modelTable>lgpla}" tooltip="{modelTable>lgpla}" />
+                            <Text text="{modelTable>imwm}" />
+                            <Input autocomplete="false" type="Number" value="{modelTable>secuency}" editable="{modelTable>editable}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer>
+            <OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
+                <content>
+                    <ToolbarSpacer width=""/>
+                    <Button text="Save" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                    <Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                </content>
+            </OverflowToolbar>
+        </footer>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

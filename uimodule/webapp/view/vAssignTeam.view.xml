@@ -1,0 +1,133 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vAssignTeam" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core">
+    <Page id="pAssignTeam" showHeader="true" title="Usuarios Asignados" showFooter="true" showNavButton="true" navButtonPress="returnAction">
+        <content>
+            <VBox id="vbFrame" visible="false">
+				<VBox id="messagesBox" class="sapUiContentPadding"/>
+				</VBox>
+                <layout:BlockLayout background="Default" visible="true">
+                <layout:content>
+                    <layout:BlockLayoutRow scrollable="false">
+                        <layout:content>
+                            <layout:BlockLayoutCell width="1" title="Datos de Documento" titleAlignment="Begin" titleLevel="Auto" class="sapUiResponsiveMargin">
+                                <layout:content>
+                                    <Label text="Documento:" design="Standard" width="88px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Text id="docInvId" text="" width="348px" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Label text="Sociedad:" design="Standard" width="88px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Text id="bukrs" text="" width="348px" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Label text="Centro:" design="Standard" width="88px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Text id="werks" text="" width="348px" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Label text="Tipo:" design="Standard" width="88px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Text id="type" text="" width="348px" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Label text="Status:" design="Standard" width="88px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Text id="status" text="" width="348px" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                            <layout:BlockLayoutCell width="1" title="Datos de Ruta" titleAlignment="Begin" titleLevel="Auto" class="sapUiResponsiveMargin">
+                                <layout:content>
+                                    <Label text="Id Ruta:" design="Standard" width="68px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Text id="routeId" text="" width="338px" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Label text="Desc. Ruta:" design="Standard" width="78px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <Text id="rdesc" text="" width="328px" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                            <layout:BlockLayoutCell width="1" title="Datos de Zona" titleAlignment="Begin" titleLevel="Auto" class="sapUiResponsiveMargin">
+                                <layout:content>
+                                    <Label text="Zona:" design="Standard" width="98px" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <TextArea id="zoneArea" editable="false" value="" width="328px" growing="true"/>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                        </layout:content>
+                    </layout:BlockLayoutRow>
+                </layout:content>
+            </layout:BlockLayout>
+            <Table id="oTable" items="{path: 'oModel>/'}" selectionChange="getData" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar/>
+                <columns>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Doc. Interno" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Id Tarea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Fecha creación tarea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Fecha tarea concluida" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="lblTeam1A" text="Asignado a" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="cTeam1B" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="false">
+                        <header>
+                            <Text  text="Conteo 1B" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" />
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="cTeam2" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="false">
+                        <header>
+                            <Text  text="Conteo 2" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" />
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="cTeam3" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="false">
+                        <header>
+                            <Text  text="Conteo 3" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" />
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="cTeamX" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="false">
+                        <header>
+                            <Text  text="Conteo Especial" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" />
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Status Conteo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem press="selectRow" type="Active">
+                        <cells>
+                            <Text text="{oModel>docInvId}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text text="{oModel>taskId}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text text="{oModel>createdTaskDate}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Link text="{oModel>uploadTaskDate}" tooltip="{oModel>uploadTaskDate}" press="concludeTask" enabled="{oModel>enableUploadDate}"/>
+                            <Link text="{oModel>team1A}" press="handleTeam1A" tooltip="{oModel>team1A}" enabled="{oModel>enableTeam1A}"/>
+                            <Link text="{oModel>team1B}" tooltip="{oModel>team1B}" press="handleTeam1B" enabled="{oModel>enableTeam1B}"/>
+                            <Link text="{oModel>team2}" tooltip="{oModel>team2}" press="handleTeam2" enabled="{oModel>enableTeam2}"/>
+                            <Link text="{oModel>team3}" tooltip="{oModel>team3}" press="handleTeam3" enabled="{oModel>enableTeam3}" />
+                            <Link text="{oModel>teamX}" tooltip="{oModel>teamX}" press="handleTeamX" enabled="{oModel>enableTeamX}" />
+                            <ObjectStatus icon="{oModel>icon}" text="{oModel>textClose}" state="{oModel>state}" textDirection="Inherit" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

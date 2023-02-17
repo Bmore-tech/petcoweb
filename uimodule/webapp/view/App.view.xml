@@ -1,0 +1,51 @@
+<mvc:View controllerName="com.bmore.inveweb.controller.App"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:tnt="sap.tnt"
+	xmlns:f="sap.f">
+	<tnt:ToolPage id="app" class="sapUiDemoToolPage" sideExpanded="false">
+		<tnt:header>
+			<f:ShellBar id="shell_bar_app" 
+			showNavButton="false" 
+			navButtonPressed="_onNavBack" title="Sistema de Conteo de Inventarios" 
+			showMenuButton="false" 
+			homeIcon="./resources/img/logo.png" 
+			showCopilot="false" 
+			showSearch="false" 
+			showNotifications="false" 
+			menuButtonPressed="onSideNavButtonPress" 
+			showProductSwitcher="false" 
+			productSwitcherPressed="fnOpen" 
+			avatarPressed="handlePopoverPress" 
+			notificationsNumber="2">
+				<f:profile>
+					<f:Avatar id="avatar" initials=""/>
+				</f:profile>
+			</f:ShellBar>
+		</tnt:header>
+		<tnt:sideContent>
+			<tnt:SideNavigation id="sideNavigation">
+				<tnt:item >
+					<tnt:NavigationList id="nvlContainer" width="auto" expanded="false">
+						<tnt:items >
+							<!-- <tnt:NavigationListItem icon="sap-icon://crm-service-manager" expanded="true" hasExpander="true" text="Gestion" id="side-warehouse-navigation" visible="true"/> -->
+						</tnt:items>
+					</tnt:NavigationList>
+				</tnt:item>
+				<tnt:fixedItem/>
+				<tnt:footer>
+					<tnt:NavigationList width="auto" expanded="true">
+						<tnt:items>
+							<tnt:NavigationListItem expanded="false" hasExpander="false" text="Powered by B-more">
+								<tnt:items/>
+							</tnt:NavigationListItem>
+						</tnt:items>
+					</tnt:NavigationList>
+				</tnt:footer>
+			</tnt:SideNavigation>
+		</tnt:sideContent>
+		<tnt:mainContents>
+			<App id="mainContents"/>
+		</tnt:mainContents>
+	</tnt:ToolPage>
+</mvc:View>

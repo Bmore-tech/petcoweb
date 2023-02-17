@@ -1,0 +1,74 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vRecountSap" xmlns="sap.m">
+    <Page showHeader="true" showFooter="true" showNavButton="true">
+        <customHeader id="cHeader">
+			<Bar>
+				<contentLeft>
+					<Toolbar>
+						<Button id="bBack" enabled="true" type="Back"
+							press="returnAction" tooltip="Atrás" />
+							<Button id="bRecount" icon="sap-icon://process"
+							enabled="false" press="askRecountSap" tooltip="Recontar" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label design="Bold" text="Asignar grupo para reconteo"
+						class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <content>
+            <Label text="Documento de Inventario:" design="Standard" width="218px" required="false" textAlign="Begin" textDirection="Inherit" visible="true" class="sapUiLargeMarginTop sapUiLargeMarginBegin"/>
+            <Input autocomplete="false" id="docIdRecount" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiMediumMarginTop"/>
+            <Table id="oTable" items="{path: 'oModel>/'}" fixedLayout="false" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar/>
+                <columns>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Documento Interno" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Ruta" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Asignado a" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="cIsRecount" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Activar para reconteo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Active">
+                        <cells>
+                            <Text text="{oModel>docInvId}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text text="{oModel>route}" tooltip="{oModel>route}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Button text="{oModel>user}" tooltip="{oModel>user}" type="Emphasized" press="showModalAvailableUsers" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                            <Switch state="{oModel>isRecount}" customTextOff="No" customTextOn="Si" type="Default" enabled="{oModel>enable}" change="onSelectRecount" visible="true"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

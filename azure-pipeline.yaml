@@ -1,0 +1,55 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pr:
+  branches:
+    include:
+      - master
+
+resources:
+  repositories:
+  - repository: appsectemplates
+    type: git
+    name: DevSecOps/DevSecOps
+    # ref: sonarcloud
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- checkout: self
+- checkout: appsectemplates
+- template: pipeline_templates/Security_tasks/prepareSonarCloud.yml@appsectemplates
+  parameters:
+    SCServiceConnection: 'SonarcloudServer'
+    SCProjectKey: 'MAZ_Logistic_Inventarios_InvCic_frontend' 
+    SCProjectName: 'MAZ_Logistic_Inventarios_InvCic_frontend'
+    # SCBranchName: '$(Build.SourceBranchName)'
+    # SCBaseDirPath: './$(Build.Repository.Name)'
+
+- template: pipeline_templates/secure_code_scan.yml@appsectemplates
+  parameters:
+    
+    scanSonarCloud: true
+    sonarCloudGate: false
+    SCServiceConnection: 'SonarcloudServer'
+
+    scanSnyk: false
+    SKFailOnIssues: true
+    SkServiceConnection: 'SnykServer'
+    SkOrganization: '9134a366-363d-4605-866c-42e698f2f7f1'
+    SkAdditionalArgs: '--all-projects --detection-depth=4'
+    
+    scanGitleaks: false
+    #GitHubRepoName: 'MAZ_InvCic_frontend'
+
+    scanCheckmarx: true
+    CxServiceConnection: 'CheckmarxServer'
+    CxPreset: 'ASA_SDLC_Ready'
+    CxEnableSyncScan: false
+    CxEnableThreshold: false
+    CxTeamName: '/CxServer/AB-InBev/MAZ/Logistics_Inventarios_Ciclicos'
+
+

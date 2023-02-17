@@ -1,0 +1,261 @@
+<mvc:View controllerName="com.bmore.inveweb.controller.vConciliacionFrescura"
+  xmlns="sap.m"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:form="sap.ui.layout.form"
+  xmlns:core="sap.ui.core"
+  xmlns:layout="sap.ui.layout">
+
+  <OverflowToolbar width="auto" height="46px" design="Solid" visible="true" enabled="true">
+    <content>
+      <OverflowToolbarButton text="Action" type="Default" icon="sap-icon://navigation-left-arrow" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Home" iconDensityAware="false"/>
+    </content>
+  </OverflowToolbar>
+  <IconTabBar id="iconTabBar" select=".onQuickFilter" headerBackgroundDesign="Transparent">
+    <items>
+      <IconTabFilter id="total_count" key="PT" showAll="true" count="" text="Inventario de PT"/>
+      <IconTabSeparator/>
+      <IconTabFilter id="loss" key="Pérdida" icon="sap-icon://unpaid-leave" iconColor="Neutral" count="" text="Pérdida"/>
+      <IconTabFilter id="agrupado" key="AGRUPADO" icon="sap-icon://target-group" iconColor="Contrast" count="" text="Agrupado"/>
+      <IconTabFilter id="fuera" key="FUERA ESP." icon="sap-icon://message-error" iconColor="Negative" count="" text="Fuera De Esp"/>
+      <IconTabFilter id="riesgo" key="EN RIESGO" icon="sap-icon://message-warning" iconColor="Critical" count="" text="En Riesgo"/>
+      <IconTabFilter id="en_tiempo" key="EN TIEMPO" icon="sap-icon://message-success" iconColor="Positive" count="" text="En Tiempo"/>
+      <IconTabFilter id="libre" key="LIBRE" icon="sap-icon://unlocked" iconColor="Positive" count="" text="LIBRE/FUERA DE RIESGO" visible="false"/>
+      <IconTabFilter id="bloqueado" key="BLOQUEADO" icon="sap-icon://locked" iconColor="Default" count="" text="Bloqueado" visible="false"/>
+    </items>
+    <content>
+      <layout:BlockLayout id="_IDGenBlockLayout1" background="Default" visible="true">
+          <layout:content>
+              <layout:BlockLayoutRow id="_IDGenBlockLayoutRow1" scrollable="false">
+                  <layout:content>
+                      <layout:BlockLayoutCell id="_IDGenBlockLayoutCell1" width="2" title="Documento Frescura" titleAlignment="Begin" titleLevel="Auto">
+                          <layout:content>
+                              <Label id="_IDGenLabel2" text="Documento de Inventario:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                              <Input autocomplete="false" id="docInvId" type="Text" showValueHelp="true" valueHelpRequest="showMCFreshDocInv" placeholder="Buscar documento" enabled="true" visible="true" width="99%" valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                              <Label id="_IDGenLabel3" text="Sociedad / Centro:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                              <Input autocomplete="false" id="bukrs" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiTinyMarginEnd"/>
+                              <Input autocomplete="false" id="werks" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                          </layout:content>
+                      </layout:BlockLayoutCell>
+                      <layout:BlockLayoutCell id="_IDGenBlockLayoutCell2" width="2" title="Datos de Edición" titleAlignment="Begin" titleLevel="Auto">
+                          <layout:content>
+                              <Label id="_IDGenLabel6" text="Documento de / Registro de Frescura por:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                              <Input autocomplete="false" id="createdBy" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiTinyMarginEnd"/>
+                              <Input autocomplete="false" id="countedBy" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                              <Label id="_IDGenLabel4" text="Fecha Creación / Fecha de Cierre:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                              <Input autocomplete="false" id="dStart" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiTinyMarginEnd"/>
+                              <Input autocomplete="false" id="dEnd" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                          </layout:content>
+                      </layout:BlockLayoutCell>
+                  </layout:content>
+              </layout:BlockLayoutRow>
+          </layout:content>
+      </layout:BlockLayout>
+      <Table id="oTableFresc" items="{path: 'oModel>/'}" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+        <infoToolbar>
+          <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+            <content>
+              <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </content>
+          </Toolbar>
+        </infoToolbar>
+        <headerToolbar>
+          <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+            <content>
+              <Title text="Posiciones" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+              <ToolbarSpacer width=""/>
+            </content>
+          </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Centro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Ubicación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Teórico" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="U.M" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Lote" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Fecha Frescura" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Hora de Actualización" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Estatus de PT" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Nota" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+        </columns>
+        <items>
+          <ColumnListItem type="Active">
+            <cells>
+              <Text text="{oModel>werks}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>lgort} - {oModel>lgobe}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>lgpla}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>matnr} - {oModel>maktx}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>counted}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>theoric}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>meins}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>lote}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>fecProd}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>countDate}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <ObjectStatus text="{oModel>estatusPt}" state="{oModel>state}"/>
+              <Text text="{oModel>note}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+      <Table id="oTableGroupedFresc" items="{path: 'oModel>/'}" visible="false" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+        <infoToolbar>
+          <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+            <content>
+              <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </content>
+          </Toolbar>
+        </infoToolbar>
+        <headerToolbar>
+          <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+            <content>
+              <Title text="Posiciones" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+              <Text id="txtTheoric" text="Teorico SAP por Lote"/>
+              <ToolbarSpacer width=""/>
+              <ToggleButton id="btnDesestimarLote" press="desestimar" tooltip="Al desetimar lote, se mostrará el stock por almacén del material" text="Desestimar Lote" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+            </content>
+          </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column id="colTheoricLote" width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Teórico" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column id="colTheoricLgort" width="auto" hAlign="Left" vAlign="Top" visible="false" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Teórico" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="U.M" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Lote" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Fecha Frescura" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Estatus de PT" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="% Exactitud" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+        </columns>
+        <items>
+          <ColumnListItem type="Active">
+            <cells>
+              <Text text="{oModel>lgort} - {oModel>lgobe}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>matnr} - {oModel>maktx}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>counted}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>theoric}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>theoricAlmacen}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>meins}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>lote}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <Text text="{oModel>fecProd}" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+              <ObjectStatus text="{oModel>estatusPt}" state="{oModel>state}"/>
+              <Text text="{oModel>accuracy}%" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </content>
+  </IconTabBar>
+</mvc:View>

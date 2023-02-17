@@ -1,0 +1,493 @@
+{
+  "_version": "1.21.0",
+  "sap.app": {
+    "id": "com.bmore.inveweb",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}"
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "rootView": {
+      "viewName": "com.bmore.inveweb.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "idAppControl"
+    },
+    "dependencies": {
+      "minUI5Version": "1.60.0",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.bmore.inveweb.i18n.i18n"
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "/css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "com.bmore.inveweb.view",
+        "controlId": "mainContents",
+        "controlAggregation": "pages",
+        "async": true,
+        "bypassed": {
+          "target": "notFound"
+        }
+      },
+      "routes": [
+        {
+          "name": "Login",
+          "pattern": "",
+          "titleTarget": "",
+          "greedy": false,
+          "target": ["Login"]
+        },
+        {
+          "name": "Home",
+          "pattern": "Home",
+          "target": ["TargetHome"]
+        },
+        {
+          "pattern": "dashboarFrescura",
+          "name": "dashboardFrescura",
+          "target": ["dashboardFrescura"]
+        },
+        {
+          "pattern": "inventarioPT",
+          "name": "inventarioPT",
+          "target": ["inventarioPT"]
+        },
+        {
+          "pattern": "Products/{objectId}",
+          "name": "object",
+          "target": ["object"]
+        },
+        {
+          "pattern": "relevantes",
+          "name": "relevantes",
+          "target": ["relevantes"]
+        },
+        {
+          "pattern": "highLight",
+          "name": "highLight",
+          "target": ["highLight"]
+        },
+        {
+          "pattern": "resumen",
+          "name": "resumen",
+          "target": ["resumen"]
+        },
+        {
+          "pattern": "zone",
+          "name": "zone",
+          "target": ["zone"]
+        },
+        {
+          "pattern": "assignMaterial",
+          "name": "assignMaterial",
+          "target": ["assignMaterial"]
+        },
+        {
+          "pattern": "tipoAlmacen",
+          "name": "tipoAlmacen",
+          "target": ["tipoAlmacen"]
+        },
+        {
+          "pattern": "grupos",
+          "name": "grupos",
+          "target": ["grupos"]
+        },
+        {
+          "pattern": "rutas",
+          "name": "rutas",
+          "target": ["rutas"]
+        },
+        {
+          "pattern": "multiAlmacen",
+          "name": "multiAlmacen",
+          "target": ["multiAlmacen"]
+        },
+        {
+          "pattern": "docInv",
+          "name": "docInv",
+          "target": ["docInv"]
+        },
+        {
+          "pattern": "assignTeam",
+          "name": "assignTeam",
+          "target": ["assignTeam"]
+        },
+        {
+          "pattern": "materiales",
+          "name": "materiales",
+          "target": ["materiales"]
+        },
+        {
+          "pattern": "systemClass",
+          "name": "systemClass",
+          "target": ["systemClass"]
+        },
+        {
+          "pattern": "category",
+          "name": "category",
+          "target": ["category"]
+        },
+        {
+          "pattern": "justifiCat",
+          "name": "justifiCat",
+          "target": ["justifiCat"]
+        },
+        {
+          "pattern": "urban",
+          "name": "urban",
+          "target": ["urban"]
+        },
+        {
+          "pattern": "returnableValuation",
+          "name": "returnableValuation",
+          "target": ["returnableValuation"]
+        },
+        {
+          "pattern": "valuationClass",
+          "name": "valuationClass",
+          "target": ["valuationClass"]
+        },
+        {
+          "pattern": "conciliation",
+          "name": "conciliation",
+          "target": ["conciliation"]
+        },
+        {
+          "pattern": "conciSap",
+          "name": "conciSap",
+          "target": ["conciSap"]
+        },
+        {
+          "pattern": "vJustify",
+          "name": "vJustify",
+          "target": ["vJustify"]
+        },
+        {
+          "pattern": "vJustifyLgpla",
+          "name": "vJustifyLgpla",
+          "target": ["vJustifyLgpla"]
+        },
+        {
+          "pattern": "vRepository",
+          "name": "vRepository",
+          "target": ["vRepository"]
+        },
+        {
+          "pattern": "vRecountSap",
+          "name": "vRecountSap",
+          "target": ["vRecountSap"]
+        },
+        {
+          "pattern": "vDashboard",
+          "name": "vAlpha",
+          "target": ["vAlpha"]
+        },
+        {
+					"pattern": "vDashboard/{countyId}",
+					"name": "vBeta",
+					"target": ["vBeta"]
+				},
+        {
+					"pattern": "vPriceMatnr",
+					"name": "vPriceMatnr",
+					"target": ["vPriceMatnr"]
+				},
+        {
+					"pattern": "vManageDRV",
+					"name": "vManageDRV",
+					"target": ["vManageDRV"]
+				},
+        {
+					"pattern": "vDashboard/{countryRegion}/{idDrv}/{dvr}",
+					"name": "vGamma",
+					"target": ["vGamma"]
+				},
+        {
+					"pattern": "vDashboard/{countryRegion}/{idDrv}/{dvr}/{werks}/{werksDesc}",
+					"name": "vDelta",
+					"target": ["vDelta"]
+				},
+        {
+					"pattern": "vExplosion",
+					"name": "vExplosion",
+					"target": ["vExplosion"]
+				},
+        {
+					"pattern": "vDocFrescura",
+					"name": "vDocFrescura",
+					"target": ["vDocFrescura"]
+				},
+        {
+					"pattern": "vDashboardFrescura",
+					"name": "vDashboardFrescura",
+					"target": ["vDashboardFrescura"]
+				},
+        {
+					"pattern": "vDetallesFrescura",
+					"name": "vDetallesFrescura",
+					"target": ["vDetallesFrescura"]
+				},
+        {
+					"pattern": "vInventarioPTFrescura",
+					"name": "vInventarioPTFrescura",
+					"target": ["vInventarioPTFrescura"]
+				},
+        {
+					"pattern": "vConciliacionDocumentoFrescura",
+					"name": "vConciliacionDocumentoFrescura",
+					"target": ["vConciliacionDocumentoFrescura"]
+				},
+        {
+					"pattern": "vReglasFrescura",
+					"name": "vReglasFrescura",
+					"target": ["vReglasFrescura"]
+				},
+        {
+          "pattern": "vContingencyTask",
+          "name": "vContingencyTask",
+          "target": ["vContingencyTask"]
+        }
+
+      ],
+      "targets": {
+        "Login": {
+          "viewType": "XML",
+          "viewLevel": 1,
+          "viewId": "Login",
+          "viewName": "Login"
+        },
+        "TargetHome": {
+          "viewType": "XML",
+          "viewLevel": 2,
+          "viewId": "Home",
+          "viewName": "Home"
+        },
+        "dashboardFrescura": {
+          "viewName": "DashboardFrescura",
+          "viewId": "dashboardFrescura",
+          "viewLevel": 2,
+          "title": "dashboardFrescura"
+        },
+        "inventarioPT": {
+          "viewName": "InventarioPT",
+          "viewId": "inventarioPT",
+          "viewLevel": 2,
+          "title": "{i18n>inventarioPTViewTitle}"
+        },
+        "object": {
+          "viewName": "Object",
+          "viewId": "object",
+          "viewLevel": 2,
+          "title": "{i18n>objectViewTitle}"
+        },
+        "objectNotFound": {
+          "viewName": "ObjectNotFound",
+          "viewId": "objectNotFound"
+        },
+        "relevantes": {
+          "viewName": "Relevantes",
+          "viewId": "relevantes"
+        },
+        "highLight": {
+          "viewName": "HigLight",
+          "viewId": "HigLight"
+        },
+        "resumen": {
+          "viewName": "Resumen",
+          "viewId": "resumen"
+        },
+        "notFound": {
+          "viewName": "NotFound",
+          "viewId": "notFound"
+        },
+        "zone": {
+          "viewName": "vZone",
+          "viewId": "vZone"
+        },
+        "assignMaterial": {
+          "viewName": "vAssignMaterial",
+          "viewId": "vAssignMaterial"
+        },
+        "tipoAlmacen": {
+          "viewName": "vTypeWareHouse",
+          "viewId": "vTypeWareHouse"
+        },
+        "grupos": {
+          "viewName": "vGroups",
+          "viewId": "vGroups"
+        },
+        "rutas": {
+          "viewName": "vRoute",
+          "viewId": "vRoute"
+        },
+        "multiAlmacen": {
+          "viewName": "vMultiAlmacen",
+          "viewId": "vMultiAlmacen"
+        },
+        "docInv": {
+          "viewName": "vInvDocument",
+          "viewId": "vInvDocument"
+        },
+        "assignTeam": {
+          "viewName": "vAssignTeam",
+          "viewId": "vAssignTeam"
+        },
+        "materiales": {
+          "viewName": "vMaterialCatalog",
+          "viewId": "vMaterialCatalog"
+        },
+        "systemClass": {
+          "viewName": "vClassificationSystem",
+          "viewId": "vClassificationSystem"
+        },
+        "category": {
+          "viewName": "vCategory",
+          "viewId": "vCategory"
+        },
+        "justifiCat": {
+          "viewName": "vJustificationCat",
+          "viewId": "vJustificationCat"
+        },
+        "urban": {
+          "viewName": "vUrban",
+          "viewId": "vUrban"
+        },
+        "returnableValuation": {
+          "viewName": "vReturnableValuation",
+          "viewId": "vReturnableValuation"
+        },
+        "valuationClass": {
+          "viewName": "vValuationClass",
+          "viewId": "vValuationClass"
+        },
+        "conciliation": {
+          "viewName": "vConciliation",
+          "viewId": "vConciliation"
+        },
+        "conciSap": {
+          "viewName": "vConsSap",
+          "viewId": "vConsSap"
+        },
+        "vJustify": {
+          "viewName": "vJustify",
+          "viewId": "vJustify"
+        },
+        "vJustifyLgpla": {
+          "viewName": "vJustifyLgpla",
+          "viewId": "vJustifyLgpla"
+        },
+        "vRepository": {
+          "viewName": "vRepository",
+          "viewId": "vRepository"
+        },
+        "vRecountSap": {
+          "viewName": "vRecountSap",
+          "viewId": "vRecountSap"
+        },
+        "vAlpha": {
+          "viewName": "vAlpha",
+          "viewId": "vAlpha"
+        },
+        "vBeta": {
+          "viewName": "vBeta",
+          "viewId": "vBeta",
+          "viewLevel": 3
+        },
+        "vPriceMatnr": {
+          "viewName": "vPriceMatnr",
+          "viewId": "vPriceMatnr"
+        },
+        "vManageDRV": {
+          "viewName": "vManageDRV",
+          "viewId": "vManageDRV"
+        },
+        "vGamma": {
+          "viewName": "vGamma",
+          "viewId": "vGamma",
+          "viewLevel": 4
+        },
+        "vDelta": {
+          "viewName": "vDelta",
+          "viewId": "vDelta",
+          "viewLevel": 5
+        },
+        "vExplosion": {
+          "viewName": "vExplosion",
+          "viewId": "vExplosion"
+        },
+        "vDocFrescura": {
+          "viewName": "vDocFrescura",
+          "viewId": "vDocFrescura"
+        },
+        "vDashboardFrescura": {
+          "viewName": "vDashboardFrescura",
+          "viewId": "vDashboardFrescura"
+        },
+        "vDetallesFrescura": {
+          "viewName": "vDetallesFrescura",
+          "viewId": "vDetallesFrescura"
+        },
+        "vInventarioPTFrescura": {
+          "viewName": "vInventarioPTFrescura",
+          "viewId": "vInventarioPTFrescura"
+        },
+        "vConciliacionDocumentoFrescura": {
+          "viewName": "vConciliacionDocumentoFrescura",
+          "viewId": "vConciliacionDocumentoFrescura"
+        },
+        "vReglasFrescura": {
+          "viewName": "vReglasFrescura",
+          "viewId": "vReglasFrescura"
+        },
+        "vContingencyTask": {
+          "viewName": "vContingencyTask",
+          "viewId": "vContingencyTask"
+        }
+      }
+    }
+  }
+}

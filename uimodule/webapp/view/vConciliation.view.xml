@@ -1,0 +1,303 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vConciliation" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
+    <Page id="pConciliation" showHeader="true" showFooter="true" showNavButton="true" navButtonPress="returnAction">
+        <customHeader>
+			<Bar id="_IDGenBar1">
+				<contentLeft>
+					<Toolbar id="_IDGenToolbar1">
+						<Button id="bBack" enabled="true" type="Back"
+							press="returnAction" tooltip="Atrás" />
+						<Button id="bCount" text="Reconteo Mensual"
+							icon="sap-icon://collections-management" enabled="false"
+							press="recount" tooltip="Recontar" />
+						<!-- <Button id="bSave" icon="sap-icon://permission"
+							enabled="false" press="closeInvDoc"
+							tooltip="Cerrar Documento de Inventario" /> -->
+						<Button id="bRefresh" text="Recargar Documentos" icon="sap-icon://refresh"
+							enabled="false" tooltip="Refrescar Documentos de Inventario"
+							press="refresh" />
+						<Button id="bSpecial" text="Reconteo Diario" icon="sap-icon://inspect"
+							enabled="false" tooltip="Conteo Especial" press="specialCount" />
+						<Button id="bExport" text="Descargar a Excel" icon="sap-icon://download"
+							enabled="true" tooltip="Descargar conteos"
+							press="exportConciliation" />
+						<Button id="bSaveMassive" text="Cerrar Documento" icon="sap-icon://locked"
+							enabled="false" press="massiveClose" tooltip="Cierre Masivo" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label id="_IDGenLabel1" design="Bold" text="Conciliación" class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <content>
+            <VBox id="vbFrame" visible="false">
+				<VBox id="messagesBox" class="sapUiContentPadding"/>
+			</VBox>
+            <IconTabBar id="tabBarSections" expandable="true" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="tabC">
+                <items>
+                    <IconTabFilter id="_IDGenIconTabFilter1" icon="sap-icon://decision" iconColor="Default" text="Conciliación" tooltip="Conciliación" key="tabC" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                        <content>
+                            <layout:BlockLayout id="_IDGenBlockLayout1" background="Default" visible="true">
+                                <layout:content>
+                                    <layout:BlockLayoutRow id="_IDGenBlockLayoutRow1" scrollable="false">
+                                        <layout:content>
+                                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell1" width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <form:Form id="_IDGenForm1" width="100%" editable="true" visible="true">
+                                                        <form:title>
+                                                            <core:Title id="_IDGenTitle1" text="Datos de Conciliación" level="Auto"/>
+                                                        </form:title>
+                                                        <form:formContainers>
+                                                            <form:FormContainer id="_IDGenFormContainer1" visible="true">
+                                                                <form:formElements>
+                                                                    <form:FormElement id="_IDGenFormElement1" visible="true">
+                                                                        <form:label>
+                                                                            <Label id="_IDGenLabel2" text="Documento de Inventario" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <ComboBox id="idConc" change="loadConciliationIDChilds" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement id="_IDGenFormElement2" visible="true">
+                                                                        <form:label>
+                                                                            <Label id="_IDGenLabel3" text="Sociedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="bukrs" placeholder="sociedad" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement id="_IDGenFormElement3" visible="true">
+                                                                        <form:label>
+                                                                            <Label id="_IDGenLabel4" text="Centro" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="werks" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                </form:formElements>
+                                                                <form:title/>
+                                                            </form:FormContainer>
+                                                        </form:formContainers>
+                                                        <form:layout>
+                                                            <form:ResponsiveGridLayout id="_IDGenResponsiveGridLayout1" adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                                        </form:layout>
+                                                    </form:Form>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell2" width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <form:Form id="_IDGenForm2" width="100%" editable="true" visible="true">
+                                                        <form:title>
+                                                            <core:Title id="_IDGenTitle2" text="" level="Auto"/>
+                                                        </form:title>
+                                                        <form:formContainers>
+                                                            <form:FormContainer id="_IDGenFormContainer2" visible="true">
+                                                                <form:formElements>
+                                                                    <form:FormElement id="_IDGenFormElement4" visible="true">
+                                                                        <form:label>
+                                                                            <Label id="_IDGenLabel5" text="Documento Interno" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <ComboBox id="idConcInt" change="loadDocInvInfo" editable="true" enabled="false" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement id="_IDGenFormElement5" visible="true">
+                                                                        <form:label>
+                                                                            <Label id="_IDGenLabel6" text="Ruta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="route" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement id="formComplteReport" visible="false">
+                                                                        <form:label>
+                                                                            <Label id="_IDGenLabel7" text="Descargar Conteo Completo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Button id="idComplteReport" enabled="false" visible='true' icon="sap-icon://excel-attachment" press='getCompleteReport' tooltip="Descargar Conteo Completo"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                </form:formElements>
+                                                                <form:title/>
+                                                            </form:FormContainer>
+                                                        </form:formContainers>
+                                                        <form:layout>
+                                                            <form:ResponsiveGridLayout id="_IDGenResponsiveGridLayout2" adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                                        </form:layout>
+                                                    </form:Form>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                        </layout:content>
+                                    </layout:BlockLayoutRow>
+                                </layout:content>
+                            </layout:BlockLayout>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator id="_IDGenIconTabSeparator1" icon="" iconDensityAware="false"/>
+                </items>
+            </IconTabBar>
+            <Table id="oTable" items="{path: 'oModel>/'}" sticky="ColumnHeaders,HeaderToolbar" fixedLayout="false" width="auto" noDataText="No data" mode="None" showSeparators="All"  class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar id="_IDGenToolbar2" width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label id="_IDGenLabel8" text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar1" width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <Title id="_IDGenTitle3" text="Posiciones" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                            <ToolbarSpacer id="_IDGenToolbarSpacer1" width=""/>
+                            <Button id="bConfig" text="Mostrar/Ocultar Columnas" icon="sap-icon://show" press="configTable" tooltip="Configurar columnas mostradas" />
+                            <SearchField id="fSearchCount" liveChange="filterCount" placeholder="Buscar" showSearchButton="true" visible="true" width="auto"/>
+                            <Button id="bCount1Filter" icon="sap-icon://show" enabled="true" text="Conteo 1" tooltip="Filtrar Conteo 1" type="Ghost" press="filterC1" visible="false" />
+                            <Button id="bCount2Filter" text="Conteo 2" icon="sap-icon://show" enabled="true" tooltip="Filtrar Conteo 2" type="Ghost" press="filterC2" visible="false" />
+                            <Button id="bCount3Filter" text="Conteo 3" icon="sap-icon://show" enabled="true" tooltip="Filtrar Conteo 3" type="Ghost" press="filterC3" visible="false" />
+                            <Button id="bCountEFilter" text="Conteo Especial" icon="sap-icon://show" enabled="true" tooltip="Filtrar Conteo Especial" type="Ghost" press="filterCE" visible="false" />
+                            
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="idAlmacenC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText2" text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idZoneC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText3" text="Zona" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idLgplaC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText4" text="Ubicación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idDateIni" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText5" text="Fecha inicial" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idDateEnd" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText6" text="Fecha final" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idMatnrC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText7" text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idMeasureUnitC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText8" text="U.M." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idFechaProdC" visible="false" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText9" text="Fecha prod." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idNotaC" visible="false" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText10" text="Nota" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idLoteC" visible="false" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText11" text="Lote" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idCount1AC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="lblCount1" text="Conteo 1A" tooltip="Cantidad Conteo 1A" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idCount1BC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText13" text="Conteo 1B" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idDif1C" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText14" text="Diferencia" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idCount2C" visible="false" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText15" text="Conteo 2" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idDif2C" visible="false" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText16" text="Diferencia" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idCount3C" visible="false" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText17" text="Conteo 3" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idCountXC" visible="false" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText18" text="Conteo Especial" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="idIscC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText19" text="ISC" tooltip="Indicador Sugerencia de Conteo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem1" press="selectRow" type="Active">
+                        <cells>
+                            <Text id="_IDGenText20" text="{oModel>lgobe}" tooltip="{oModel>lgort}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText21" text="{oModel>zoneD}" tooltip="{oModel>zoneId}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText22" text="{oModel>lgpla}" tooltip="{oModel>lgpla}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText23" text="{oModel>dateIni}" tooltip="{oModel>dateIni}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText24" text="{oModel>dateEnd}" tooltip="{oModel>dateEnd}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <ObjectStatus class="sapUiSmallMarginBottom" text="{oModel>matnr}" tooltip="{oModel>matnrD} -- Tarima: {oModel>vhilm}" state="{oModel>state}" />
+                            <Text id="_IDGenText26" text="{oModel>measureUnit}" tooltip="{oModel>measureUnit}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText27" text="{oModel>prodDate}" tooltip="{oModel>prodDate}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText28" text="{oModel>note}" tooltip="{oModel>note}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText29" text="{oModel>lote}" tooltip="{oModel>lote}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText30" text="{oModel>count1A}" tooltip="{oModel>count1A}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText31" text="{oModel>count1B}" tooltip="{oModel>count1B}" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText32" text="{oModel>dif1}" tooltip="Diferencia Conteo 1" class="sapUiSmallMarginBottom" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText33" text="{oModel>count2}" tooltip="{oModel>count2}" class="sapUiSmallMarginBottom"/>
+                            <Text id="_IDGenText34" text="{oModel>dif2}" tooltip="{oModel>dif2}" class="sapUiSmallMarginBottom"/>
+                            <Text id="_IDGenText35" text="{oModel>count3}" tooltip="{oModel>count3}" class="sapUiSmallMarginBottom"/>
+                            <Text id="_IDGenText36" text="{oModel>countX}" tooltip="{oModel>countX}" class="sapUiSmallMarginBottom"/>
+                            <Switch state="{oModel>isc}" enabled="{oModel>editable}" tooltip="¿Recontar?" change="selectRowBox" customTextOff="No" customTextOn="Si" type="Default" visible="true"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

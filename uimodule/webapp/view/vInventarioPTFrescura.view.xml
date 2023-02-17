@@ -1,0 +1,125 @@
+<mvc:View controllerName="com.bmore.inveweb.controller.vInventarioPTFrescura"
+  xmlns="sap.m"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:semantic="sap.f.semantic">
+  <IconTabBar id="iconTabBar" select=".onQuickFilter" headerBackgroundDesign="Transparent">
+    <items>
+      <IconTabFilter id="total_count" key="e" showAll="true" count="" text="Inventario de PT"/>
+      <IconTabSeparator/>
+      <IconTabFilter id="loss" key="Pérdida" icon="sap-icon://unpaid-leave" iconColor="Neutral" count="" text="Pérdida"/>
+      <IconTabFilter id="fuera" key="Fuera De Esp" icon="sap-icon://message-error" iconColor="Negative" count="" text="Fuera De Esp"/>
+      <IconTabFilter id="riesgo" key="EN RIESGO" icon="sap-icon://message-warning" iconColor="Critical" count="" text="En Riesgo"/>
+      <IconTabFilter id="en_tiempo" key="EN TIEMPO" icon="sap-icon://message-success" iconColor="Positive" count="" text="En Tiempo"/>
+      <IconTabSeparator/>
+      <IconTabFilter id="sync" key="SINCRONIZAR" icon="sap-icon://synchronize" enabled="false" count="" text="Sinc. SAP" tooltip="Sincronizar de SAP"/>
+      <IconTabFilter id="precios" key="PRECIOS" icon="sap-icon://collections-insight" visible="false" enabled="false" count="" text="Sinc. Precios" tooltip="Sincronizar precios de SAP"/>
+    </items>
+    <content>
+      <Table id="frescura_table" selectionChange="_selectRowTable" fixedLayout="false" width="auto" items="{path: 'FrescuraModel>/Materiales'}" sticky="HeaderToolbar,InfoToolbar,ColumnHeaders" growing="true" growingScrollToLoad="true" noDataText="No data" mode="SingleSelectMaster" showSeparators="All">
+        <infoToolbar>
+          <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+            <content>
+              <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </content>
+          </Toolbar>
+        </infoToolbar>
+        <headerToolbar>
+          <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+            <content>
+              <Title id="total" text="" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+              <ToolbarSpacer width=""/>
+              <Text text="CONSULTA DE FRESCURA POR SOCIEDAD Y CENTRO" wrapping="true"/>
+              <Button id="btnExcel" press="exportExcel" text="Exportar a Excel" type="Transparent" icon="sap-icon://download" iconFirst="true" width="auto" enabled="false" visible="true" iconDensityAware="false"/>
+              <ComboBox id="bukrs" change="loadWerks" editable="true" enabled="true" placeholder="Sociedad" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+              <ComboBox id="werks" editable="true" enabled="true" change="getFrescuraByWerk" placeholder="Centro" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+              <Button id="btnRefresh" press="refresh" text="Refrescar" type="Transparent" icon="sap-icon://refresh" iconFirst="true" width="auto" enabled="false" visible="true" iconDensityAware="false"/>
+              <OverflowToolbarButton press="handleSortDescending" text="Sort" type="Transparent" icon="sap-icon://sort-descending" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+              <OverflowToolbarButton press="handleSortAscendeing" text="Sort" type="Transparent" icon="sap-icon://sort-ascending" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+              <OverflowToolbarButton press="clearAllSortings" text="Sort" type="Transparent" icon="sap-icon://clear-filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+              <SearchField id="search_field" placeholder="Buscar" showSearchButton="true" visible="true" width="auto" liveChange="_onSearch"/>
+            </content>
+          </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="SKU" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="170px" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" mergeDuplicates="false">
+            <header>
+              <Text text="Nombrel del material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+           <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Block" mergeDuplicates="false">
+            <header>
+              <Text text="U.M.B." tooltip="Unidad de Medida Base" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Block" mergeDuplicates="false">
+            <header>
+              <Text text="Lote" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Desktop" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Total Inventario" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Valor" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Desktop" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Fecha Lote" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Right" vAlign="Top" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Frescura" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Estatus de la política" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+          <Column id="ColumDecision" visible="false" width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+              <Text text="Decisión empleo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+          </Column>
+        </columns>
+        <items>
+          <ColumnListItem type="Navigation">
+            <cells>
+              <Text text="{FrescuraModel>matnr}" />
+              <Text text="{FrescuraModel>maktx}" />
+              <Text text="{FrescuraModel>umb}" />
+              <Text text="{FrescuraModel>charg}" />
+              <Text text="{FrescuraModel>totalInventario}" />
+              <ObjectNumber number="{path: 'FrescuraModel>stprs'}"/>
+              <Text text="{FrescuraModel>fechaLote}" />
+              <Text text="{FrescuraModel>frescura}" />
+              <ObjectNumber number="{path: 'FrescuraModel>statusPolitica'}" state="{FrescuraModel>status}"/>
+              <Text text="{FrescuraModel>detailsFrescura/useDecision}" />
+              <!-- <ObjectStatus text="{status}" state="{= ${status} === 'Shipped' ? 'Success' : ${status} === 'Missing' ? 'Warning' : ${status} === 'Preparing' ? 'Information' : 'Error'}" icon="{= ${status} === 'Shipped' ? 'sap-icon://accept' : ${status} === 'Missing' ? 'sap-icon://status-critical' : ${status} === 'Preparing' ? 'sap-icon://begin' : 'sap-icon://status-negative'}"/> -->
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </content>
+  </IconTabBar>
+</mvc:View>

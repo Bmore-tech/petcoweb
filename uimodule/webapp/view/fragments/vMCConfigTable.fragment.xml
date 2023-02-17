@@ -1,0 +1,47 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog id="oDialogConfigTable" contentWidth="45%" horizontalScrolling="true" showHeader="true" state="None" stretch="false" title="Mostrar/Ocultar columnas" type="Standard" verticalScrolling="true">
+        <content>
+            <Table id="oConfigTable" items="{path: 'oModel>/'}" width="auto" noDataText="No data" mode="None" showSeparators="All" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar/>
+                <columns>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Mostrar" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Columna" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Active">
+                        <cells>
+                            <Switch state="{oModel>visible}" change="changeSwitch" customTextOff="No" customTextOn="Si" type="Default" enabled="true" visible="true"/>
+                            <Text text="{oModel>text}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <beginButton/>
+        <buttons>
+            <Button press="restoreColumns" text="Restaurar" type="Transparent" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+            <Button press="_closeDialogConfigTable" text="Cerrar" type="Transparent" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+        </buttons>
+        <customHeader/>
+        <endButton/>
+        <subHeader/>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,116 @@
+<mvc:View
+	controllerName="com.bmore.inveweb.controller.InventarioPT"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.f.semantic">
+
+	<Page showHeader="false" title="Frescura CMM" showFooter="false" showNavButton="false">
+      
+      <content>
+        <IconTabBar id="iconTabBar" select=".onQuickFilter" expandable="false" headerBackgroundDesign="Transparent">
+          <items>
+            <IconTabFilter id="total_count" key="e" showAll="true" count="" text="Inventario de PT"/>
+            <IconTabSeparator/>
+            <IconTabFilter id="fuera" key="Fuera De Esp" icon="sap-icon://message-error" iconColor="Negative" count="" text="Fuera De Esp"/>
+            <IconTabFilter id="riesgo" key="En Riesgo" icon="sap-icon://message-warning" iconColor="Critical" count="" text="En Riesgo"/>
+            <IconTabFilter id="en_tiempo" key="En Tiempo" icon="sap-icon://message-success" iconColor="Positive" count="" text="En Tiempo"/>
+          </items>
+          <content>
+            <Table id="frescura_table" fixedLayout="false" width="auto" items="{path: 'DataModel>/Materiales'}" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+              <infoToolbar>
+                <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                  <content>
+                    <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </content>
+                </Toolbar>
+              </infoToolbar>
+              <headerToolbar>
+                <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                  <content>
+                    <Title id="total" text="" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                    <ToolbarSpacer width=""/>
+                    <OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                    <OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                    <OverflowToolbarButton text="Group" type="Transparent" icon="sap-icon://group-2" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                    <OverflowToolbarButton text="Settings" type="Transparent" icon="sap-icon://action-settings" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                  </content>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                  <header>
+                    <Text text="SKU" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="170px" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" mergeDuplicates="false">
+                  <header>
+                    <Text text="Nombrel del material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Block" mergeDuplicates="false">
+                  <header>
+                    <Text text="Lote" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Desktop" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                  <header>
+                    <Text text="Total Inventario" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                  <header>
+                    <Text text="Valor" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Desktop" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                  <header>
+                    <Text text="Fecha Lote" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="auto" hAlign="Right" vAlign="Top" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                  <header>
+                    <Text text="Frescura" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                  <header>
+                    <Text text="Estatus de la política" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+                <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                  <header>
+                    <Text text="Días para posicionar" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                  </header>
+                  <footer/>
+                </Column>
+              </columns>
+              <items>
+                <ColumnListItem type="Navigation" press=".onPress">
+                  <cells>
+                    <Text text="{DataModel>MATNR}" />
+                    <Text text="{DataModel>MAKTX}" />
+                    <Text text="{DataModel>CHARG}" />
+                    <Text text="{DataModel>totalInventario}" />
+                    <ObjectNumber number="{path: 'DataModel>valor'}"/>
+                    <Text text="{DataModel>fechaLote}" />
+                    <Text text="{DataModel>frescura}" />
+                    <ObjectNumber number="{path: 'DataModel>status'}" state="{DataModel>state}"/>
+                    <ObjectNumber number="{DataModel>diasPocicionar}" state="{DataModel>state}"/>
+                    <Text text="{DataModel>diasPocicionar}" />
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </content>
+        </IconTabBar>
+      </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,166 @@
+<mvc:View controllerName="com.bmore.inveweb.controller.Object"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.f.semantic"
+	xmlns:form="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout">
+
+	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false">
+		<semantic:titleHeading>
+			<Title id="lote" text="Holis" />
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<FlexBox alignItems="Start" justifyContent="SpaceBetween">
+				<Panel backgroundDesign="Transparent">
+					<ObjectAttribute title="Material" text="3000003"/>
+					<ObjectAttribute title="Valor" text="$10266.54"/>
+					<ObjectAttribute title="Canal" text="Tradicional"/>
+					<ObjectAttribute title="Categoría ABC" text="A"/>
+					<ObjectAttribute title="Origen" text="Nacional"/>
+				</Panel>
+				<Panel backgroundDesign="Transparent">
+					<ObjectNumber id="objectHeader" unit="Días" textAlign="End" state="{
+							path: 'UnitsInStock',
+							formatter: '.formatter.quantityState'}" number="123">
+					</ObjectNumber>
+					<ObjectStatus text="En Tiempo" state="Success" visible="{path:'Discontinued'}"/>
+					<ProgressIndicator width="300px" percentValue="86" displayValue="123" showValue="true" state="Success" />
+				</Panel>
+
+			</FlexBox>
+		</semantic:headerContent>
+		<semantic:content>
+			<l:VerticalLayout width="100%">
+				<Panel backgroundDesign="Transparent" headerText="Detalle">
+					<content>
+						<form:SimpleForm minWidth="1024" maxContainerCols="2" editable="false" layout="ResponsiveGridLayout" labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1">
+							<form:content>
+								<Label text="Total Inv"/>
+								<Text text="156"/>
+								<Label text="Precio/CJ"/>
+								<Text text=" $65.81 "/>
+								<Label text="HL/Cartón"/>
+								<Text text="0.0852"/>
+								<Label text="HL Bloqueados"/>
+								<Text text=""/>
+								<Label text="$ Bloqueado"/>
+								<Text text=""/>
+								<Label text="HL Totales"/>
+								<Text text=" 13.29 "/>
+							</form:content>
+						</form:SimpleForm>
+						<form:Form width="100%" editable="true" visible="true">
+							<form:title>
+								<core:Title text="Retenido (según aplique)" level="Auto"/>
+							</form:title>
+							<form:formContainers>
+								<form:FormContainer visible="true">
+									<form:formElements>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Causa" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<Input autocomplete="false" value="RET 41 ROTURA TARDIA (5940)" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Motivo general" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<Input autocomplete="false" value="ROTURA TARDIA" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Fecha de bloqueo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<DatePicker value="20210121" width="auto" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Clasificación de acuerdo a SLA" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<Input autocomplete="false" value="5" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Días de bloqueo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<Text text="27" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Días liberado" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<Text text="Pendiente" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:fields>
+										</form:FormElement>
+									</form:formElements>
+									<form:title/>
+								</form:FormContainer>
+								<form:FormContainer visible="true">
+									<form:formElements>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Comentarios" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<Input autocomplete="false" value="RET 408 COMPLETO" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Decisión empleo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<ComboBox selectedKey="Pendiente" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
+													<items>
+														<core:Item text="Destrucción" enabled="true" key="Destrucción"/>
+														<core:Item text="A mercado" enabled="true" key="A mercado"/>
+													</items>
+												</ComboBox>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="Fecha de liberación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<DatePicker width="auto" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement visible="true">
+											<form:label>
+												<Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											</form:label>
+											<form:fields>
+												<Button text="Guardar" type="Accept" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+											</form:fields>
+										</form:FormElement>
+									</form:formElements>
+									<form:title/>
+								</form:FormContainer>
+							</form:formContainers>
+							<form:layout>
+								<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+							</form:layout>
+						</form:Form>
+					</content>
+				</Panel>
+			</l:VerticalLayout>
+		</semantic:content>
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
+		</semantic:sendEmailAction>
+	</semantic:SemanticPage>
+</mvc:View>

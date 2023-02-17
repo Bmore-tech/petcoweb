@@ -1,0 +1,595 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vConsSap" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:c="sap.ui.core">
+    <Page id="pConciliation" showHeader="true"  showFooter="true" showNavButton="false">
+        <customHeader >
+			<Bar id="_IDGenBar1">
+				<contentLeft>
+					<Toolbar id="_IDGenToolbar1">
+						<Button id="bBack" enabled="true" type="Back"
+							press="returnAction" tooltip="Atrás" />
+						<Button id="bCount" icon="sap-icon://inspect"
+							enabled="false" text="Reconteo" press="askRecount" tooltip="Reconteo de Materiales con Diferencia" />
+						<Button id="bSave" enabled="false"
+							icon="sap-icon://decision" text="Finalizar Documento"
+							press="confirmClose" tooltip="Cierra el documento"/>
+						<Button id="bPartialSave" text="Guardar sin finalizar" icon="sap-icon://save"
+							enabled="false" press="saveChanges" tooltip="Guarda cambios para seguir editando después" />
+						<Button id="idTransit"
+							icon="sap-icon://shipping-status" enabled="false" press="none"
+							visible="false" tooltip="Sin tránsitos" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label id="_IDGenLabel1" design="Bold" text="Conciliación con SAP"
+						class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <VBox id="vbFrame" visible="false">
+            <VBox id="messagesBox" class="sapUiContentPadding"/>
+        </VBox>
+        <content>
+            <VBox id="lblSelectedConci" class="sapUiContentPadding" visible="false" />
+            <IconTabBar id="tabBar" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" select="checkTab">
+                <items>
+                    <IconTabFilter id="_IDGenIconTabFilter1" key="tabC" icon="sap-icon://building" iconColor="Default" text="Conci Centro" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" tooltip="Conciliación por centro" iconDensityAware="false">
+                        <content>
+                            <layout:BlockLayout id="_IDGenBlockLayout1" background="Default" visible="true">
+                                <layout:content>
+                                    <layout:BlockLayoutRow id="_IDGenBlockLayoutRow1" scrollable="false">
+                                        <layout:content>
+                                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell1" width="2" title="Tipo de Documento" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <Label id="_IDGenLabel2" text="Documento de Inventario:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="docInvId" type="Text" showValueHelp="true" valueHelpRequest="showMCDocInv" enabled="true" visible="true" width="99%" valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel3" text="Sociedad / Centro:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="bukrs" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiTinyMarginEnd"/>
+                                                    <Input autocomplete="false" id="werks" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel4" text="Fecha Creación / Fecha Conciliación:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="dStart" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiTinyMarginEnd"/>
+                                                    <Input autocomplete="false" id="dEnd" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel5" text="Tipo de Documento:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="type" type="Text" showValueHelp="false" enabled="false" visible="true" width="99%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell2" width="2" title="Datos de Edición" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <Label id="_IDGenLabel6" text="Creado por:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="createdBy" type="Text" showValueHelp="false" enabled="false" visible="true" width="100%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel7" text="Conciliar por Centro:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Switch id="chkWerks" state="false" change="checkConci" customTextOff="No" customTextOn="Si" type="Default" enabled="true" visible="true"/>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                        </layout:content>
+                                    </layout:BlockLayoutRow>
+                                </layout:content>
+                            </layout:BlockLayout>
+                            <c:HTML id="_IDGenHTML1"
+								content='&lt;input type="file" id="fileConcSap" style="position: fixed; top: -100em" multiple="false" onchange="sap.ui.getCore().byId(&apos;container-inveweb---vConsSap&apos;).getController().uploadTemplate();" &gt;'>
+							</c:HTML>
+                            <Table id="oTable" items="{path: 'oModel>/'}" selectionChange="getData" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" sticky="ColumnHeaders,HeaderToolbar" fixedLayout="false" class="sapUiResponsiveMargin">
+                                <infoToolbar/>
+                                <headerToolbar>
+                                    <OverflowToolbar id="_IDGenOverflowToolbar1" width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                        <content>
+                                            <Title id="_IDGenTitle1" text="Posiciones" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                                            <ToolbarSpacer id="_IDGenToolbarSpacer1" width=""/>
+                                            
+                                            <ToggleButton id="tbSH" press="showFinan" text="Vista Financiera" type="Default" icon="sap-icon://lead" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Vista Financiera" iconDensityAware="false"/>
+                                            <ToggleButton id="tbNoTransit" text="Tránsitos Activos" press="removeTransit" type="Ghost" icon="sap-icon://bus-public-transport" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Activar/Quitar Tránsitos" iconDensityAware="false"/>
+                                            <Button id="btn_Report_PDF" text="Reporte Conciliación"  press="loadPDFReport" type="Transparent" icon="sap-icon://pdf-attachment" iconFirst="true" width="auto" enabled="false" visible="true" tooltip="Descargar Reporte Conciliado Pdf" iconDensityAware="false"/>
+                                            <Button id="_IDGenOverflowToolbarButton3" text="Exportar tabla a excel"  press="downloadAccountant" type="Transparent" icon="sap-icon://download" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar Tabla" iconDensityAware="false"/>
+                                            <Button id="_IDGenOverflowToolbarButton2" text="Plantilla justificación" press="downloadTemplate" type="Transparent" icon="sap-icon://excel-attachment" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar plantilla justificaciones por Centro" iconDensityAware="false"/>
+                                            <Button id="bUpload" text="Cargar archivo justificaciones" press="openFilePicker" type="Transparent" icon="sap-icon://upload" iconFirst="true" width="auto" enabled="false" visible="true" tooltip="Cargar plantilla justificaciones por Centro" iconDensityAware="false"/>
+                                            <Button id="_IDGenButton1" text="Mostrar/Ocultar columnas" press="columns" type="Default" icon="sap-icon://show" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Mostrar/ Ocultar columnas" iconDensityAware="false"/>
+                                        </content>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column id="_IDGenColumn1" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText1" text="Item" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn2" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText2" text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn3" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText3" text="Categoría" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn4" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText4" text="U.M.B" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn5" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText5" text="Contado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn6" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText6" text="Total Explosionado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn7" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText7" text="Contado Total" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="cTheoric" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText8" text="Teórico" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn8" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText9" text="Consignación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn9" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText10" text="Tránsito" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn10" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText11" text="Contable" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn11" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText12" text="Diferencia" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="cISC" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText13" text="ISC" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem id="_IDGenColumnListItem1" press="loadVJustify" type="Navigation">
+                                        <cells>
+                                            <Text id="_IDGenText14" text="{oModel>item}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Link id="_IDGenLink1" text="{oModel>matnr}" tooltip="{oModel>matnrD}" press="showExtractTables" width="auto" visible="true"/>
+                                            <Text id="_IDGenText15" text="{oModel>category}" tooltip="{oModel>category}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText16" text="{oModel>meins}" tooltip="{oModel>meins}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText17" text="{oModel>counted}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText18" text="{oModel>countedExpl}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText19" text="{oModel>countedTot}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText20" text="{oModel>theoric}" tooltip="{oModel>theoricExplain}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText21" text="{oModel>consignation}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText22" text="{oModel>transit}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText23" text="{oModel>accountant}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText24" text="{oModel>diff}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Switch id="_IDGenSwitch1" state="{oModel>isc}" customTextOff="No" customTextOn="Si" type="Default" enabled="true" visible="true"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator id="_IDGenIconTabSeparator1" icon="" iconDensityAware="false"/>
+                    <IconTabFilter id="matExpl" key="itbExpl" icon="sap-icon://chart-axis" iconColor="Default" text="Expl Centro" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" tooltip="Explosionados por centro" iconDensityAware="false">
+                        <content>
+                            <Table id="oTableExplRep" items="{path: 'oModelExplRep>/'}" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" sticky="ColumnHeaders,HeaderToolbar" fixedLayout="false" class="sapUiResponsiveMargin">
+                                <infoToolbar/>
+                                <headerToolbar>
+                                    <OverflowToolbar id="_IDGenOverflowToolbar2" width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                        <content>
+                                            <Title id="_IDGenTitle2" text="Explosión de materiales por centro" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                                            <ToolbarSpacer id="_IDGenToolbarSpacer2" width=""/>
+                                            <OverflowToolbarButton id="_IDGenOverflowToolbarButton4" type="Transparent" press="downlMatnrExpl" icon="sap-icon://download" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                            <Button id="_IDGenButton2" text="Mostrar/Ocultar columnas" press="columns" type="Default" icon="sap-icon://show" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Mostrar/ Ocultar columnas" iconDensityAware="false"/>
+                                        </content>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column id="_IDGenColumn12" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText25" text="Item" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn13" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText26" text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn14" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText27" text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn15" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText28" text="Categoría" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn16" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText29" text="U.M.B." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn17" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText30" text="Contado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn18" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText31" text="Material Explosionado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="LTR" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn19" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText32" text="Descripción " width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn20" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText33" text="U.M.B. " width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn21" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText34" text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem id="_IDGenColumnListItem2" type="Active">
+                                        <cells>
+                                            <Text id="_IDGenText35" text="{oModelExplRep>item}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText36" text="{oModelExplRep>matnr}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText37" text="{oModelExplRep>description}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText38" text="{oModelExplRep>category}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText39" text="{oModelExplRep>umb}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText40" text="{oModelExplRep>counted}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText41" text="{oModelExplRep>matnrExpl}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText42" text="{oModelExplRep>descMantrExpl}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText43" text="{oModelExplRep>umbExpl}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText44" text="{oModelExplRep>quantity}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator id="_IDGenIconTabSeparator2" icon="" iconDensityAware="false"/>
+                    <IconTabFilter id="itfByLgpla" key="tabCByLgpla" icon="sap-icon://shelf" iconColor="Default" text="Conci Ubicación" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" tooltip="Conciliación por ubicación" iconDensityAware="false">
+                        <content>
+                            <layout:BlockLayout id="_IDGenBlockLayout2" background="Default" visible="true">
+                                <layout:content>
+                                    <layout:BlockLayoutRow id="_IDGenBlockLayoutRow2" scrollable="false">
+                                        <layout:content>
+                                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell3" width="2" title="Tipo de Documento" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <Label id="_IDGenLabel8" text="Documento de Inventario:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="docInvIdByLgpla" type="Text" valueHelpRequest="showMCDocInvAux" showValueHelp="true" enabled="true" visible="true" width="99%" valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel9" text="Sociedad / Centro:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="bukrsByLgpla" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiTinyMarginEnd"/>
+                                                    <Input autocomplete="false" id="werksByLgpla" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel10" text="Fecha Creación / Fecha Conciliación:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="dStartByLgpla" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" class="sapUiTinyMarginEnd"/>
+                                                    <Input autocomplete="false" id="dEndByLgpla" type="Text" showValueHelp="false" enabled="false" visible="true" width="49%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel11" text="Tipo de Documento:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="typeByLgpla" type="Text" showValueHelp="false" enabled="false" visible="true" width="99%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell4" width="2" title="Datos de Edición" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <Label id="_IDGenLabel12" text="Creado por:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Input autocomplete="false" id="createdByLgpla" type="Text" showValueHelp="false" enabled="false" visible="true" width="100%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                    <Label id="_IDGenLabel13" text="Conciliar por Ubicación:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                    <Switch id="chkLgpla" change="checkConciLgpla" state="false" customTextOff="No" customTextOn="Si" type="Default" enabled="true" visible="true"/>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                        </layout:content>
+                                    </layout:BlockLayoutRow>
+                                </layout:content>
+                            </layout:BlockLayout>
+                            <c:HTML id="_IDGenHTML2"
+								content='&lt;input type="file" id="fileConcLgpla" style="position: fixed; top: -100em" multiple="false" onchange="sap.ui.getCore().byId(&apos;container-inveweb---vConsSap&apos;).getController().uploadTemplateLgpla();" &gt;'>
+							</c:HTML>
+                            <Table id="oTableByLgpla" items="{path: 'oModelLgpla>/'}" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" sticky="ColumnHeaders,HeaderToolbar" fixedLayout="false" class="sapUiResponsiveMargin">
+                                <infoToolbar/>
+                                <headerToolbar>
+                                    <OverflowToolbar id="_IDGenOverflowToolbar3" width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                        <content>
+                                            <Title id="_IDGenTitle3" text="Posiciones" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                                            <ToolbarSpacer id="_IDGenToolbarSpacer3" width=""/> 
+                                            <ToggleButton id="tbSHByLgpla" press="switchView" text="Vista Financiera" type="Default" icon="sap-icon://lead" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Vista Financiera" iconDensityAware="false"/>
+                                            <Button id="btn_Report_LGPLA_PDF" text="Reporte Conciliación"  press="loadPDF_LGPLA_Report" type="Transparent" icon="sap-icon://pdf-attachment" iconFirst="true" width="auto" enabled="false" visible="true" tooltip="Descargar Reporte Conciliado Pdf" iconDensityAware="false"/>                                           
+                                            <Button id="_IDGenOverflowToolbarButton6" text="Exportar tabla a excel" type="Transparent" icon="sap-icon://download" press="downloadReport" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar Tabla" iconDensityAware="false"/>
+                                            <Button id="_IDGenOverflowToolbarButton5" text="Plantilla justificación" press="downloadTemplateLgpla" type="Transparent" icon="sap-icon://excel-attachment" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar plantilla justificaciones por Ubicación" iconDensityAware="false"/>
+                                            <Button id="bUploadByLgpla" text="Cargar archivo justificaciones" press="openFilePickerLgpla"  type="Transparent" icon="sap-icon://upload" iconFirst="true" width="auto" enabled="false" visible="true" tooltip="Cargar plantilla justificaciones por Ubicación" iconDensityAware="false"/>
+                                            <Button id="_IDGenButton3" text="Mostrar/Ocultar columnas" press="columns" type="Default" icon="sap-icon://show" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Mostrar/ Ocultar columnas" iconDensityAware="false"/>
+                                        </content>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column id="_IDGenColumn22" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText45" text="Item" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn23" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText46" text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn24" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText47" text="Ubicación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn25" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText48" text="Fecha conteo inicio" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn26" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText49" text="Fecha conteo fin" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn27" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText50" text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn28" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText51" text="U.M.B." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn29" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText52" text="Contado Total" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn30" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText53" text="C. Explosionado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn31" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText54" text="Total Contado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn32" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText55" text="Teórico" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn33" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText56" text="Diferencia" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn34" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText57" text="ISC" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="cCountedCostByLgpla" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText58" text="Costo Contado" tooltip="Costo Contado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="cTheoricCostByLgpla" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText59" text="Costo Teórico" tooltip="Costo Teórico" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="cDiffCostByLgpla" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText60" text="Diferencia Teórico" tooltip="Diferencia Teórico" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem id="_IDGenColumnListItem3" press="loadJustifyLgpla" type="Navigation">
+                                        <cells>
+                                            <Text id="_IDGenText61" text="{oModelLgpla>item}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText62" text="{oModelLgpla>lgort}" tooltip="{oModelLgpla>lgortD}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText63" text="{oModelLgpla>lgpla}" tooltip="{oModelLgpla>lgpla}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText64" text="{path: 'oModelLgpla>dateIniCounted', formatter: '.formatLongDate'}" tooltip="{path: 'oModelLgpla>dateIniCounted', formatter: '.formatLongDate'}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText65" text="{path: 'oModelLgpla>dateEndCounted', formatter: '.formatLongDate'}" tooltip="{path: 'oModelLgpla>dateEndCounted', formatter: '.formatLongDate'}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Link id="_IDGenLink2" text="{oModelLgpla>matnr}" tooltip="{oModelLgpla>matnrD}" press="showExtractTables" width="auto" visible="true"/>
+                                            <Text id="_IDGenText66" text="{oModelLgpla>meins}" tooltip="{oModelLgpla>meins}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText67" text="{oModelLgpla>counted}" tooltip="{oModelLgpla>counted}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText68" text="{oModelLgpla>countedExpl}" tooltip="{oModelLgpla>countedExpl}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText69" text="{oModelLgpla>countedTot}" tooltip="{oModelLgpla>countedTot}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText70" text="{oModelLgpla>theoric}" tooltip="{oModelLgpla>theoricExplain}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText71" text="{oModelLgpla>diff}" tooltip="{oModelLgpla>diff}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Switch id="_IDGenSwitch2" state="{oModelLgpla>isc}" customTextOff="No" customTextOn="Si" type="Default" enabled="true" visible="true"/>
+                                            <Text id="_IDGenText72" text="{oModelLgpla>countedCost}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText73" text="{oModelLgpla>theoricCost}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text id="_IDGenText74" text="{oModelLgpla>diffCost}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator id="_IDGenIconTabSeparator3" icon="" iconDensityAware="false"/>
+                    <IconTabFilter id="matExplByLgpla" key="itbExplByLgpla" icon="sap-icon://line-chart" iconColor="Default" text="Expl Ubicación" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" tooltip="Explosionados por ubicación" iconDensityAware="false">
+                        <content>
+                            <Table id ="oTableExplRepByLgpla" items="{path: 'oModelMatExplLgpla>/'}" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <infoToolbar/>
+                                <headerToolbar>
+                                    <OverflowToolbar id="_IDGenOverflowToolbar4" width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                        <content>
+                                            <Title id="_IDGenTitle4" text="Explosión de materiales por ubicación" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                                            <ToolbarSpacer id="_IDGenToolbarSpacer4" width=""/>
+                                            <OverflowToolbarButton id="_IDGenOverflowToolbarButton7" type="Transparent" icon="sap-icon://download" press="downlMatnrExplMatExplByLgpla" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                            <Button id="_IDGenButton4" text="Mostrar/Ocultar columnas" press="columns" type="Default" icon="sap-icon://show" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Mostrar/ Ocultar columnas" iconDensityAware="false"/>
+                                        </content>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column id="_IDGenColumn35" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText75" text="Item" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn36" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText76" text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn37" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText77" text="Tipo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn38" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText78" text="Ubicación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn39" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText79" text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn40" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText80" text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn41" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText81" text="Categoría" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn42" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText82" text="U.M.B." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn43" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText83" text="Contado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn44" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText84" text="Material Explosionado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="LTR" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn45" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText85" text="Descripción " width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn46" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText86" text="Almacén Explosionado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn47" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText87" text="U.M.B. " width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="_IDGenColumn48" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text id="_IDGenText88" text="Cantidad " width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem id="_IDGenColumnListItem4" type="Active">
+                                        <cells>
+                                            <Text id="_IDGenText89" text="{oModelMatExplLgpla>item}" tooltip="{oModelMatExplLgpla>item}" wrapping="true"/>
+                                            <Text id="_IDGenText90" text="{oModelMatExplLgpla>lgort}" tooltip="{oModelMatExplLgpla>lgortD}" wrapping="true"/>
+                                            <Text id="_IDGenText91" text="{oModelMatExplLgpla>lgtyp}" tooltip="{oModelMatExplLgpla>lgtyp}" wrapping="true"/>
+                                            <Text id="_IDGenText92" text="{oModelMatExplLgpla>lgpla}" tooltip="{oModelMatExplLgpla>lgpla}" wrapping="true"/>
+                                            <Text id="_IDGenText93" text="{oModelMatExplLgpla>matnr}" tooltip="{oModelMatExplLgpla>matnr}" wrapping="true"/>
+                                            <Text id="_IDGenText94" text="{oModelMatExplLgpla>description}" tooltip="{oModelMatExplLgpla>description}" wrapping="true"/>
+                                            <Text id="_IDGenText95" text="{oModelMatExplLgpla>category}" tooltip="{oModelMatExplLgpla>category}" wrapping="true"/>
+                                            <Text id="_IDGenText96" text="{oModelMatExplLgpla>umb}" tooltip="{oModelMatExplLgpla>umb}" wrapping="true"/>
+                                            <Text id="_IDGenText97" text="{oModelMatExplLgpla>counted}" tooltip="{oModelMatExplLgpla>counted}" wrapping="true"/>
+                                            <Text id="_IDGenText98" text="{oModelMatExplLgpla>matnrExpl}" tooltip="{oModelMatExplLgpla>matnrExpl}" wrapping="true"/>
+                                            <Text id="_IDGenText99" text="{oModelMatExplLgpla>descMantrExpl}" tooltip="{oModelMatExplLgpla>descMantrExpl}" wrapping="true"/>
+                                            <Text id="_IDGenText100" text="{oModelMatExplLgpla>lgortExpl}" tooltip="{oModelMatExplLgpla>lgortExpl}" wrapping="true"/>
+                                            <Text id="_IDGenText101" text="{oModelMatExplLgpla>umbExpl}" tooltip="{oModelMatExplLgpla>umbExpl}" wrapping="true"/>
+                                            <Text id="_IDGenText102" text="{oModelMatExplLgpla>quantity}" tooltip="{oModelMatExplLgpla>quantity}" wrapping="true"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                </items>
+                <content>
+                    <Text id="_IDGenText103" text="Tab Bar Content goes here ..." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                </content>
+            </IconTabBar>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

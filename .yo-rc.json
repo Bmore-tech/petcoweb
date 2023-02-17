@@ -1,0 +1,21 @@
+{
+  "generator-template-ui5-project": {
+    "projectname": "inveweb",
+    "namespaceUI5": "com.bmore",
+    "platform": "Static webserver",
+    "viewtype": "XML",
+    "ui5libs": "Local resources (OpenUI5)",
+    "newdir": true,
+    "namespaceURI": "com/bmore",
+    "opa5pos": [
+      "Main"
+    ],
+    "opa5Journeys": [
+      "Main"
+    ],
+    "uimodules": [
+      "uimodule"
+    ],
+    "setupCompleted": true
+  }
+}

@@ -1,0 +1,374 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vInvDocument" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
+    <Page id="pInvDocument" showHeader="true" showFooter="true" showNavButton="true" navButtonPress="returnAction">
+        <customHeader>
+			<Bar>
+				<contentLeft>
+					<Toolbar>
+						<Button id="bNew" text="Nuevo" icon="sap-icon://create"
+							enabled="true" press="newRecord" tooltip="Nuevo" />
+						<Button id="bCancel" text="Cancelar" icon="sap-icon://cancel"
+							enabled="false" press="cancelEdition" tooltip="Cancelar" />
+						<Button id="bSave" text="Guardar" icon="sap-icon://save"
+							enabled="false" press="saveEdition" tooltip="Guardar" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label design="Bold" text="Documento de Inventario"
+						class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <content>
+            <VBox id="vbFrame" visible="false">
+				<VBox id="messagesBox" class="sapUiContentPadding"/>
+			</VBox>
+            <IconTabBar id="tabBarSections" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="tabD">
+                <items>
+                    <IconTabFilter key="tabD" icon="sap-icon://document-text" tooltip="Creacion de Documento de Inventario" iconColor="Default" text="Crear" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                        <content>
+                            <layout:BlockLayout background="Default" visible="true">
+                                <layout:content>
+                                    <layout:BlockLayoutRow scrollable="false">
+                                        <layout:content>
+                                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <form:Form width="100%" editable="true" visible="true">
+                                                        <form:title>
+                                                            <core:Title text="Creación Documento de Inventario" level="Auto"/>
+                                                        </form:title>
+                                                        <form:formContainers>
+                                                            <form:FormContainer visible="true">
+                                                                <form:formElements>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Documento de Inventario" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="invDocIdCreate" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Sociedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <ComboBox id="bukrsCreate" change="checkRowsBukrs" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Centro" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <ComboBox id="werksCreate" change="setTypeDoc" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Tipo de Documento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <ComboBox id="docTypeCreate" change="setFocus" selectedKey="1" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
+                                                                                <items>
+                                                                                    <core:Item text="Colaborativo (Diario)" enabled="true" key="1"/>
+                                                                                    <core:Item text="Comparativo (Mensual)" enabled="true" key="2"/>
+                                                                                    <core:Item text="Frescura" enabled="true" key="4"/>
+                                                                                </items>
+                                                                            </ComboBox>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                </form:formElements>
+                                                                <form:title/>
+                                                            </form:FormContainer>
+                                                        </form:formContainers>
+                                                        <form:layout>
+                                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                                        </form:layout>
+                                                    </form:Form>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <form:Form width="100%" editable="true" visible="true">
+                                                        <form:title>
+                                                            <core:Title text="Datos de Edición" level="Auto"/>
+                                                        </form:title>
+                                                        <form:formContainers>
+                                                            <form:FormContainer visible="true">
+                                                                <form:formElements>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Creado por" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="createdByCreate" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Modificado por" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="modifiedByCreate" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                </form:formElements>
+                                                                <form:title/>
+                                                            </form:FormContainer>
+                                                        </form:formContainers>
+                                                        <form:layout>
+                                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                                        </form:layout>
+                                                    </form:Form>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                        </layout:content>
+                                    </layout:BlockLayoutRow>
+                                </layout:content>
+                            </layout:BlockLayout>
+                            <Table id="oTableCreate" selectionChange="selectRoute" items="{path: 'oCreateModel>/'}" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <infoToolbar/>
+                                <headerToolbar>
+                                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                        <content>
+                                            <Title text="Asignación de Rutas" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                                            <ToolbarSpacer width=""/>
+                                            <OverflowToolbarButton id="bAddPosition" press="showModalRoutes" tooltip="Agregar posición" type="Accept" icon="sap-icon://add" iconFirst="true" width="auto" enabled="false" visible="true" iconDensityAware="false"/>
+                                            <OverflowToolbarButton id="bDeletePosition" press="removePositions" tooltip="Borrar posiciones" type="Reject" icon="sap-icon://less" iconFirst="true" width="auto" enabled="false" visible="true" iconDensityAware="false"/>
+                                        </content>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Doc Interno" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Id Tarea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Ruta" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="colContadorA" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Contador" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column id="colContadorB" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="false">
+                                        <header>
+                                            <Text text="Contador B" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem  type="Active">
+                                        <cells>
+                                            <Text text="{oCreateModel>docInvId}" tooltip="{oCreateModel>docInvId}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text text="{oCreateModel>taskId}" tooltip="{oCreateModel>taskId}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text text="{oCreateModel>route}" tooltip="{oCreateModel>route}" visible="true" width="auto" wrapping="true"/>
+                                            <Input autocomplete="false" type="Text" value="{oCreateModel>assignToA}" tooltip="{oCreateModel>assignToA}" valueHelpRequest="openMCAsignTo" showValueHelp="true" enabled="{enabledUser}" visible="true" width="auto" valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                            <Input autocomplete="false" type="Text" value="{oCreateModel>assignToB}" tooltip="{oCreateModel>assignToB}" valueHelpRequest="openMCAsignTo" showValueHelp="true" enabled="{enabledUser}" visible="true" width="auto" valueHelpOnly="true" required="false" valueStateText="Invalid entry"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator icon="" iconDensityAware="false"/>
+                    <IconTabFilter tooltip="Historial de Documentos de Inventario" key="tabH" icon="sap-icon://sap-box" iconColor="Default" text="Consultar" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                        <content>
+                            <layout:BlockLayout background="Default" visible="true">
+                                <layout:content>
+                                    <layout:BlockLayoutRow scrollable="false">
+                                        <layout:content>
+                                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <form:Form width="100%" editable="true" visible="true">
+                                                        <form:title>
+                                                            <core:Title text="Historial Documento de Inventario" level="Auto"/>
+                                                        </form:title>
+                                                        <form:formContainers>
+                                                            <form:FormContainer visible="true">
+                                                                <form:formElements>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Documento de Inventario" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="invDocId" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Sociedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <ComboBox id="bukrs" change="checkRowsBukrs" editable="true" enabled="false" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Centro" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <ComboBox id="werks" change="setFocus" editable="true" enabled="false" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Tipo de Documento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="docType" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                </form:formElements>
+                                                                <form:title/>
+                                                            </form:FormContainer>
+                                                        </form:formContainers>
+                                                        <form:layout>
+                                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                                        </form:layout>
+                                                    </form:Form>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                                <layout:content>
+                                                    <form:Form width="100%" editable="true" visible="true">
+                                                        <form:title>
+                                                            <core:Title id="titleEdi" text="Datos de Edición" level="Auto"/>
+                                                        </form:title>
+                                                        <form:formContainers>
+                                                            <form:FormContainer visible="true">
+                                                                <form:formElements>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Creado por" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="createdBy" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Modificado por" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Input autocomplete="false" id="modifiedBy" type="Text" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                    <form:FormElement visible="true">
+                                                                        <form:label>
+                                                                            <Label text="Reporte conteo fisico" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                                        </form:label>
+                                                                        <form:fields>
+                                                                            <Button id="GetDocConciliated" enabled="false" visible='false' icon="sap-icon://excel-attachment" press='getReporteDocInv' tooltip="Exportar Documento de Inventario"/>
+                                                                        </form:fields>
+                                                                    </form:FormElement>
+                                                                </form:formElements>
+                                                                <form:title/>
+                                                            </form:FormContainer>
+                                                        </form:formContainers>
+                                                        <form:layout>
+                                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                                        </form:layout>
+                                                    </form:Form>
+                                                </layout:content>
+                                            </layout:BlockLayoutCell>
+                                        </layout:content>
+                                    </layout:BlockLayoutRow>
+                                </layout:content>
+                            </layout:BlockLayout>
+                            <Table id="oTable" items="{path: 'oModel>/'}" selectionChange="getData" width="auto" noDataText="No data" mode="SingleSelectLeft" showSeparators="All" sticky="ColumnHeaders,HeaderToolbar" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <infoToolbar>
+                                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                                        <content>
+                                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </content>
+                                    </Toolbar>
+                                </infoToolbar>
+                                <headerToolbar>
+                                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                        <content>
+                                            <Title text="Documentos de Inventario existentes" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                                            <ToolbarSpacer width=""/>
+                                            <OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                            <SearchField id="fSearch" search="searchFilter" placeholder="Buscar documento" showSearchButton="true" visible="true" width="auto"/>
+                                        </content>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Id Doc" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Sociedad" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Centro" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Tipo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Creado por" width="auto"  wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Status" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem press="loadVAssignTeam" type="Navigation">
+                                        <cells>
+                                            <Text text="{oModel>docInvId}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text text="{oModel>bukrsD}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text text="{oModel>werksD}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text text="{oModel>type}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text text="{oModel>createdBy}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            <Text text="{oModel>status}" width="auto" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                </items>
+                <content>
+                    <Text text="Tab Bar Content goes here ..." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                </content>
+            </IconTabBar>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

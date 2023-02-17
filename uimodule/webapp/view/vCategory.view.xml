@@ -1,0 +1,66 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vCategory" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core"> 
+    <Page id= "pCategory" showHeader="true" showFooter="true" title="Categorías" showNavButton="true">
+        <VBox id="vbFrame" visible="false">
+            <VBox id="messagesBox" class="sapUiContentPadding"/>
+        </VBox> 
+        <core:HTML
+        content='&lt;input type="file" id="fileCatMatnr"
+        style="position: fixed; top: -100em" multiple="false"
+         onchange="sap.ui.getCore().byId(&apos;container-inveweb---vCategory&apos;).getController().uploadTemplate();"
+        &gt;'>
+    </core:HTML>      
+        <content>
+            <Table id="oTable" items="{path: 'oModel>/'}" fixedLayout="false" sticky="ColumnHeaders,HeaderToolbar" selectionChange="updateTable" width="auto" noDataText="No data" mode="SingleSelectLeft" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar>
+                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <ToolbarSpacer width=""/>
+                            <Button id="bNew" press="newRecord" text="Nueva categoria" type="Transparent" icon="sap-icon://write-new" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Nuevo" iconDensityAware="false"/>
+                            <Button id="bEdit" press="editRecord" text="Editar categoria" type="Transparent" icon="sap-icon://write-new-document" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Editar" iconDensityAware="false"/>
+                            <Button id="bMatrn" text="Ver materiales" tooltip="Ver materiales de categoria" press="loadRelatedMatnr" icon="sap-icon://crm-service-manager" />
+                            <SearchField id="fSearch" search="filterTable" placeholder="Buscar" showSearchButton="true" visible="true" width="auto"/>
+                            <OverflowToolbarButton id="bCancel" press="cancelEdition" text="Group" type="Reject" icon="sap-icon://cancel" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Cancelar" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bSave" press="saveEdition" text="Settings" type="Accept" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Guardar" iconDensityAware="false"/>
+                            <Button id="bDelete" press="deleteRecord" text="" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Eliminar" iconDensityAware="false"/>
+                            <Button id="bTemplate" press="downloadTemplate" text="" type="Default" icon="sap-icon://excel-attachment" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar plantilla" iconDensityAware="false"/>
+                            <Button id="bUpload" press="openFilePicker" text="" type="Default" icon="sap-icon://notes" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="subir materiales" iconDensityAware="false"/>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Id" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Categoría" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Active" >
+                        <cells>
+                            <Text text="{oModel>catId}" tooltip="{catId}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/> 
+                            <Input autocomplete="false" value="{oModel>category}" type="{oModel>type}" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="110"/> 
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

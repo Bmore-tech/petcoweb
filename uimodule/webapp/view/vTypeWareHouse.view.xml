@@ -1,0 +1,161 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vTypeWareHouse" xmlns="sap.m" 
+    xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
+    <Page id="pTypeWareHouse" showHeader="true" title="Tipo de Almacén" showFooter="true" showNavButton="true" navButtonPress="returnAction">
+		<customHeader>
+			<Bar>
+				<contentLeft>
+					<Toolbar>
+						<Button id="bBack" enabled="true" type="Back" press="returnAction"
+							tooltip="Atrás" />
+						<Button id="bNew" icon="sap-icon://create" enabled="true"
+							press="newRecord" text="Nuevo" tooltip="Nuevo" />
+						<Button id="bEdit" text="Editar" icon="sap-icon://request" enabled="false"
+							press="editRecord" tooltip="Editar" />
+						<Button id="bCancel" text="Cancelar" icon="sap-icon://cancel" enabled="false"
+							press="cancelEdition" tooltip="Cancelar" />
+						<Button id="bSave" text="Guardar" icon="sap-icon://save" enabled="false"
+							press="saveEdition" tooltip="Guardar" />
+						<Button id="bDelete" text="Borrar" icon="sap-icon://delete" enabled="false"
+							press="deleteRecord" tooltip="Eliminar" />
+						<Button id="bTemplate" text="Plantilla" icon="sap-icon://excel-attachment"
+							press="downloadTemplate" tooltip="Descargar plantilla" />
+					</Toolbar>
+				</contentLeft>
+			</Bar>
+		</customHeader>
+        <content>
+			<VBox id="vbFrame" visible="false">
+				<VBox id="messagesBox" class="sapUiContentPadding"/>
+			</VBox>
+            <layout:BlockLayout background="Default" visible="true">
+                <layout:content>
+                    <layout:BlockLayoutRow scrollable="false">
+                        <layout:content>
+                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                <layout:content>
+                                    <form:Form width="100%" editable="true" visible="true">
+                                        <form:title>
+                                            <core:Title text="Datos para Tipo de Almacén" level="Auto"/>
+                                        </form:title>
+                                        <form:formContainers>
+                                            <form:FormContainer visible="true">
+                                                <form:formElements>
+                                                    <form:FormElement visible="true">
+                                                        <form:label>
+                                                            <Label text="Id Tipo de Almacén" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Input autocomplete="false" id="lgTyp" type="Text" showValueHelp="true" valueHelpRequest="showModalLgTyp" enabled="true" visible="true" width="auto" 
+                                                                    valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0" placeholder="Consulta Tipo de Almacén"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement visible="true">
+                                                        <form:label>
+                                                            <Label text="Descripción" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <TextArea id="ltypt" editable="false" maxLength="100" rows="2" cols="25"  wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement visible="true">
+                                                        <form:label>
+                                                            <Label text="Sociedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <ComboBox id="bukrs" change="loadWerks" editable="true" enabled="false" visible="true" valueState="None" maxWidth="100%"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement visible="true">
+                                                        <form:label>
+                                                            <Label text="Centro" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <ComboBox id="werks" change="loadLgort" editable="true" enabled="false" visible="true" valueState="None" maxWidth="100%">
+                                                                <items>
+																	<core:Item text="{werksDesc}" enabled="true" key="{werks}"/>
+                                                                </items>
+                                                            </ComboBox>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement visible="true">
+                                                        <form:label>
+                                                            <Label text="Núm. / Almacén" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Input autocomplete="false" id="lgNum" type="Text" showValueHelp="false" enabled="false" visible="true"  valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                            <ComboBox id="lgort" change="setLgNum" editable="true" enabled="false" visible="true"  valueState="None" maxWidth="100%"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                </form:formElements>
+                                                <form:title/>
+                                            </form:FormContainer>
+                                        </form:formContainers>
+                                        <form:layout>
+                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                        </form:layout>
+                                    </form:Form>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                <layout:content/>
+                            </layout:BlockLayoutCell>
+                        </layout:content>
+                    </layout:BlockLayoutRow>
+                </layout:content>
+            </layout:BlockLayout>
+			<core:HTML
+					content='&lt;input type="file" id="fileTypeWareHouse"
+					style="position: fixed; top: -100em" multiple="false"
+					onchange="sap.ui.getCore().byId(&apos;container-inveweb---vTypeWareHouse&apos;).getController().uploadTemplate();"
+					&gt;'>
+				</core:HTML>
+            <Table id="oTable" items="{path: 'oModel>/'}" selectionChange="getData" fixedLayout="false" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" sticky="ColumnHeaders,HeaderToolbar" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar>
+                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <Title text="Carriles" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                            <ToolbarSpacer width=""/>
+                            <OverflowToolbarButton id="bExport"  press="downloadXLSX" tooltip="Descargar datos" type="Transparent" icon="sap-icon://download" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bUpload" press="openFilePicker" tooltip="Cargar plantilla" type="Transparent" icon="sap-icon://upload" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bAddPosition" press="addPosition" tooltip="Agregar carril" type="Accept" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bDeletePosition" press="removePosition" tooltip="Borrar posiciones" type="Reject" icon="sap-icon://less" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column width="auto" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Carril" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Activo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Active">
+                        <cells>
+                            <Input autocomplete="false" value="{oModel>description}" tooltip="{oModel>description}" editable="{oModel>editable}"/>
+                            <CheckBox selected="{oModel>status}" editable="{oModel>editable}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

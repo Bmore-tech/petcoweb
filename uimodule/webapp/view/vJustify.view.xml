@@ -1,0 +1,78 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vJustify" xmlns="sap.m">
+    <Page showHeader="true" showFooter="true" showNavButton="false">
+        <customHeader>
+			<Bar>
+				<contentLeft>
+					<Toolbar>
+						<Button id="bBack" enabled="true" type="Back" press="returnAction" tooltip="Atrás" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label design="Bold" text="Justificación por Centro" class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <content>
+            <Title text="Datos del Material" titleStyle="Auto" width="90%" textAlign="Begin" visible="true" wrapping="false" class="sapUiMediumMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin"/>
+            <Label text="Id del Material:" design="Standard" width="15%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" class="sapUiLargeMarginBegin"/>
+            <Text id="matnr" text="" width="75%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            <Label text="Descripción:" design="Standard" width="15%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" class="sapUiLargeMarginBegin"/>
+            <Text id="description" text="" width="75%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            <Table id="oTableJustify" items="{path: 'oModelJustify>/'}" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiLargeMarginTop sapUiTinyMarginBottom sapUiTinyMarginBegin sapUiTinyMarginEnd">
+                <infoToolbar>
+                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar>
+                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <Title text="Detalle de la Justificación" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                            <ToolbarSpacer width=""/>
+                            <OverflowToolbarButton id="bAddJustify" icon="sap-icon://add" enabled="false" tooltip="Agregar Justificación" type="Accept" press="addJustify" iconFirst="true" width="auto"  visible="true" iconDensityAware="false"/>
+                            <OverflowToolbarButton id="bDeleteJustify" icon="sap-icon://less" enabled="false" tooltip="Eliminar Justificación" type="Reject" press="removeJustify" iconFirst="true" width="auto"  visible="true" iconDensityAware="false"/>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Cantidad U.M.B." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Justificación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Archivo" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Active">
+                        <cells>
+                            <Text text="{oModelJustify>quantity}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text text="{oModelJustify>justify}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text text="{oModelJustify>jsDescription}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Link text="{oModelJustify>fileName}" tooltip="{oModelJustify>fileName}" press="downloadFile" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

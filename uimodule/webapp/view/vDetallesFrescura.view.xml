@@ -1,0 +1,225 @@
+<mvc:View controllerName="com.bmore.inveweb.controller.vDetallesFrescura"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.uxap"
+	xmlns:m="sap.m"
+	xmlns:f="sap.f"
+	xmlns:form="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc">
+	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="true" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="false" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
+		<headerTitle>
+			<ObjectPageDynamicHeaderTitle>
+				<expandedHeading>
+					<m:Title text="Días para posicionar: {/maktx}" wrapping="true" class="sapUiSmallMarginEnd"/>
+				</expandedHeading>
+
+				<snappedHeading>
+					<m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Center">
+						<m:FlexBox wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
+							<m:Title text="{products>Name}" wrapping="true"/>
+						</m:FlexBox>
+					</m:FlexBox>
+				</snappedHeading>
+				<navigationActions>
+					<m:OverflowToolbarButton type="Transparent" icon="sap-icon://nav-back" press="returnAction" tooltip="Regresar a Inventarios PT"/>
+				</navigationActions>
+				<actions>
+					<m:ToggleButton text="Guardar" type="Accept" press=".asyncSetDatail"/>
+					<m:Button id="btnDelete" text="Eliminar" type="Reject" press=".confirmDelete" visible="false"/>
+				</actions>
+			</ObjectPageDynamicHeaderTitle>
+		</headerTitle>
+
+		<headerContent>
+			<m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch" justifyContent="SpaceBetween">
+
+				<f:Avatar src="sap-icon://product" displaySize="L" displayShape="Square" class="sapUiTinyMarginEnd">
+				</f:Avatar>
+				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+					<m:Label text="Material"/>
+					<m:Text text="{/matnr}"/>
+				</m:VBox>
+				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+					<m:Label text="Lote"/>
+					<m:Text text="{/charg}"/>
+				</m:VBox>
+				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+					<m:Label text="Fecha lote"/>
+					<m:Text text="{/fechaLote}"/>
+				</m:VBox>
+				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+					<m:Label text="Valor"/>
+					<m:Text text="{/stprs}"/>
+				</m:VBox>
+				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+					<m:Label text="Canal"/>
+					<m:ObjectNumber number="Tradicional" emphasized="false"/>
+				</m:VBox>
+				<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+					<m:ObjectNumber unit="días en almacen" textAlign="End" state="{/status}" number="{/frescura}"/>
+					<m:ObjectStatus text="{/statusPolitica}" state="{/status}" visible="{path:'Discontinued'}" />
+					<m:ProgressIndicator id="ProgressIndicator" width="300px" percentValue="0" displayValue="{/frescura}" showValue="true" state="{/status}" />
+				</m:VBox>
+
+			</m:FlexBox>
+		</headerContent>
+
+		<sections>
+			<ObjectPageSection title="Infomación general">
+				<subSections>
+					<ObjectPageSubSection>
+						<blocks>
+							<form:SimpleForm maxContainerCols="1" editable="false" layout="ResponsiveGridLayout" labelSpanL="12" labelSpanM="12" emptySpanL="0" emptySpanM="0" columnsL="1" columnsM="1">
+								<form:content>
+									<m:Label text="Centro"/>
+									<m:Text text="{/werks}"/>
+									<m:Label text="Almacen"/>
+									<m:Text text="{/lgort}"/>
+									<m:Label text="Total inventario"/>
+									<m:Text text="{/totalInventario}"/>
+									<m:Label text="$ Bloqueado"/>
+									<m:Text text="{/priceLockedHL}"/>
+									<m:Label text="HL Totales"/>
+									<m:Text text="{/totalHL}"/>
+								</form:content>
+							</form:SimpleForm>
+							<form:SimpleForm maxContainerCols="1" editable="false" layout="ResponsiveGridLayout" labelSpanL="12" labelSpanM="12" emptySpanL="0" emptySpanM="0" columnsL="1" columnsM="1">
+								<form:content>
+									<m:Label text="Libre utilizacion"/>
+									<m:Text text="{/clabs}"/>
+									<m:Label text="Bloqueado"/>
+									<m:Text text="{/cinsm}"/>
+									<m:Label text="Control de calidad"/>
+									<m:Text text="{/cspem}"/>
+									<m:Label text="HL/Cartón"/>
+									<m:Text text="{/hl}"/>
+									<m:Label text="HL Bloqueados"/>
+									<m:Text text="{/lockedHL}"/>
+								</form:content>
+							</form:SimpleForm>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection showTitle="true" title="Retenido (segun aplique)" titleUppercase="true" visible="true">
+				<subSections>
+					<ObjectPageSubSection title="Retenido (segun aplique)" mode="Expanded">
+						<blocks>
+							<m:HBox alignItems="Stretch" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Center" renderType="Div" visible="true" displayInline="false">
+								<m:items>
+									<form:Form width="auto" editable="true" visible="true" class="sapUiSmallMargin">
+										<form:title/>
+										<form:formContainers>
+											<form:FormContainer visible="true">
+												<form:formElements>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Causa" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:Input id="cause" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label  text="Motivo general" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:Input id="generalReason" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Clasificación de acuerdo a SLA" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:Input id="slaClasification" type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Fecha bloqueo" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:DatePicker change="lockDays" id="lockDate" width="auto" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Días bloqueado" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:Text id="lockDays" text="10" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:fields>
+													</form:FormElement>
+												</form:formElements>
+												<form:title/>
+											</form:FormContainer>
+										</form:formContainers>
+										<form:layout>
+											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+										</form:layout>
+									</form:Form>
+									<form:Form width="auto" editable="true" visible="true" class="sapUiSmallMargin">
+										<form:title/>
+										<form:formContainers>
+											<form:FormContainer visible="true">
+												<form:formElements>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Comentarios" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:TextArea id="comments" rows="5" cols="20" maxLength="0" wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Decisión de empleo" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:ComboBox id="desision" selectedKey="Pendiente" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
+																<m:items>
+																	<core:Item text="Destrucción" enabled="true" key="Destrucción" />
+																	<core:Item text="A mercado" enabled="true" key="A mercado" />
+																</m:items>
+															</m:ComboBox>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Fecha liberación" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:DatePicker change="releaseDays" id="releaseDate" width="auto" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<m:Label text="Días liberado" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<m:Text id="releaseDays" text="22" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:fields>
+													</form:FormElement>
+												</form:formElements>
+												<form:title/>
+											</form:FormContainer>
+										</form:formContainers>
+										<form:layout>
+											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+										</form:layout>
+									</form:Form>
+
+								</m:items>
+								<m:layoutData/>
+							</m:HBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+				<customAnchorBarButton/>
+			</ObjectPageSection>
+
+		</sections>
+	</ObjectPageLayout>
+</mvc:View>

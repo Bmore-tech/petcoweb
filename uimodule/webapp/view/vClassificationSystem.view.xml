@@ -1,0 +1,345 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vClassificationSystem" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout">
+    <Page id="pClassificationSystem" showNavButton="true" showHeader="true" title="Sistema de Clasificación" enableScrolling="true" navButtonPress="returnAction" showSubHeader="false">
+		<customHeader>
+			<Bar>
+				<contentLeft>
+					<Toolbar>
+						<Button id="bBack" enabled="true" type="Back"
+							press="returnAction" tooltip="Atrás" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label design="Bold" text="Sistema de Clasificación"
+						class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <content>
+            <IconTabBar id="idIconTabBar" select="onNav" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="Ok">
+                <items>
+                    <IconTabFilter id="itfSearch" key="search" icon="sap-icon://search" iconColor="Default" text="Armados" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" tooltip="Consulta, modificación y alta de armados" iconDensityAware="false">
+                        <content>
+                            <form:Form width="100%" editable="true" visible="true">
+                              	<form:toolbar>
+								<Toolbar id="TB1">
+									<Title text="Armados de Materiales" level="Auto"/>
+									<ToolbarSpacer />
+<!-- 										<SegmentedButton class="sapUiSmallMarginBottom"> -->
+<!-- 											<items> -->
+												
+<!-- 											<SegmentedButtonItem id="btnRemoveMatnr" press="onRemoveMatnr" text="Quitar Material" tooltip="Quita un material del sistema de clasificación" icon="sap-icon://less" enabled="false" /> --> 
+<!-- 											</items> -->
+<!-- 										</SegmentedButton> -->
+										<SegmentedButton id="sgmntBtnsArmados"  class="sapUiSmallMarginBottom">
+											<items>
+												<SegmentedButtonItem id="btnAddMatnr" press="onAddMatnr" text="Agregar Material" tooltip="Agrega un material al sistema de clasificación" icon="sap-icon://add" enabled="true"/>
+												<SegmentedButtonItem id="btnAddZCPP" press="onAddZcpp" text="Agregar Pallet" tooltip="Agrega armado de Cama por pallet con sus Cajas por Cama" icon="sap-icon://add" enabled="false"/>
+<!-- 												<SegmentedButtonItem id="btnRemoveZCPP" press="onRemoveZcpp" text="Quitar Pallet" tooltip="Quita armado de Cama por pallet con sus Cajas por Cama" icon="sap-icon://less" enabled="false" /> -->
+												<SegmentedButtonItem id="btnAEditZCPP" press="onEditZCPP" text="Editar Pallet" tooltip="Editar armado de pallet con sus Cajas por Cama" icon="sap-icon://edit" enabled="false" />
+												<SegmentedButtonItem id="btnSaveZCPC" press="onSaveZCPC" text="Guardar pallet" tooltip="Guarda  los armados del pallet seleccionado" icon="sap-icon://save" visible="false" />
+												<SegmentedButtonItem id="btnAddZCPC" press="onAddZCPC" text="Agregar Cajas por Cama" tooltip="Agrega nuevo 'Cajas por Cama' al pallet seleccionado" icon="sap-icon://add" visible="false" />
+												<SegmentedButtonItem id="btnRemoveZCPC" press="onRemoveZCPC" text="Quitar Cajas por Cama" tooltip="Quita el último 'Cajas por Cama'" icon="sap-icon://less" visible="false" />
+												<SegmentedButtonItem id="btnCancelZCPP" press="onCancelZCPP" text="Cancelar edición" tooltip="Cancelar la edición de pallet" icon="sap-icon://cancel" visible="false" />
+											</items>
+										</SegmentedButton>
+								</Toolbar>
+							</form:toolbar>
+                                <form:formContainers>
+                                    <form:FormContainer visible="true">
+                                        <form:formElements>
+                                            <form:FormElement visible="true">
+                                                <form:label>
+                                                    <Label text="Búsqueda de Material" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <Input autocomplete="false" id="inputSelectMatnr" type="Text" showValueHelp="true" valueHelpRequest="_onValueHelpMatnr" enabled="true" visible="true" width="400px" valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmArmados" visible="false">
+                                                <form:label>
+                                                    <Label text="Armados" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <ComboBox id="cmbxArmados" change="onChangeArmados" editable="true" enabled="true" visible="true" width="229px" valueState="None" maxWidth="100%">
+                                                    </ComboBox>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPP" visible="true">
+                                                <form:label>
+                                                    <Label id="lblCPP" text="Camas por  Pallet 1" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPP" change="onChangeStInCPP" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC1" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 1" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC1" change="onChangeStInCPC1" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC2" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 2" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC2" change="onChangeStInCPC2" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC3" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 3" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC3" change="onChangeStInCPC3" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC4" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 4" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC4" change="onChangeStInCPC4" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC5" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 5" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC5" change="onChangeStInCPC5" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC6" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 6" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC6" change="onChangeStInCPC6" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC7" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 7" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC7" change="onChangeStInCPC7" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC8" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 8" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC8" change="onChangeStInCPC8" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmCPC9" visible="true">
+                                                <form:label>
+                                                    <Label text="Cajas por Cama 9" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInCPC9" change="onChangeStInCPC9" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                        </form:formElements>
+                                        <form:title/>
+                                    </form:FormContainer>
+                                </form:formContainers>
+                                <form:layout>
+                                    <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                </form:layout>
+                            </form:Form>
+                            <Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <form:Form id="formPPC" width="100%" editable="true" visible="true">
+                            	<form:toolbar>
+										<Toolbar id="TB2">
+											<Title text="Piezas por Caja" level="Auto"/>
+											<ToolbarSpacer />
+											<SegmentedButton id="sgmntBtnsZPPC"  class="sapUiSmallMarginBottom">
+												<items>
+												<SegmentedButtonItem id="btnAddZPPC" press="onAddZPPC" text="Agregar Piezas por Caja" tooltip="Agrega armado de piezas por caja" icon="sap-icon://add" enabled="false" /> 
+												<SegmentedButtonItem id="btnContinueAddZPPC" press="onContinueAddZPPC" text="Agregar Piezas por Caja" tooltip="Agrega armado de piezas por caja" icon="sap-icon://add" visible="false" /> 
+												<SegmentedButtonItem id="btnEditZPPC" press="onEditZPPC" text="Editar Piezas por Caja" tooltip="Edita armado de piezas por caja" icon="sap-icon://edit" enabled="false" />
+												<SegmentedButtonItem id="btnCancelZPPC" press="onCancelZPPC" text="Cancelar edición" tooltip="Cancela edición de piezas por caja" icon="sap-icon://cancel" enabled="true" visible="false"/>
+												<SegmentedButtonItem id="btnSaveZPPC" press="onSaveZPPC" text="Guardar Piezas por Caja" tooltip="Guarda armado de piezas por caja" icon="sap-icon://save" enabled="true" visible="false"/>
+												</items>
+											</SegmentedButton>
+										</Toolbar>
+									</form:toolbar>
+                                <form:formContainers>
+                                    <form:FormContainer visible="true">
+                                        <form:formElements>
+                                            <form:FormElement id="frmElmPPC1" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 1" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC1" change="onChangePPC1" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC2" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 2" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC2" change="onChangePPC2" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC3" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 3" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC3" change="onChangePPC3" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC4" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 4" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC4" change="onChangePPC4" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC5" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 5" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC5" change="onChangePPC5" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC6" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 6" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC6" change="onChangePPC6" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC7" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 7" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC7" change="onChangePPC7" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC8" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 8" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC8" change="onChangePPC8" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                            <form:FormElement id="frmElmPPC9" visible="true">
+                                                <form:label>
+                                                    <Label text="Piezas por Caja 9" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                </form:label>
+                                                <form:fields>
+                                                    <StepInput id="stInPPC9" change="onChangePPC9" value="0" min="0"  step="1" largerStep="2" displayValuePrecision="3" width="228px" valueState="None" editable="false" enabled="true" visible="true"/>
+                                                </form:fields>
+                                            </form:FormElement>
+                                        </form:formElements>
+                                        <form:title/>
+                                    </form:FormContainer>
+                                </form:formContainers>
+                                <form:layout>
+                                    <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                </form:layout>
+                            </form:Form>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator icon="" iconDensityAware="false"/>
+                    <IconTabFilter id="itfDB" key="dataBase" icon="sap-icon://database" iconColor="Default" text="Base de Datos" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" tooltip="Ver tabla de sistema de clasificacion" iconDensityAware="false">
+                        <content>
+                            <Table id="tblBD" width="auto" noDataText="No data" mode="None" items="{path: 'SystemClassModel>/armados'}" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <infoToolbar/>
+                                <headerToolbar>
+						          <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+						            <content>
+						              <Title id="total" text="" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+						              <ToolbarSpacer width=""/>
+						              <Label id="idLblDate" text="" tooltip="Fecha de última sincronización" />
+						              <Button id="bExport" press="exportTable" text="Descargar a excel" type="Transparent" icon="sap-icon://download" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar datos" iconDensityAware="false"/>
+						              <Button id="idLoadTable" press="getClassification" text="Ver tabla / Refrescar" type="Transparent" icon="sap-icon://table-view" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Visualizar Tabla" iconDensityAware="false"/>
+						              <SearchField id="srchFieldBD" placeholder="Buscar" showSearchButton="true" visible="true" width="auto" liveChange="_onSearchBD"/>
+<!-- 						              <OverflowToolbarButton id="bSync" press="setClassification" text="Sort" type="Transparent" icon="sap-icon://message-warning" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Resincronizar información" iconDensityAware="false"/> -->
+						            </content>
+						          </OverflowToolbar>
+						        </headerToolbar>
+                                <columns>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Caracteristicas" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Valor" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <header>
+                                            <Text text="Descripción del valor" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </header>
+                                        <footer/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                   <ColumnListItem type="Active">
+						            <cells>
+						              <Text text="{SystemClassModel>object}" />
+						              <Text text="{SystemClassModel>maktx}" />
+						              <Text text="{SystemClassModel>smbez}" />
+						              <Text text="{SystemClassModel>atflv}" />
+						              <Text text="{SystemClassModel>atnam}" />
+						            </cells>
+						          </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+                    <IconTabSeparator icon="" iconDensityAware="false"/>
+                    <IconTabFilter id="itfAttach" key="attachFile" icon="sap-icon://attachment" iconColor="Default" text="Nuevos Materiales" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" tooltip="Carga masiva de nuevos materiales con sus armados" iconDensityAware="false">
+                        <content>
+                            <Button text="Cargar archivo" press="openFilePicker" type="Accept" icon="sap-icon://attachment" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Cargar archivo" iconDensityAware="false" class="sapUiTinyMargin"/>
+                           	<Button text="Descargar plantilla sencilla" press="downloadTemplateSimple" type="Default" icon="sap-icon://download" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar plantilla de armados" iconDensityAware="false" class="sapUiTinyMargin"/>
+                           	<Button text="Descargar plantilla completa" press="downloadTemplateComplete" type="Default" icon="sap-icon://download" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar plantilla de armados" iconDensityAware="false" class="sapUiTinyMargin"/>
+  						 </content>
+                    </IconTabFilter>
+                </items>
+                <content/>
+            </IconTabBar>
+            <TextArea id="txtAreaAttch" value="" rows="25" cols="260" maxLength="0" wrapping="None" editable="false" required="false" valueStateText="Invalid entry" visible="false" class="sapUiResponsiveMargin"/>
+            <core:HTML
+				content='&lt;input type="file" id="fileArmados"
+				style="position: fixed; top: -100em" multiple="false"
+				onchange="sap.ui.getCore().byId(&apos;container-inveweb---vClassificationSystem&apos;).getController().uploadTemplate();"
+				&gt;'>
+			</core:HTML>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

@@ -1,0 +1,157 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vExplosion" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
+    <Page id="pExplosion" showHeader="true"  showFooter="true" showNavButton="true">
+        <customHeader>
+			<Bar id="_IDGenBar1">
+				<contentLeft>
+					<Toolbar id="_IDGenToolbar1">
+						<Button id="bBack" enabled="true" type="Back" press="returnAction"
+							tooltip="Atrás" />
+						<Button id="bEdit" icon="sap-icon://request" enabled="false"
+							press="editRecord" tooltip="Editar" />
+						<Button id="bCancel" icon="sap-icon://cancel" enabled="false"
+							press="cancelEdition" tooltip="Cancelar" />
+						<Button id="bSave" icon="sap-icon://save" enabled="false"
+							press="saveEdition" tooltip="Guardar" />
+					</Toolbar>
+				</contentLeft>
+				<contentMiddle>
+					<Label id="_IDGenLabel1" design="Bold" text="Explosión de Materiales"
+						class="fSize" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
+        <content>
+            <VBox id="vbFrame" visible="false">
+				<VBox id="messagesBox" class="sapUiContentPadding"/>
+			</VBox>
+            <layout:BlockLayout id="_IDGenBlockLayout1" background="Default" visible="true">
+                <layout:content>
+                    <layout:BlockLayoutRow id="_IDGenBlockLayoutRow1" scrollable="false">
+                        <layout:content>
+                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell1" width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                <layout:content>
+                                    <form:Form id="_IDGenForm1" width="100%" editable="true" visible="true">
+                                        <form:title>
+                                            <core:Title id="_IDGenTitle1" text="Datos del Material" level="Auto"/>
+                                        </form:title>
+                                        <form:formContainers>
+                                            <form:FormContainer id="_IDGenFormContainer1" visible="true">
+                                                <form:formElements>
+                                                    <form:FormElement id="_IDGenFormElement1" visible="true">
+                                                        <form:label>
+                                                            <Label id="_IDGenLabel2" text="Sociedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <ComboBox id="bukrs" change="loadWerks" editable="true" enabled="false" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement id="_IDGenFormElement2" visible="true">
+                                                        <form:label>
+                                                            <Label id="_IDGenLabel3" text="Centro" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <ComboBox id="werks" editable="true" enabled="false" visible="true" width="auto" valueState="None" maxWidth="100%"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement id="_IDGenFormElement3" visible="true">
+                                                        <form:label>
+                                                            <Label id="_IDGenLabel4" text="Id Material" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Input autocomplete="false" id="matnr" valueHelpRequest="selectMatnr" placeholder="material" type="Text" showValueHelp="true" enabled="true" visible="true" width="auto" valueHelpOnly="true" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement id="_IDGenFormElement4" visible="true">
+                                                        <form:label>
+                                                            <Label id="_IDGenLabel5" text="Descripción" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <TextArea id="description" rows="2" cols="20" maxLength="0" wrapping="None" enabled="false" required="false" valueStateText="Invalid entry" visible="true"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                </form:formElements>
+                                                <form:title/>
+                                            </form:FormContainer>
+                                        </form:formContainers>
+                                        <form:layout>
+                                            <form:ResponsiveGridLayout id="_IDGenResponsiveGridLayout1" adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                        </form:layout>
+                                    </form:Form>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                            <layout:BlockLayoutCell id="_IDGenBlockLayoutCell2" width="2" title="" titleAlignment="Begin" titleLevel="Auto">
+                                <layout:content/>
+                            </layout:BlockLayoutCell>
+                        </layout:content>
+                    </layout:BlockLayoutRow>
+                </layout:content>
+            </layout:BlockLayout>
+            <Table id="oTable" items="{path: 'oModel>/'}" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                <infoToolbar>
+                    <Toolbar id="_IDGenToolbar2" width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                        <content>
+                            <Label id="_IDGenLabel6" text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </content>
+                    </Toolbar>
+                </infoToolbar>
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar1" width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <Title id="_IDGenTitle2" text="Materiales explosionados" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                            <ToolbarSpacer id="_IDGenToolbarSpacer1" width=""/>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="_IDGenColumn1" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText1" text="Componente" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn2" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText2" text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn3" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText3" text="U.M.B." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn4" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText4" text="Relevante" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column id="_IDGenColumn5" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text id="_IDGenText5" text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem1" type="Active">
+                        <cells>
+                            <Text id="_IDGenText6" text="{oModel>component}" tooltip="{oModel>component}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText7" text="{oModel>compDesc}" tooltip="{oModel>compDesc}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Text id="_IDGenText8" text="{oModel>umb}" tooltip="{oModel>umb}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <Switch id="_IDGenSwitch1" state="{oModel>relevant}" enabled="{oModel>editable}" customTextOff="No" customTextOn="Si" type="Default" visible="true"/>
+                            <ComboBox items="{path:'oModelCmb>/', templateShareable:false}" selectedKey="{oModel>lgort}" editable="{oModel>editable}" enabled="true" placeholder="Almacén" visible="true" width="auto" valueState="None" maxWidth="100%">
+                                <core:Item  key="{oModelCmb>key}" text="{oModelCmb>text}"/>
+                            </ComboBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>

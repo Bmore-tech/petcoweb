@@ -1,0 +1,113 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
+    <Dialog id="oDialogCategory" contentWidth="45%" horizontalScrolling="true" showHeader="true" state="None" stretch="false" title="Categoria" type="Standard" verticalScrolling="true">
+        <content>
+            <VBox>
+                <VBox id="vbFrameFragment" visible="false">
+                    <VBox id="messagesBoxFragment" class="sapUiContentPadding"/>
+                </VBox>
+                <Panel id="pNuevo" height="auto" width="100%" headerText="Dar de Alta Nuevo Material" expandable="true" expanded="true" expandAnimation="true" backgroundDesign="Solid">
+
+                    <Bar>
+                        <contentMiddle>
+                            <Label design="Bold" text="Nuevo Material" class="fSize" />
+                        </contentMiddle>
+                        <contentLeft>
+                            <Toolbar>
+                                <Button id="bSaveFragment" icon="sap-icon://save" enabled="true" press="uploadMatnrByCatFragment" width="50px" tooltip="Guardar" />
+                                <!-- <Button id="bConsulta" icon="sap-icon://search" enabled="true" press="searchFilter" width="50px" tooltip="Consultar" /> -->
+                            </Toolbar>
+                        </contentLeft>
+                    </Bar>
+                    <content>
+                        <Title text="" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                        <form:Form width="100%" editable="true" visible="true">
+                            <form:title/>
+                            <form:formContainers>
+                                <form:FormContainer visible="true">
+                                    <form:formElements>
+                                        <form:FormElement visible="true">
+                                            <form:label>
+                                                <Label text="Material" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                            </form:label>
+                                            <form:fields>
+                                                <Input autocomplete="false" id="matnr" submit="uploadMatnrByCatFragment" type="Text" showValueHelp="false" enabled="true" visible="true" width="302.609375px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                            </form:fields>
+                                        </form:FormElement>
+                                        <form:FormElement visible="true">
+                                            <!-- <form:label>
+                                    <Label text="Descripción" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <Input autocomplete="false" id="matkx" type="Text" showValueHelp="false" enabled="true" visible="true" width="302.609375px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                </form:fields> -->
+                                        </form:FormElement>
+                                    </form:formElements>
+                                    <form:title/>
+                                </form:FormContainer>
+                            </form:formContainers>
+                            <form:layout>
+                                <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                            </form:layout>
+                        </form:Form>
+
+                    </content>
+                </Panel>
+                <Panel id="pMaterial" height="auto" width="100%" headerText="Consultar Tabla de Materiales" expandable="true" expanded="true" expandAnimation="true" backgroundDesign="Solid">
+                    <Table id="oTableCategory" selectionChange="tableSecond" items="{path: 'oModel>/'}" width="auto" mode="MultiSelect" showSeparators="All" growing="true" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                        <infoToolbar>
+                            <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                                <content>
+                                    <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </content>
+                            </Toolbar>
+                        </infoToolbar>
+                        <headerToolbar>
+                            <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                <content>
+                                    <Label id="lbCat" text="" tooltip="Categoría seleccionada" />
+                                    <ToolbarSpacer width=""/>
+                                    <SearchField id="fSearchFragment" search="filterSearch" placeholder="Buscar" showSearchButton="true" visible="true" width="auto"/>
+
+                                    <OverflowToolbarButton id="bDeleteMatrn" press="deleteRecord" text="Eliminar" type="Transparent" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="false" visible="true" tooltip="Eliminar" iconDensityAware="false"/>
+                                    <Button id="bDownloadM" press="downloadMatrn" text="" type="Default" icon="sap-icon://excel-attachment" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Descargar materiales" iconDensityAware="false"/>
+
+                                </content>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column id="cMatnr" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                <header>
+                                    <Text text="Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </header>
+                                <footer/>
+                            </Column>
+                            <Column id="cMatkx" width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                <header>
+                                    <Text text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </header>
+                                <footer/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem type="Active">
+                                <cells>
+                                    <Text text="{oModel>matnr}" tooltip="{oModel>matnr}"/>
+                                    <Text text="{oModel>matkx}" tooltip="{oModel>matkx}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </Panel>
+            </VBox>
+        </content>
+        <beginButton/>
+        <buttons>
+            <Button press="_closeDialog" text="Cerrar" type="Transparent" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+        </buttons>
+        <customHeader/>
+        <endButton/>
+        <subHeader/>
+    </Dialog>
+</core:FragmentDefinition>

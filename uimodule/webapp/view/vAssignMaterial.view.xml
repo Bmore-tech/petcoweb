@@ -1,0 +1,141 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.inveweb.controller.vAssignMaterial" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
+    <Page showHeader="true" title="Asignación de Material" showFooter="false" showNavButton="true" navButtonPress="returnAction">
+        <content>
+			<VBox id="messagesBox"/>
+            <layout:BlockLayout background="Default" visible="true" class="sapUiSizeCompact">
+                <layout:content>
+                    <layout:BlockLayoutRow scrollable="false">
+                        <layout:content>
+                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto" class="sapUiResponsiveMargin">
+                                <layout:content>
+                                    <form:Form width="100%" editable="true" visible="true">
+                                        <form:title>
+                                            <core:Title text="Datos para Ruta" level="Auto"/>
+                                        </form:title>
+                                        <form:formContainers>
+                                            <form:FormContainer visible="true">
+                                                <form:formElements>
+                                                    <form:FormElement label="Id Zona" visible="true">
+                                                        <form:fields>
+                                                            <Text id="zoneId"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="Descripción" visible="true">
+                                                        <form:fields>
+                                                            <Text id="description"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="Sociedad" visible="true">
+                                                        <form:fields>
+                                                            <Text id="society"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="Centro" visible="true">
+                                                        <form:fields>
+                                                            <Text id="center"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="Almacén" visible="true">
+                                                        <form:fields>
+                                                            <Text id="depotId"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                </form:formElements>
+                                                <form:title/>
+                                            </form:FormContainer>
+                                        </form:formContainers>
+                                        <form:layout>
+                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                        </form:layout>
+                                    </form:Form>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                            <layout:BlockLayoutCell width="2" title="" titleAlignment="Begin" titleLevel="Auto" class="sapUiResponsiveMargin">
+                                <layout:content>
+                                    <form:Form width="100%" editable="true" visible="true">
+                                        <form:title>
+                                            <core:Title text="Datos para Posición" level="Auto"/>
+                                        </form:title>
+                                        <form:formContainers>
+                                            <form:FormContainer visible="true">
+                                                <form:formElements>
+                                                    <form:FormElement label="Posición" visible="true">
+                                                        <form:fields>
+                                                            <Text id="positionId"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="Tipo de Almacén" visible="true">
+                                                        <form:fields>
+                                                            <Text id="lgtyp"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="Ubicación" visible="true">
+                                                        <form:fields>
+                                                            <Text id="lgpla"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="IM/WM" visible="true">
+                                                        <form:fields>
+                                                            <Text id="imwm"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement label="Secuencia" visible="true">
+                                                        <form:fields>
+                                                            <Text id="sequence"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                </form:formElements>
+                                                <form:title/>
+                                            </form:FormContainer>
+                                        </form:formContainers>
+                                        <form:layout>
+                                            <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                                        </form:layout>
+                                    </form:Form>
+                                </layout:content>
+                            </layout:BlockLayoutCell>
+                        </layout:content>
+                    </layout:BlockLayoutRow>
+                </layout:content>
+            </layout:BlockLayout>
+            <Table id="oAssignMatnrTable" items="{path: 'modelAssignMatnr>/'}" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                <headerToolbar>
+                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                        <content>
+                            <Title text="Materiales" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                            <ToolbarSpacer width=""/>
+                            <Button id="bAddMaterial" press="addMaterial" tooltip="Agregar material" type="Accept" icon="sap-icon://add" />
+                            <Button id="bDeleteMaterial" press="removeMaterial" tooltip="Eliminar material" type="Reject" icon="sap-icon://less" />
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Id de Material" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Active">
+                        <cells>
+                            <Text text="{modelAssignMatnr>matnr}"/>
+                            <Text text="{modelAssignMatnr>descM}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer/>
+        <headerContent/>
+        <subHeader/>
+        <customHeader/>
+    </Page>
+</mvc:View>
