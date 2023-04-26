@@ -1,0 +1,44 @@
+<mvc:View
+        xmlns="sap.m"
+        xmlns:mvc="sap.ui.core.mvc"  
+        displayBlock="true"
+        height="100%"
+        controllerName="com.petco.portalproveedorespetco.controller.Conceps">
+
+        <Table id="idProductsTable" inset="false">
+            <headerToolbar>
+                <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                    <content>
+                        <ToolbarSpacer width=""/>
+                        <Button id="bNew" text="Nuevo Concepto" 
+                            press="navToView('ConcepsForm', 'Datos para Conceptos')"
+                        type="Transparent" icon="sap-icon://write-new" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Nuevo" iconDensityAware="false"/>
+                    </content>
+                </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+                <Column
+                        width="12em">
+                    <Text text="Id Concepto" />
+                </Column>
+                <Column
+                        width="12em">
+                    <Text text="Descripción" />
+                </Column>
+                <Column
+                        width="12em">
+                    <Text text="Cuenta Contable" />
+                </Column>
+                <Column
+                        width="12em">
+                    <Text text="Grupo Aprovador" />
+                </Column>
+                <Column
+                        width="12em">
+                    <Text text="Grupo Prevalidador" />
+                </Column>
+            </columns>
+        </Table>
+    
+     
+</mvc:View>

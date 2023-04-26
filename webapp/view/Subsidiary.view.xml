@@ -1,0 +1,103 @@
+<mvc:View
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form" 
+    xmlns:core="sap.ui.core" 
+    xmlns:layout="sap.ui.layout"
+	displayBlock="true"
+	height="100%"
+    controllerName="com.petco.portalproveedorespetco.controller.Subsidiary">
+    
+<form:Form width="100%" editable="true" visible="true">
+    <form:formContainers>
+        <form:FormContainer visible="true">
+            <form:formElements>
+                <form:FormElement visible="true">
+                    <form:label>
+                        <Label text="Id./ Sucursal" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                    </form:label>
+                    <form:fields>
+                        <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="203px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                        <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="250px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                    </form:fields>
+                </form:FormElement>
+                <form:FormElement visible="true">
+                    <form:label>
+                        <Label text="Centro de Costos" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                    </form:label>
+                    <form:fields>
+                        <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="203px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                    </form:fields>
+                </form:FormElement>
+                <form:FormElement visible="true">
+                    <form:label>
+                        <Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                    </form:label>
+                    <form:fields/>
+                </form:FormElement>
+            </form:formElements>
+            <form:title/>
+        </form:FormContainer>
+    </form:formContainers>
+    <form:layout>
+        <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+    </form:layout>
+</form:Form>
+<Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+    <infoToolbar>
+        <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+            <content>
+                <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </content>
+        </Toolbar>
+    </infoToolbar>
+    <headerToolbar>
+        <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+            <content>
+                <Title text="Sucursales" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                <ToolbarSpacer width=""/>
+                <OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                <OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+            </content>
+        </OverflowToolbar>
+    </headerToolbar>
+    <columns>
+        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+                <Text text="Id Sucursal" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+        </Column>
+        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+                <Text text="Sucursal" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+        </Column>
+        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+            <header>
+                <Text text="Centro de Costos" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+            </header>
+            <footer/>
+        </Column>
+    </columns>
+    <items/>
+</Table>
+<form:Form width="100%" editable="true" visible="true">
+    <form:title/>
+    <form:formContainers/>
+    <form:layout>
+        <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+    </form:layout>
+</form:Form>
+<layout:Grid defaultIndent="L0 M0 S0" defaultSpan="L2 M6 S12" position="Right" width="auto" containerQuery="false" hSpacing="2" vSpacing="1" visible="true" class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiTinyMarginBegin sapUiLargeMarginEnd">
+    <layout:content>
+        <Button text="Nuevo" type="Default" icon="sap-icon://write-new-document" iconFirst="true" width="140px" enabled="true" visible="true" tooltip="Nuevo" iconDensityAware="false"/>
+        <Button text="Editar" type="Default" icon="sap-icon://edit" iconFirst="true" width="140px" enabled="true" visible="true" tooltip="Editar" iconDensityAware="false"/>
+        <Button text="Guardar" type="Accept" icon="sap-icon://save" iconFirst="true" width="140px" enabled="true" visible="true" tooltip="Guardar" iconDensityAware="false"/>
+        <Button text="Cancelar" type="Reject" icon="sap-icon://cancel" iconFirst="true" width="140px" enabled="true" visible="true" tooltip="Eliminar" iconDensityAware="false"/>
+        <Button text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="140px" enabled="true" visible="true" tooltip="Eliminar" iconDensityAware="false"/>
+    </layout:content>
+</layout:Grid>
+
+</mvc:View>
