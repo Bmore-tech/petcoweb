@@ -1,0 +1,107 @@
+{
+	"_version": "1.12.0",
+
+	"sap.app": {
+		"id": "com.petco.portalproveedorespetco",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "com.petco.portalproveedorespetco.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "app"
+		},
+
+		"dependencies": {
+			"minUI5Version": "1.112.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.ui.layout": {},
+				"sap.ui.unified": {},
+				"sap.m": {},
+				"sap.f": {},
+				"sap.tnt": {}
+			}
+		},
+
+		"handleValidation": true,
+
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.petco.portalproveedorespetco.i18n.i18n"
+				}
+			}
+		},
+
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "com.petco.portalproveedorespetco.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "main",
+					"target": "main"
+				},
+				{
+					"pattern": "reception",
+					"name": "reception",
+					"target": "reception"
+				},
+
+				{
+					"pattern": "conceps",
+					"name": "conceps",
+					"target": "conceps"
+				}
+			],
+			"targets": {
+				"main": {
+					"viewId": "main",
+					"viewName": "Main"
+				},
+				"reception": {
+					"viewId": "reception",
+					"viewName": "Reception"
+				},
+
+				"conceps": {
+					"viewId": "conceps",
+					"viewName": "Conceps"
+				}
+			}
+		}
+	}
+}

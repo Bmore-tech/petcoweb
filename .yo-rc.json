@@ -1,0 +1,15 @@
+{
+  "generator-ui5-ts-app": {
+    "application": "portalproveedorespetco",
+    "namespace": "com.petco",
+    "framework": "OpenUI5",
+    "frameworkVersion": "1.112.0",
+    "author": "petco",
+    "initrepo": false,
+    "tstypes": "@openui5/ts-types-esm",
+    "tstypesVersion": "1.112.0",
+    "appId": "com.petco.portalproveedorespetco",
+    "appURI": "com/petco/portalproveedorespetco",
+    "setupCompleted": true
+  }
+}
