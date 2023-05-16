@@ -1,13 +1,13 @@
 <mvc:View
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m"
-    xmlns:form="sap.ui.layout.form" 
-    xmlns:core="sap.ui.core" 
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
     xmlns:layout="sap.ui.layout"
 	displayBlock="true"
 	height="100%"
-    controllerName="com.petco.portalproveedorespetco.controller.Subsidiary">
-    
+    controllerName="com.bmore.portalproveedores.controller.Subsidiary">
+
 <form:Form width="100%" editable="true" visible="true">
     <form:formContainers>
         <form:FormContainer visible="true">

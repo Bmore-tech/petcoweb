@@ -1,45 +1,14 @@
-<mvc:View
-	controllerName="com.bmore.portalproveedores.controller.App"
-	displayBlock="true"
-	xmlns="sap.m"
-  xmlns:tnt="sap.tnt"
-  xmlns:f="sap.f"
-  xmlns:core="sap.ui.core"
-	xmlns:mvc="sap.ui.core.mvc">
-	<tnt:ToolPage id="main" class="sapUiDemoToolPage" sideExpanded="true">
-		<tnt:header>
-			<f:ShellBar id="shell_bar_app"
-        		showNavButton="false"
-        		navButtonPressed="onNavBack"
-        		title=""
-				homeIcon="./images/Petco-brand-logo-prd.svg"
-				showMenuButton="false"
-				showCopilot="false"
-        		showSearch="false"
-				showNotifications="false"
-				menuButtonPressed="onSideNavButtonPress"
-				showProductSwitcher="false"
-				productSwitcherPressed="fnOpen"
-        		avatarPressed="handlePopoverPress"
-				notificationsNumber="2">
-				<f:profile>
-					<f:Avatar id="avatar"/>
-				</f:profile>
-			</f:ShellBar>
-		</tnt:header>
-    <tnt:sideContent>
-			<tnt:SideNavigation visible="false" id="navbar" >
-				<tnt:item>
-					<tnt:NavigationList width="auto" expanded="true">
+<SideNavigation xmlns="sap.tnt" xmlns:core="sap.ui.core" expanded="true" selectedKey="{/selectedKey}" itemSelect="onItemSelect">
+	<tnt:NavigationList width="auto" expanded="true">
 
 						<tnt:items>
-							<tnt:NavigationListItem icon="sap-icon://home" expanded="true" hasExpander="true" text="Home" select="navTo_home">
+							<tnt:NavigationListItem icon="sap-icon://home" expanded="true" hasExpander="true" text="Home" select="navToView('DashBoard')">
 								<tnt:items/>
 							</tnt:NavigationListItem>
 
 							<tnt:NavigationListItem icon="sap-icon://monitor-payments" expanded="true" hasExpander="true" text="CFDI">
 								<tnt:items>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Recepción" select="navto_reception">
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Recepción" select="navToView('Reception')">
 										<tnt:items/>
 									</tnt:NavigationListItem>
 									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Pendientes">
@@ -72,11 +41,11 @@
 							<tnt:NavigationListItem icon="sap-icon://course-book" expanded="true" hasExpander="true" text="Catálogos">
 							<tnt:items>
 								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Conceptos"
-									select="navToConveps">
+									select="navToView('Conceps', 'Conceptos')">
 									<tnt:items/>
 								</tnt:NavigationListItem>
 								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Sucursales"
-									select="navToSubsidiary">
+									select="navToView('Subsidiary', 'Datos para Sucursales')">
 									<tnt:items/>
 								</tnt:NavigationListItem>
 								</tnt:items>
@@ -84,13 +53,5 @@
 
 						</tnt:items>
 					</tnt:NavigationList>
-				</tnt:item>
-				<tnt:fixedItem/>
-				<tnt:footer/>
-			</tnt:SideNavigation>
-		</tnt:sideContent>
-		<tnt:mainContents>
-			<App id="app"/>
-		</tnt:mainContents>
-	</tnt:ToolPage>
-</mvc:View>
+	</fixedItem>
+</SideNavigation>

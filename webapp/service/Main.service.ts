@@ -1,7 +1,7 @@
-import {Dashboard} from "com/petco/portalproveedorespetco/model/DashBoard";
+import {Dashboard} from "../model/DashBoard";
 import { showMsgStrip } from "../component/MessageStrip.component";
-import {MessageStripType} from "com/petco/portalproveedorespetco/model/MessageStripType";
-import {SOLICITUD_SERVICES, URL_ENDPOINT_SERVICES} from "com/petco/portalproveedorespetco/properties/properties";
+import {MessageStripType} from "../model/MessageStripType";
+import {SOLICITUD_SERVICES, URL_ENDPOINT_SERVICES} from "../properties/properties";
 
 export const getDashBoard = async (): Promise<Dashboard> => {
 

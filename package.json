@@ -1,33 +1,26 @@
 {
-  "name": "portalproveedorespetco",
+  "name": "portalproveedores",
   "version": "1.0.0",
-  "description": "UI5 Application: portalproveedorespetco",
-  "author": "petco",
+  "description": "UI5 Application: portalproveedores",
+  "author": "B-more",
   "license": "Apache-2.0",
   "scripts": {
     "build": "ui5 build --clean-dest",
     "build:opt": "ui5 build self-contained --clean-dest --all",
-    "start": "ui5 serve --port 3000 -o index.html",
-    "start:dist": "ui5 serve  --port 3000 -o index.html --config ui5-dist.yaml",
+    "start": "ui5 serve --port 8080 -o index.html",
+    "start:dist": "ui5 serve  --port 8080 -o index.html --config ui5-dist.yaml",
     "ts-typecheck": "tsc --noEmit",
-    "lint": "eslint webapp"
+    "lint": "eslint webapp",
+    "test": "npm run lint"
   },
   "devDependencies": {
-    "@openui5/ts-types-esm": "1.112.0",
-    "@sap/eslint-plugin-ui5-jsdocs": "^2.0.8",
-    "@sapui5/ts-types": "^1.102.15",
-    "@typescript-eslint/eslint-plugin": "^5.42.1",
-    "@typescript-eslint/parser": "^5.42.1",
-    "@ui5/cli": "^2.14.14",
-    "eslint": "^8.38.0",
-    "typescript": "^4.8.4",
-    "ui5-middleware-livereload": "^0.7.0",
-    "ui5-tooling-transpile": "^0.2.0"
-  },
-  "ui5": {
-    "dependencies": [
-      "ui5-middleware-livereload",
-      "ui5-tooling-transpile"
-    ]
+    "@openui5/types": "1.113.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@ui5/cli": "^3.0.6",
+    "eslint": "^8.37.0",
+    "typescript": "^5.0.3",
+    "ui5-middleware-livereload": "^0.8.2",
+    "ui5-tooling-transpile": "^0.5.2"
   }
 }

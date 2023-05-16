@@ -1,0 +1,17 @@
+<mvc:View xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="com.bmore.portalproveedores.controller.NotFound"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+
+	<Page showHeader="false">
+		<HBox alignItems="Center" direction="Column" fitContainer="false" width="auto" height="auto" justifyContent="Center" renderType="Div" visible="true" displayInline="false" class="sapUiResponsiveMargin">
+			<items>
+				<core:Icon src="sap-icon://sys-find" size="150px" height="150px" width="150px" visible="true" class="sapUiResponsiveMargin"/>
+				<Title text="404 No se encontro el recurso solicitado" titleStyle="H3" width="auto" textAlign="Begin" visible="true" wrapping="false" class="sapUiResponsiveMargin"/>
+				<Button text="Inicio" type="Emphasized" icon="sap-icon://home" iconFirst="false" width="125px" enabled="true" visible="true" tooltip="Ir a la página principal" iconDensityAware="false" class="sapUiResponsiveMargin" press="_onNavHome"/>
+			</items>
+			<layoutData/>
+		</HBox>
+	</Page>
+
+</mvc:View>

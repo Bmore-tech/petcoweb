@@ -1,4 +1,4 @@
-import {Carrucel} from "com/petco/portalproveedorespetco/model/Carrucel";
+import {Carrucel} from "./Carrucel";
 
 export interface Dashboard {
     approved: number;

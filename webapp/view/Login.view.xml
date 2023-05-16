@@ -1,0 +1,31 @@
+<mvc:View xmlns:form="sap.ui.layout.form" controllerName="com.bmore.portalproveedores.controller.Login" displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
+	<Page showHeader="false" id="Login">
+		<content>
+			<VBox alignItems="Stretch" direction="Column" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false" class="sapUiLargeMarginTop sapUiLargeMarginBottom sapUiTinyMarginBegin sapUiTinyMarginEnd">
+				<items />
+				<layoutData />
+			</VBox>
+			<!-- Formulario de incio de sesión -->
+			<VBox alignItems="Center" direction="Column" fitContainer="false" width="auto" height="auto" justifyContent="Center" renderType="Div" visible="true" displayInline="false" class="sapUiLargeMarginTop">
+				<items>
+					<HBox alignItems="Center" direction="Row" fitContainer="false" width="auto" height="auto" justifyContent="Center" renderType="Div" visible="true" displayInline="false">
+						<items>
+							<VBox alignItems="Center" direction="Column" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false" class="card_custom">
+								<items>
+									<Image src="./images/Petco_Logo.png" height="auto" width="200px" visible="true" densityAware="false" class="sapUiLargeMarginTop sapUiTinyMarginBottom" />
+									<Title text="Portal de proveedores" titleStyle="H2" width="auto" textAlign="Begin" visible="true" wrapping="false" class="sapUiTinyMarginBottom sapUiLargeMarginBegin sapUiLargeMarginEnd" />
+									<Input id="user" placeholder="Usuario" type="Text" showValueHelp="false" valueHelpOnly="false" />
+									<Input id="pass" placeholder="Contraseña" type="Password" showValueHelp="false" valueHelpOnly="false" />
+                  <Button text="Iniciar sesión" type="Emphasized" width="auto" enabled="true" visible="true" press="onLogin" />
+								</items>
+								<layoutData />
+							</VBox>
+						</items>
+						<layoutData />
+					</HBox>
+				</items>
+				<layoutData />
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

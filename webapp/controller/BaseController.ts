@@ -6,15 +6,11 @@ import ResourceModel from "sap/ui/model/resource/ResourceModel";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import Router from "sap/ui/core/routing/Router";
 import History from "sap/ui/core/routing/History";
-import XMLView from "sap/ui/core/mvc/XMLView";
-import oCore from "sap/ui/core/Core";
 
 /**
- * @namespace com.petco.portalproveedorespetco.controller
+ * @namespace com.bmore.portalproveedores.controller
  */
 export default abstract class BaseController extends Controller {
-
-	public pathView = "com.petco.portalproveedorespetco.view.";
 
 	/**
 	 * Convenience method for accessing the component of the controller's view.
@@ -82,93 +78,10 @@ export default abstract class BaseController extends Controller {
 		if (sPreviousHash !== undefined) {
 			window.history.go(-1);
 		} else {
-			this.getRouter().navTo("reception", {}, undefined, true);
+			this.getRouter().navTo("main", {}, undefined, true);
 		}
 	}
 
-	/**
-	 * Method onToggleButtonPress for Expanded or Collapse Menu.
-	 */
-	public onToggleButtonPress = async (oEvent): Promise<void> => {
-		const oToolPage = oEvent.getSource().getParent().getParent();
-		const oSideNavigation = oToolPage.getAggregation('sideContent');
-		const banderaExpanded : boolean = oSideNavigation.getExpanded();
-		oSideNavigation.setExpanded(!banderaExpanded);
-	}
 
-	private async navToView(view: string, title: string, isBackButton: boolean) : Promise<void> {
-
-		const viewContent = sap.ui.getCore().getModel("coreModel")?.containerView;
-		const viewXMLContent = oCore.byId("viewXMLContent");
-
-		if (viewXMLContent) {
-			viewXMLContent.destroy();
-		}
-
-		const oView : XMLView = await XMLView.create({
-			id: "viewXMLContent",
-			viewName: `${this.pathView}${view}`
-		});
-
-		await viewContent.addContent(oView);
-
-
-		const toolTitle = sap.ui.getCore().getModel("coreModel")?.toolTitle;
-		if (title !== undefined) {
-			const labelTitle = sap.ui.getCore().getModel("coreModel")?.labelTitle;
-			toolTitle.setVisible(true);
-			labelTitle.setText(title);
-		} else {
-			toolTitle.setVisible(false);
-		}
-
-		if (typeof isBackButton === "undefined") {
-
-			const historyPath = sap.ui.getCore().getModel("historyPath");
-			let listPages = [];
-			
-			if (historyPath) {
-				listPages = [...historyPath.listPages];
-
-			}
-
-			listPages.push({
-				view,
-				title
-			});
-
-
-			sap.ui.getCore().setModel({
-				listPages
-			}, "historyPath");
-		}
-
-	}
-
-
-	private async navToBack() : Promise<void> {
-
-		debugger;
-		
-		const historyPath = sap.ui.getCore().getModel("historyPath");
-		
-		if (historyPath) {
-
-			const listPages = [...historyPath.listPages];
-
-			if (listPages.length > 0) {
-				
-				listPages.pop();
-				const history = listPages[listPages.length -1];
-
-
-				sap.ui.getCore().setModel({
-					listPages
-				}, "historyPath");
-
-				this.navToView(history.view, history.title, true);
-			}
-		}
-	}
 
 }

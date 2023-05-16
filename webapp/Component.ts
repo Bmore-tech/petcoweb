@@ -3,7 +3,7 @@ import { support } from "sap/ui/Device";
 import models from "./model/models";
 
 /**
- * @namespace com.petco.portalproveedorespetco
+ * @namespace com.bmore.portalproveedores
  */
 export default class Component extends UIComponent {
 

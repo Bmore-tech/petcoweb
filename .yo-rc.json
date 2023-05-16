@@ -1,15 +1,15 @@
 {
   "generator-ui5-ts-app": {
-    "application": "portalproveedorespetco",
-    "namespace": "com.petco",
+    "application": "portalproveedores",
+    "namespace": "com.bmore",
     "framework": "OpenUI5",
-    "frameworkVersion": "1.112.0",
-    "author": "petco",
+    "frameworkVersion": "1.113.0",
+    "author": "B-more",
     "initrepo": false,
-    "tstypes": "@openui5/ts-types-esm",
-    "tstypesVersion": "1.112.0",
-    "appId": "com.petco.portalproveedorespetco",
-    "appURI": "com/petco/portalproveedorespetco",
+    "tstypes": "@openui5/types",
+    "tstypesVersion": "1.113.0",
+    "appId": "com.bmore.portalproveedores",
+    "appURI": "com/bmore/portalproveedores",
     "setupCompleted": true
   }
 }

@@ -1,121 +1,82 @@
-<mvc:View
-		xmlns="sap.m"
-		xmlns:f="sap.f"
-		xmlns:tnt="sap.tnt"
-		xmlns:mvc="sap.ui.core.mvc"
-		xmlns:l="sap.ui.layout"
-		displayBlock="true"
-		height="100%"
-		controllerName="com.petco.portalproveedorespetco.controller.Main">
+<mvc:View controllerName="com.bmore.portalproveedores.controller.Main" displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:card="sap.f.cards" height="100%">
+	<Page showHeader="false">
+		<HBox justifyContent="Center" renderType="Bare" >
+			<Carousel height="400px" width="100%" loop="true" showPageIndicator="true" pageIndicatorPlacement="Bottom" visible="true" pages="{dashboard>/carrucel}" class="sapUiContentPadding">
+				<pages>
+					<Image src="{dashboard>}" height="500px" width="500px" visible="true" densityAware="false" />
+				</pages>
+			</Carousel>
+		</HBox>
+    <HBox justifyContent="Center" renderType="Bare" >
+   <f:Card class="sapUiMediumMargin" width="500px">
+			<f:header>
 
+						<card:Header
+							title="Total de solicitudes:"
+							iconSrc="sap-icon://activity-2" />
 
-	<tnt:ToolPage id="toolPage" sideExpanded="true">
-		<tnt:header>
-			
-			<tnt:ToolHeader height="50px" width="auto" design="Transparent" visible="true" enabled="true">
-				<tnt:content>
-					<Button text="" type="Default" icon="sap-icon://menu2" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Preciona para ver menú" press="onToggleButtonPress"/>
-					<ToolbarSpacer width="20px"/>
-					<Title text="Portal de Proveedores" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
-					<ToolbarSpacer width=""/>
-					<Button icon="sap-icon://bell" type="Transparent">
-						<layoutData>
-							<OverflowToolbarLayoutData priority="NeverOverflow" />
-						</layoutData>
-					</Button>
-					<Avatar
-							displaySize="XS"
-							backgroundColor="Accent7"
-							initials="JD"
-							badgeIcon="sap-icon://edit" />
-				</tnt:content>
-			</tnt:ToolHeader>
-		</tnt:header>
+			</f:header>
+			<f:content>
+				<List showSeparators="None">
+					<CustomListItem>
+						<HBox alignItems="Center" justifyContent="SpaceBetween">
+							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+								<ObjectStatus
+										class="sapMObjectStatusLarge"
+										icon="sap-icon://message-success"
+										state="Success" />
+							</VBox>
 
+							<NumericContent value="{dashboard>/approved}" scale="APROBADAS"
+											valueColor="Good" class="sapUiTinyMargin sapUiSmallMarginEnd"
+											press="sayHello()" />
+						</HBox>
+					</CustomListItem>
+					<CustomListItem>
+						<HBox alignItems="Center" justifyContent="SpaceBetween">
+							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+								<ObjectStatus
+										class="sapMObjectStatusLarge"
+										icon="sap-icon://begin"
+										state="Warning" />
+							</VBox>
 
-		<tnt:sideContent>
-			<tnt:SideNavigation visible="true">
-				<tnt:item>
-					<tnt:NavigationList width="auto" expanded="true">
+							<NumericContent value="{dashboard>/progress}" scale="En progreso"
+											valueColor="Critical" class="sapUiTinyMargin sapUiSmallMarginEnd"
+											press="press" />
+						</HBox>
+					</CustomListItem>
+					<CustomListItem>
+						<HBox alignItems="Center" justifyContent="SpaceBetween">
+							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+								<ObjectStatus
+										class="sapMObjectStatusLarge"
+										icon="sap-icon://sap-box"
+										state="None" />
+							</VBox>
 
-						<tnt:items>
-							<tnt:NavigationListItem icon="sap-icon://home" expanded="true" hasExpander="true" text="Home" select="navToView('DashBoard')">
-								<tnt:items/>
-							</tnt:NavigationListItem>
-							
-							<tnt:NavigationListItem icon="sap-icon://monitor-payments" expanded="true" hasExpander="true" text="CFDI">
-								<tnt:items>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Recepción" select="navToView('Reception')">
-										<tnt:items/>
-									</tnt:NavigationListItem>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Pendientes">
-										<tnt:items/>
-									</tnt:NavigationListItem>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Borradores">
-										<tnt:items/>
-									</tnt:NavigationListItem>
-									<tnt:NavigationListItem expanded="true" hasExpander="true" text="Rechazados"/>
-								</tnt:items>
-							</tnt:NavigationListItem>	
+							<NumericContent value="{dashboard>/draft}" scale="Borradores"
+											valueColor="Neutral" class="sapUiTinyMargin sapUiSmallMarginEnd"
+											press="press" />
+						</HBox>
+					</CustomListItem>
+					<CustomListItem>
+						<HBox alignItems="Center" justifyContent="SpaceBetween">
+							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+								<ObjectStatus
+										class="sapMObjectStatusLarge"
+										icon="sap-icon://error"
+										state="Error" />
+							</VBox>
 
-
-							<tnt:NavigationListItem icon="sap-icon://employee-approvals" expanded="true" hasExpander="true" text="Aprobadores">
-							<tnt:items>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Aprobar Solicitudes">
-									<tnt:items/>
-								</tnt:NavigationListItem>					
-								</tnt:items>
-							</tnt:NavigationListItem>	
-							
-							<tnt:NavigationListItem icon="sap-icon://manager-insight" expanded="true" hasExpander="true" text="Reportes">
-							<tnt:items>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Histórico de facturas">
-									<tnt:items/>
-								</tnt:NavigationListItem>					
-								</tnt:items>
-							</tnt:NavigationListItem>	
-
-							<tnt:NavigationListItem icon="sap-icon://course-book" expanded="true" hasExpander="true" text="Catálogos">
-							<tnt:items>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Conceptos" 
-									select="navToView('Conceps', 'Conceptos')">
-									<tnt:items/>
-								</tnt:NavigationListItem>	
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Sucursales" 
-									select="navToView('Subsidiary', 'Datos para Sucursales')">
-									<tnt:items/>
-								</tnt:NavigationListItem>				
-								</tnt:items>
-							</tnt:NavigationListItem>
-		
-						</tnt:items>
-					</tnt:NavigationList>
-				</tnt:item>
-				<tnt:fixedItem/>
-				<tnt:footer/>
-			</tnt:SideNavigation>
-		</tnt:sideContent>
-
-		<tnt:mainContents>
-			<OverflowToolbar id="toolTitle" width="auto" height="46px" design="Solid" visible="false">
-                <content>
-                    <Button id="backButtonToolBar" type="Transparent" icon="sap-icon://nav-back" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"
-						press="navToBack()" />
-                </content>
-				<Label id="labelTitle" />
-            </OverflowToolbar>
-			<l:VerticalLayout
-					class="sapUiContentPadding"
-					id="stripContent"
-					visible="false"
-					width="100%">
-			</l:VerticalLayout>
-			<l:VerticalLayout
-					class="sapUiContentPadding"
-					id="viewContent"
-					width="100%">
-			</l:VerticalLayout>
-
-		</tnt:mainContents>
-	</tnt:ToolPage>
+							<NumericContent value="{dashboard>/rejected}" scale="Rechazadas"
+											valueColor="Error" class="sapUiTinyMargin sapUiSmallMarginEnd"
+											press="press" />
+						</HBox>
+					</CustomListItem>
+				</List>
+			</f:content>
+		</f:Card>
+    </HBox>
+	</Page>
 </mvc:View>
