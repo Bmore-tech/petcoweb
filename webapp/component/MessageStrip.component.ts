@@ -6,21 +6,21 @@ import MessageStrip from "sap/m/MessageStrip";
 
 const oInvisibleMessage = InvisibleMessage.getInstance();
 
-export const showMsgStrip = (mesaage : string, type: string) => {
+export const showMsgStrip = async (mesaage : string, type: string): Promise<void> => {
 
     const oMessageStrip = oCore.byId("msgStrip");
     if (oMessageStrip) {
         oMessageStrip.destroy();
     }
 
-    generateMsgStrip(mesaage, type);
+    await generateMsgStrip(mesaage, type);
 }
 
-const generateMsgStrip = (mesaage : string, type: string) => {
+const generateMsgStrip = async (mesaage : string, type: string): Promise<void> => {
 
     const sType = type;
     const containerMessage = sap.ui.getCore().getModel("coreModel")?.containerMessage;
-    const oMessageStrip = new MessageStrip("msgStrip", {
+    const oMessageStrip : MessageStrip = new MessageStrip("msgStrip", {
         text: mesaage,
         showCloseButton: true,
         showIcon: true,
@@ -28,8 +28,9 @@ const generateMsgStrip = (mesaage : string, type: string) => {
     });
 
     oInvisibleMessage.announce("New Information Bar of type " + sType + " " + mesaage, InvisibleMessageMode.Assertive);
-    containerMessage.addContent(oMessageStrip);
-    containerMessage.setVisible(true);
+	containerMessage.addItem(oMessageStrip);
+	containerMessage.setVisible(true);
+	//await setTimeout(containerMessage.removeItem(oMessageStrip), 10000);
 }
 
 

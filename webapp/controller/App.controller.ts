@@ -1,5 +1,7 @@
 import BaseController from "./BaseController";
 import Fragment from "sap/ui/core/Fragment";
+import {JwtData} from "com/bmore/portalproveedores/model/response/JwtData";
+import {decodeJWT, getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
 
 /**
  * @namespace com.bmore.portalproveedores.controller
@@ -23,6 +25,11 @@ export default class App extends BaseController {
 		this.byId("shell_bar_app").setShowMenuButton(false);
 		this.byId("shell_bar_app").setShowNavButton(false);
 		this.byId("navbar").setVisible(false);
+		sap.ui.getCore().byId("__component0---Login--stripContent").setVisible(false);
+
+		sap.ui.getCore().setModel({
+			containerMessage : sap.ui.getCore().byId("__component0---Login--stripContent")
+		}, "coreModel");
 	}
 	public home_navbar(): void {
 		this.byId("avatar").setVisible(true);
@@ -30,19 +37,25 @@ export default class App extends BaseController {
 		this.byId("shell_bar_app").setShowNavButton(false);
 		this.byId("navbar").setVisible(true);
 	}
-	public handlePopoverPress(oEvent): void {
-		var oButton = this.byId("avatar");
-		var sMsg = "Bienvenido ";
+	public async handlePopoverPress(oEvent): void {
+
+		const jwtEncode : string = await getJWT();
+		await decodeJWT(jwtEncode);
+		const jwt: string = sap.ui.getCore().getModel("sessionData")?.payload;
+
+		const oButton = this.byId("avatar");
+		const sMsg = `Bienvenido ${jwt.nameUser}`;
+
 		if (!this._oPopoverUser) {
-		  Fragment.load({
-			name: "com.bmore.portalproveedores.view.fragments.user",
-			controller: this
-		  }).then(function (pPopover) {
-			this._oPopoverUser = pPopover;
+
+			this._oPopoverUser = await Fragment.load({
+				name: "com.bmore.portalproveedores.view.fragments.user",
+				controller: this
+			});
+
 			this.getView().addDependent(this._oPopoverUser);
 			this._oPopoverUser.openBy(oButton);
 			this._oPopoverUser.setTitle(sMsg);
-		  }.bind(this));
 		} else {
 		  this._oPopoverUser.openBy(oButton);
 		  this._oPopoverUser.setTitle(sMsg);
