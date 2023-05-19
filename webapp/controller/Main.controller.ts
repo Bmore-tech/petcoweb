@@ -2,8 +2,8 @@ import MessageBox from "sap/m/MessageBox";
 import BaseController from "./BaseController";
 import formatter from "../model/formatter";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import {Dashboard} from "../model/DashBoard";
-import {Carrucel} from "../model/Carrucel";
+import {Dashboard} from "../model/resquest/DashBoard";
+import {Carrucel} from "../model/resquest/Carrucel";
 import { getDashBoard } from "../service/Main.service";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import Integer from "sap/ui/model/type/Integer";
@@ -20,19 +20,20 @@ export default class Main extends BaseController {
 		this.AppController.home_navbar();
 	}
 	public async onInit(): Promise<void> {
+
 		BusyIndicator.show(0);
 
-		//const dashBoardData: Dashboard = await getDashBoard();
-		//const imagesCarrucel = await this.getCarrucel(dashBoardData);
-		//const total: Integer = await this.getTotal(dashBoardData);
+		const dashBoardData: Dashboard = await getDashBoard();
+		const imagesCarrucel: Array<string> = await this.getCarrucel(dashBoardData);
+		const total: Integer = await this.getTotal(dashBoardData);
 
 		BusyIndicator.hide();
 
-		/*this.setModel(new JSONModel({
+		this.setModel(new JSONModel({
 			...dashBoardData,
 			carrucel: imagesCarrucel,
 			total
-		}), "dashboard");*/
+		}), "dashboard");
 	}
 
 

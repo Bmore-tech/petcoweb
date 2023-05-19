@@ -1,7 +1,9 @@
-import {Dashboard} from "../model/DashBoard";
+import {Dashboard} from "../model/resquest/DashBoard";
 import { showMsgStrip } from "../component/MessageStrip.component";
 import {MessageStripType} from "../model/MessageStripType";
-import {SOLICITUD_SERVICES, URL_ENDPOINT_SERVICES} from "../properties/properties";
+import {SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT} from "../properties/properties";
+import {getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
+
 
 export const getDashBoard = async (): Promise<Dashboard> => {
 
@@ -9,7 +11,18 @@ export const getDashBoard = async (): Promise<Dashboard> => {
 
     try {
 
-        const dashBoardDataRequest = await fetch(`${URL_ENDPOINT_SERVICES}${SOLICITUD_SERVICES.dashboard}`);
+		const jwt : string = await getJWT();
+		const dashBoardDataRequest: Response = await fetch(
+		`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.dashboard}`,
+		{
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+
+		);
 
         if (dashBoardDataRequest.status == 200) {
             dashBoardResponse = await dashBoardDataRequest.json();
