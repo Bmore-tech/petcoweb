@@ -17,3 +17,6 @@ span.sapMBtnInner.sapMBtnEmphasized {
     color: #ffffff;
     text-shadow: 0 0 0.125rem transparent;
 }
+.sapTntNavLIItem .sapTntNavLIGroupIcon {
+    color: #001952 !important;
+}
