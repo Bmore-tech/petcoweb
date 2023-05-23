@@ -29,3 +29,21 @@ server:
         *transpileConfig
     - name: ui5-middleware-livereload
       afterMiddleware: compression
+
+---
+specVersion: '2.3'
+kind: extension
+type: project-shim
+metadata:
+  name: thirdparty # this can be your project shim name
+shims:
+  configurations:
+    moment-timezone: # name as defined in package.json
+      specVersion: '2.3'
+      type: module # Use module type
+      metadata:
+        name: moment-timezone
+      resources:
+        configuration:
+          paths:
+            /resources/thirdparty/moment-timezone/: ''  # location where modules are stored

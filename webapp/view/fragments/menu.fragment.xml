@@ -1,6 +1,5 @@
 <SideNavigation xmlns="sap.tnt" xmlns:core="sap.ui.core" expanded="true" selectedKey="{/selectedKey}" itemSelect="onItemSelect">
 	<tnt:NavigationList width="auto" expanded="true">
-
 						<tnt:items>
 							<tnt:NavigationListItem icon="sap-icon://home" expanded="true" hasExpander="true" text="Home" select="navToView('DashBoard')">
 								<tnt:items/>

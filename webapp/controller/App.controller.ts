@@ -1,7 +1,8 @@
 import BaseController from "./BaseController";
 import Fragment from "sap/ui/core/Fragment";
-import {JwtData} from "com/bmore/portalproveedores/model/response/JwtData";
 import {decodeJWT, getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
+import Model from "sap/ui/model/Model";
+import UI5Element from "sap/ui/core/Element";
 
 /**
  * @namespace com.bmore.portalproveedores.controller
@@ -43,8 +44,8 @@ export default class App extends BaseController {
 		await decodeJWT(jwtEncode);
 		const jwt: string = sap.ui.getCore().getModel("sessionData")?.payload;
 
-		const oButton = this.byId("avatar");
-		const sMsg = `Bienvenido ${jwt.nameUser}`;
+		const oButton: UI5Element = this.byId("avatar");
+		const sMsg: string = `Bienvenido ${jwt.nameUser}`;
 
 		if (!this._oPopoverUser) {
 
@@ -62,12 +63,13 @@ export default class App extends BaseController {
 		}
 	}
 	public _closeSession(): void {
+		localStorage.removeItem("sessionData");
 		this.getRouter().navTo("TargetLogin");
 	}
 	public navto_reception(): void {
 		this.getRouter().navTo("Reception");
 	}
-	public navTo_home(): void {
+	public async navTo_home(): void {
 		this.getRouter().navTo("Main");
 	}
 	public navToSubsidiary(): void {
