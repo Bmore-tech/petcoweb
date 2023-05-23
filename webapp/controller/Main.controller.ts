@@ -1,4 +1,3 @@
-import MessageBox from "sap/m/MessageBox";
 import BaseController from "./BaseController";
 import formatter from "../model/formatter";
 import JSONModel from "sap/ui/model/json/JSONModel";
@@ -15,11 +14,13 @@ import Integer from "sap/ui/model/type/Integer";
 export default class Main extends BaseController {
 	private formatter = formatter;
 
-	public onAfterRendering(): void {
+	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
-		this.AppController.home_navbar();
+		await this.AppController.home_navbar();
 	}
 	public async onInit(): Promise<void> {
+
+		console.log("onInit Main .............")
 
 		BusyIndicator.show(0);
 
@@ -27,13 +28,14 @@ export default class Main extends BaseController {
 		const imagesCarrucel: Array<string> = await this.getCarrucel(dashBoardData);
 		const total: Integer = await this.getTotal(dashBoardData);
 
-		BusyIndicator.hide();
-
-		this.setModel(new JSONModel({
+		await this.setModel(new JSONModel({
 			...dashBoardData,
 			carrucel: imagesCarrucel,
 			total
 		}), "dashboard");
+
+		BusyIndicator.hide();
+
 	}
 
 

@@ -20,3 +20,11 @@ span.sapMBtnInner.sapMBtnEmphasized {
 .sapTntNavLIItem .sapTntNavLIGroupIcon {
     color: #001952 !important;
 }
+
+.sapMMessageToast{
+	background : #629192 !important;
+	color: #FFFFFF !important;
+	width:25rem !important;
+	max-width : 25rem !important;
+	opacity: 0.5 !important;
+}

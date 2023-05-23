@@ -21,7 +21,6 @@ export const getDashBoard = async (): Promise<Dashboard> => {
 					'Authorization': `Bearer ${jwt}`
 				}
 			}
-
 		);
 
         if (dashBoardDataRequest.status == 200) {
