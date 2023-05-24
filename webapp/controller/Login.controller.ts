@@ -4,6 +4,8 @@ import {signIn} from "com/bmore/portalproveedores/service/Login.service";
 import {SignInRequest} from "com/bmore/portalproveedores/model/resquest/SignInRequest";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import {validatedRoles} from "com/bmore/portalproveedores/util/JwtHelper";
+import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
+import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
 
 /**
  * @namespace com.bmore.portalproveedores.controller
@@ -17,18 +19,24 @@ export default class Login extends BaseController {
 
 		BusyIndicator.show(0);
 
-		const userRequest : SignInRequest = {
-			user: this.byId("user").getValue(),
-			password: this.byId("pass").getValue()
-		}
+		const user: string = this.byId("user").getValue();
+		const password: string = this.byId("pass").getValue();
 
-		if (await signIn(userRequest)) {
-			await this.AppController.navTo_home();
-			this.Main = sap.ui.getCore().byId('__component0---main').getController();
-			await validatedRoles();
-			await this.Main.onInit();
+		if (user.length == 0 || password.length == 0) {
+			showMsgStrip("Los campos de usuario o password no deben estar vacios.", MessageStripType.INFORMATION);
+		} else {
 
-			//await this.getRouter().navTo("Main");
+			const userRequest: SignInRequest = {
+				user,
+				password
+			}
+
+			if (await signIn(userRequest)) {
+				await this.AppController.navTo_home();
+				this.Main = sap.ui.getCore().byId('__component0---main').getController();
+				await validatedRoles();
+				await this.Main.onInit();
+			}
 		}
 
 		BusyIndicator.hide();

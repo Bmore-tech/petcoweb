@@ -3,6 +3,7 @@ import { showMsgStrip } from "../component/MessageStrip.component";
 import {MessageStripType} from "../model/MessageStripType";
 import {SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT} from "../properties/properties";
 import {getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
+import {ErrorResponse} from "com/bmore/portalproveedores/model/response/ErrorResponse";
 
 
 export const getDashBoard = async (): Promise<Dashboard> => {
@@ -12,7 +13,7 @@ export const getDashBoard = async (): Promise<Dashboard> => {
     try {
 
 		const jwt : string = await getJWT();
-		const dashBoardDataRequest: Response = await fetch(
+		const dashBoardDataResponse: Response = await fetch(
 		`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.dashboard}`,
 		{
 				method: 'GET',
@@ -23,16 +24,16 @@ export const getDashBoard = async (): Promise<Dashboard> => {
 			}
 		);
 
-        if (dashBoardDataRequest.status == 200) {
-            dashBoardResponse = await dashBoardDataRequest.json();
+        if (dashBoardDataResponse.status == 200) {
+            dashBoardResponse = await dashBoardDataResponse.json();
         } else {
 
-            const dashBoardResponseError : any  = dashBoardResponse = await dashBoardDataRequest.json();
-            console.log(dashBoardDataRequest)
-            if (dashBoardDataRequest.status >= 500) {
+            const dashBoardResponseError: ErrorResponse = await dashBoardDataResponse.json();
+            console.log(dashBoardDataResponse)
+            if (dashBoardDataResponse.status >= 500) {
                 showMsgStrip("Error no se puede cargar la información en el dashboard.", MessageStripType.ERROR);
             } else {
-                showMsgStrip(dashBoardResponseError.mensaje, MessageStripType.WARNING);
+                showMsgStrip(dashBoardResponseError.message, MessageStripType.WARNING);
             }
         }
 

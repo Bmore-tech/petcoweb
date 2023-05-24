@@ -25,7 +25,7 @@ export const decodeJWT  = async (token: string) : void  => {
 export const getJWT  = async () : string  => {
 
 	await validatedSession();
-	let token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
+	const token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
 
 	return token;
 }
@@ -53,9 +53,9 @@ const validatedSession  = async () : void  => {
 
 		await decodeJWT(token);
 
-		let payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
+		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
 
-		let dateExpiration: number = new Date(Number(`${payload.exp}000`)).getTime();
+		const dateExpiration: number = new Date(Number(`${payload.exp}000`)).getTime();
 		console.log("Date Expiration : ", dateExpiration);
 
 		if (new Date().getTime() > dateExpiration) {
@@ -82,7 +82,7 @@ export const validatedRoles  = async () : void  => {
 	if (token !== undefined) {
 
 		await decodeJWT(token);
-		let payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
+		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
 
 		const roleUser: string = Object.values(payload.roles)
 			.find((role: string):boolean => Roles[role] != Roles.EXECUTE_APPLICATION);

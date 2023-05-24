@@ -1,7 +1,6 @@
 import BaseController from "./BaseController";
 import Fragment from "sap/ui/core/Fragment";
 import {decodeJWT, getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
-import Model from "sap/ui/model/Model";
 import UI5Element from "sap/ui/core/Element";
 
 /**
@@ -45,7 +44,7 @@ export default class App extends BaseController {
 		const jwt: string = sap.ui.getCore().getModel("sessionData")?.payload;
 
 		const oButton: UI5Element = this.byId("avatar");
-		const sMsg: string = `Bienvenido ${jwt.nameUser}`;
+		const sMsg = `Bienvenido ${jwt.nameUser}`;
 
 		if (!this._oPopoverUser) {
 

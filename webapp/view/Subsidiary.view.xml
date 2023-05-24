@@ -1,7 +1,7 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" displayBlock="true" height="100%" controllerName="com.bmore.portalproveedores.controller.Subsidiary">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" displayBlock="true" height="100%" controllerName="com.bmore.portalproveedores.controller.Subsidiary">
 	<Page showHeader="false">
 		<content>
-			<Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+			<Table items="{path: 'subsidiariesModel>/'}" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
 				<infoToolbar>
 					<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
 						<content>
@@ -48,9 +48,9 @@
 				<items>
 					<ColumnListItem type="Active">
 						<cells>
-							<Input value="{idSubsidiary}" editable="false" />
-							<Input value="{name}" editable="false" />
-							<Input value="{idCostCenter}" editable="false" />
+							<Input value="{subsidiariesModel>subsidiaryId}" editable="false" />
+							<Input value="{subsidiariesModel>subsidiary}" editable="false" />
+							<Input value="{subsidiariesModel>costCenter}" editable="false" />
 						</cells>
 					</ColumnListItem>
 				</items>

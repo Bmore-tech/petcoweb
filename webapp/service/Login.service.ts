@@ -27,7 +27,7 @@ export const signIn = async (userRequest : SignInRequest): Promise<boolean> => {
 
 		if (loginDataResponse.status == 200) {
 
-			let jwtResponse: JwtResponse = await loginDataResponse.json();
+			const jwtResponse: JwtResponse = await loginDataResponse.json();
 			decodeJWT(jwtResponse.jwt);
 			localStorage.setItem("sessionData", JSON
 				.stringify({

@@ -90,6 +90,7 @@
 			</tnt:SideNavigation>
 		</tnt:sideContent>
 		<tnt:mainContents>
+      <VBox id="stripContent" visible="false" justifyContent="Center" renderType="Bare"></VBox>
 			<App id="app"/>
 		</tnt:mainContents>
 	</tnt:ToolPage>
