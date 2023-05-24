@@ -11,5 +11,6 @@ export const SECURITY_SERVICES : object = {
 
 export const SOLICITUD_SERVICES : object = {
     dashboard: "/dashboard",
-	subsidiary : "/subsidiary"
+	subsidiary : "/subsidiary",
+	concep: "/concept"
 }

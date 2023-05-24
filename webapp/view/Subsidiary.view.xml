@@ -1,7 +1,7 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" displayBlock="true" height="100%" controllerName="com.bmore.portalproveedores.controller.Subsidiary">
 	<Page showHeader="false">
 		<content>
-			<Table items="{path: 'subsidiariesModel>/'}" width="auto" noDataText="No data" mode="MultiSelect" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+			<Table items="{path: 'subsidiariesModel>/'}" width="auto" noDataText="No data" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
 				<infoToolbar>
 					<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
 						<content>

@@ -1,4 +1,3 @@
-import {SubsidiaryResponse} from "com/bmore/portalproveedores/model/response/SubsidiaryResponse";
 import {getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
 import {SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT} from "com/bmore/portalproveedores/properties/properties";
 import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
@@ -86,5 +85,89 @@ export const saveSubsidiary = async (subsidiary : Subsidiary): Promise<boolean> 
 	}
 
 	return isSaveSubsidiary;
+}
+
+export const updateSubsidiary = async (subsidiary : Subsidiary): Promise<boolean> => {
+
+	let isUpdateSubsidiary: boolean = false;
+
+	try {
+
+		const jwt : string = await getJWT();
+		const subsidiaryDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.subsidiary}`,
+			{
+				method: 'POST',
+				body: JSON.stringify(subsidiary),
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (subsidiaryDataResponse.status == 200) {
+			isUpdateSubsidiary = true;
+			showMsgStrip("Datos de sucursal actualizados con exito.", MessageStripType.SUCCESS);
+		} else {
+
+			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
+			console.log(subsidiaryResponseError)
+			if (subsidiaryDataResponse.status >= 500) {
+				showMsgStrip("Error en el servicio al actualizar la sucursal.", MessageStripType.ERROR);
+			} else {
+				showMsgStrip(subsidiaryResponseError.message, MessageStripType.WARNING);
+			}
+		}
+
+	} catch (e) {
+		console.log(e);
+		showMsgStrip("Error no se puede actualizar la información de la sucursal.", MessageStripType.ERROR);
+	}
+
+	return isUpdateSubsidiary;
+}
+
+
+
+
+export const deleteSubsidiary = async (subsidiaryId : string): Promise<boolean> => {
+
+	let isDeleteSubsidiary: boolean = false;
+
+	try {
+
+		const jwt : string = await getJWT();
+		const subsidiaryDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.subsidiary}/${subsidiaryId}`,
+			{
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (subsidiaryDataResponse.status == 204) {
+			isDeleteSubsidiary = true;
+			showMsgStrip("Datos de sucursal borrados con exito.", MessageStripType.SUCCESS);
+		} else {
+
+			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
+			console.log(subsidiaryResponseError)
+			if (subsidiaryDataResponse.status >= 500) {
+				showMsgStrip("Error en el servicio al borrar la sucursal.", MessageStripType.ERROR);
+			} else {
+				showMsgStrip(subsidiaryResponseError.message, MessageStripType.WARNING);
+			}
+		}
+
+	} catch (e) {
+		console.log(e);
+		showMsgStrip("Error no se puede borrar la información de la sucursal.", MessageStripType.ERROR);
+	}
+
+	return isDeleteSubsidiary;
 }
 
