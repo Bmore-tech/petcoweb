@@ -1,44 +1,74 @@
-<mvc:View
-        xmlns="sap.m"
-        xmlns:mvc="sap.ui.core.mvc"
-        displayBlock="true"
-        height="100%"
-        controllerName="com.bmore.portalproveedores.controller.Conceps">
-
-        <Table id="idProductsTable" inset="false">
-            <headerToolbar>
-                <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
-                    <content>
-                        <ToolbarSpacer width=""/>
-                        <Button id="bNew" text="Nuevo Concepto"
-                            press="navToView('ConcepsForm', 'Datos para Conceptos')"
-                        type="Transparent" icon="sap-icon://write-new" iconFirst="true" width="auto" enabled="true" visible="true" tooltip="Nuevo" iconDensityAware="false"/>
-                    </content>
-                </OverflowToolbar>
-            </headerToolbar>
-            <columns>
-                <Column
-                        width="12em">
-                    <Text text="Id Concepto" />
-                </Column>
-                <Column
-                        width="12em">
-                    <Text text="Descripción" />
-                </Column>
-                <Column
-                        width="12em">
-                    <Text text="Cuenta Contable" />
-                </Column>
-                <Column
-                        width="12em">
-                    <Text text="Grupo Aprovador" />
-                </Column>
-                <Column
-                        width="12em">
-                    <Text text="Grupo Prevalidador" />
-                </Column>
-            </columns>
-        </Table>
-
-
+<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" height="100%" controllerName="com.bmore.portalproveedores.controller.Conceps">
+	<Page showHeader="false">
+		<content>
+			<Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+				<infoToolbar>
+					<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+						<content>
+							<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+						</content>
+					</Toolbar>
+				</infoToolbar>
+				<headerToolbar>
+					<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+						<content>
+							<Title text="Conceptos" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false" />
+							<ToolbarSpacer width="" />
+							<Button id="AddConceptButton" text="Nuevo" type="Accept" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onAddConcept" />
+							<Button id="DeleteConcept" text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteConcept" />
+							<Button id="editButtonConcept" text="Editar" type="Attention" icon="sap-icon://edit" press="_onEditConcept" />
+							<Button id="saveButtonConcept" text="Guardar" icon="sap-icon://save" type="Accept" press="onSaveConcept" visible="false" />
+							<Button id="cancelButtonConcept" text="Cancelar" icon="sap-icon://decline" type="Reject" press="onCancelConcept" visible="false" />
+							<SearchField placeholder="Search" showSearchButton="true" visible="true" width="auto" />
+							<OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />
+							<OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />
+						</content>
+					</OverflowToolbar>
+				</headerToolbar>
+				<columns>
+					<Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+						<header>
+							<Text text="Id Concepto" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+						</header>
+						<footer />
+					</Column>
+					<Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+						<header>
+							<Text text="Descripción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+						</header>
+						<footer />
+					</Column>
+					<Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+						<header>
+							<Text text="Cuenta contable" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+						</header>
+						<footer />
+					</Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+						<header>
+							<Text text="Grupo aprobador" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+						</header>
+						<footer />
+					</Column>
+          <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+						<header>
+							<Text text="Grupo prevalidador" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+						</header>
+						<footer />
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Active">
+						<cells>
+							<Input value="{idConcept}" editable="false" />
+							<Input value="{name}" editable="false" />
+							<Input value="{idCostCenter}" editable="false" />
+              <Input value="{idCostCenter}" editable="false" />
+              <Input value="{idCostCenter}" editable="false" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
 </mvc:View>
