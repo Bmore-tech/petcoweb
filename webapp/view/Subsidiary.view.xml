@@ -1,7 +1,8 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" displayBlock="true" height="100%" controllerName="com.bmore.portalproveedores.controller.Subsidiary">
 	<Page showHeader="false">
 		<content>
-			<Table items="{path: 'subsidiariesModel>/'}" width="auto" noDataText="No data" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+			<Table id="tableSubsidiaries" items="{path: 'subsidiariesModel>/'}" mode="SingleSelectMaster" width="auto" noDataText="No data" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin"
+             sticky="ColumnHeaders,HeaderToolbar">
 				<infoToolbar>
 					<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
 						<content>
@@ -15,8 +16,8 @@
 							<Title text="Sucursales" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false" />
 							<ToolbarSpacer width="" />
 							<Button id="AddSubsidiaryButton" text="Nuevo" type="Accept" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onAddSubsidiary" />
-							<Button id="DeleteSubsidiary" text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteSubsidiary" />
-							<Button id="editButton" text="Editar" type="Attention" icon="sap-icon://edit" press="_onEditSubsidiary" />
+              <Button id="editButton" text="Editar" type="Attention" icon="sap-icon://edit" press="_onEditSubsidiary" />
+              <Button id="DeleteSubsidiary" text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteSubsidiary" />
 							<Button id="saveButton" text="Guardar" icon="sap-icon://save" type="Accept" press="onSave" visible="false" />
 							<Button id="cancelButton" text="Cancelar" icon="sap-icon://decline" type="Reject" press="onCancel" visible="false" />
 							<SearchField placeholder="Search" showSearchButton="true" visible="true" width="auto" />

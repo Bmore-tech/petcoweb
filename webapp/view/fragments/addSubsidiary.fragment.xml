@@ -3,17 +3,17 @@
         <content>
             <form:Form width="100%" editable="true" visible="true">
                 <form:title>
-                    <core:Title text="Sucursal" level="Auto"/>
+                    <core:Title id="titleSucursal" text="Sucursal" level="Auto"/>
                 </form:title>
                 <form:formContainers>
                     <form:FormContainer visible="true">
                         <form:formElements>
-                            <form:FormElement visible="true">
+                            <form:FormElement id="formSectionId" visible="false">
                                 <form:label>
                                     <Label text="Id Sucursal" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <Input type="Text" id="idSubsidiary" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -43,7 +43,8 @@
         </content>
         <beginButton/>
         <buttons>
-            <Button text="Guardar" type="Accept" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onSaveSubsidiary"/>
+            <Button text="Actulizar" id="buttonUpdate" type="Accept" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="_onUpdateSubsidiary" />
+            <Button text="Guardar" id="buttonSave" type="Accept" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="_onSaveSubsidiary" />
             <Button text="Cancelar" type="Reject" icon="sap-icon://decline" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onCloseSubsidiary"/>
         </buttons>
         <customHeader/>

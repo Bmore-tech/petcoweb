@@ -8,12 +8,15 @@ const oInvisibleMessage = InvisibleMessage.getInstance();
 
 export const showMsgStrip = async (mesaage : string, type: string): Promise<void> => {
 
-    const oMessageStrip = oCore.byId("msgStrip");
-    if (oMessageStrip) {
-        oMessageStrip.destroy();
-    }
-
+	await closeMsgStrip();
     await generateMsgStrip(mesaage, type);
+}
+
+export const closeMsgStrip = async (): Promise<void> => {
+	const oMessageStrip = oCore.byId("msgStrip");
+	if (oMessageStrip) {
+		oMessageStrip.destroy();
+	}
 }
 
 const generateMsgStrip = async (mesaage : string, type: string): Promise<void> => {

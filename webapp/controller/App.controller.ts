@@ -12,11 +12,7 @@ export default class App extends BaseController {
 		// apply content density mode to root view
 		//this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 		sap.ui.getCore().setModel({
-			toolTitle: this.byId("toolTitle"),
-			backButtonTool: this.byId("toolTitle"),
-			labelTitle: this.byId("labelTitle"),
-			containerMessage : this.byId("stripContent"),
-			containerView : this.byId("viewContent"),
+			containerMessage : this.byId("stripContent")
 		}, "coreModel");
 	}
 
@@ -62,6 +58,19 @@ export default class App extends BaseController {
 		}
 	}
 	public _closeSession(): void {
+
+		const views: Array<string> = [
+			"__component0---main",
+			"__component0---Subsidiary"
+		];
+
+		views.forEach((view: string): void => {
+
+			if (sap.ui.getCore().byId(view)) {
+				sap.ui.getCore().byId(view).removeContent();
+			}
+		});
+
 		localStorage.removeItem("sessionData");
 		this.getRouter().navTo("TargetLogin");
 	}
