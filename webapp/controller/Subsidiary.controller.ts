@@ -55,6 +55,10 @@ export default class Subsidiary extends BaseController {
 		this.byId("formSectionId").setVisible(false);
 		this.byId("buttonSave").setVisible(true);
 		this.byId("buttonUpdate").setVisible(false);
+
+		this.byId("idSubsidiary").setValue("");
+		this.byId("subsidiary").setValue("");
+		this.byId("costCenter").setValue("");
 	}
 
 	public async _onEditSubsidiary(oEvent): void {
