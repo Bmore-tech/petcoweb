@@ -3,7 +3,7 @@
         <content>
             <form:Form width="100%" editable="true" visible="true">
                 <form:title>
-                    <core:Title id="titleSucursal" text="Sucursal" level="Auto"/>
+                    <core:Title id="titleSubsidiary" text="Sucursal" level="Auto"/>
                 </form:title>
                 <form:formContainers>
                     <form:FormContainer visible="true">

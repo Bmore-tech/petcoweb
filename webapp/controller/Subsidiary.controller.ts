@@ -9,10 +9,12 @@ import {
 	saveSubsidiary,
 	updateSubsidiary
 } from "com/bmore/portalproveedores/service/Subsidiary.service";
-import {SubsidiaryResponse} from "com/bmore/portalproveedores/model/response/SubsidiaryResponse";
 import UI5Element from "sap/ui/core/Element";
 import {closeMsgStrip, showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
 import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
+import { Subsidiary as SubsidiaryDto } from "com/bmore/portalproveedores/model/Subsidiary";
+import View from "sap/ui/core/mvc/View";
+import {clearFieldsText, validatedFieldsText} from "com/bmore/portalproveedores/util/Util";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -33,32 +35,20 @@ export default class Subsidiary extends BaseController {
 
 	public async _onAddSubsidiary(oEvent): void {
 
-		const oView = this.getView();
-		if (!this.byId("addSubsidiary")) {
+		const fieldsClear: Array<string> = [
+			"idSubsidiary",
+			"subsidiary",
+			"costCenter"
+		];
 
-			const oDialog: Control = await Fragment.load({
-				id: oView.getId(),
-				name: "com.bmore.portalproveedores.view.fragments.addSubsidiary",
-				controller: this
-			});
+		await this.displayPopUp();
 
-			oView.addDependent(oDialog);
-			oDialog.open();
-			oDialog.addStyleClass("sapUiSizeCompact");
-
-		} else {
-			this.byId("addSubsidiary").open();
-			this.byId("addSubsidiary").addStyleClass("sapUiSizeCompact");
-		}
-
-		this.byId("titleSucursal").setText("Agregar Sucursal");
+		this.byId("titleSubsidiary").setText("Agregar Sucursal");
 		this.byId("formSectionId").setVisible(false);
 		this.byId("buttonSave").setVisible(true);
 		this.byId("buttonUpdate").setVisible(false);
 
-		this.byId("idSubsidiary").setValue("");
-		this.byId("subsidiary").setValue("");
-		this.byId("costCenter").setValue("");
+		await clearFieldsText(fieldsClear, "__component0---Subsidiary--");
 	}
 
 	public async _onEditSubsidiary(oEvent): void {
@@ -70,28 +60,11 @@ export default class Subsidiary extends BaseController {
 			showMsgStrip("Debes seleccionar una sucursal para actualizar los datos.", MessageStripType.INFORMATION);
 		} else {
 
-			const oView = this.getView();
-			if (!this.byId("addSubsidiary")) {
-
-				const oDialog: Control = await Fragment.load({
-					id: oView.getId(),
-					name: "com.bmore.portalproveedores.view.fragments.addSubsidiary",
-					controller: this
-				});
-
-				oView.addDependent(oDialog);
-				oDialog.open();
-				oDialog.addStyleClass("sapUiSizeCompact");
-
-			} else {
-				this.byId("addSubsidiary").open();
-				this.byId("addSubsidiary").addStyleClass("sapUiSizeCompact");
-			}
-
+			await this.displayPopUp();
 
 			const item = tableSubsidiaries.getSelectedItem().getCells();
 
-			this.byId("titleSucursal").setText("Actualizar Sucursal");
+			this.byId("titleSubsidiary").setText("Actualizar Sucursal");
 			this.byId("formSectionId").setVisible(true);
 			this.byId("buttonSave").setVisible(false);
 			this.byId("buttonUpdate").setVisible(true);
@@ -108,40 +81,55 @@ export default class Subsidiary extends BaseController {
 	}
 	public async _onSaveSubsidiary(oEvent): void {
 
-		BusyIndicator.show(0);
+		const fieldsValidated: Array<string> = [
+			"subsidiary",
+			"costCenter"
+		];
 
-		const SubsidiaryRequest : Subsidiary = {
-			id: null,
-			subsidiaryId: null,
-			subsidiary: this.byId("subsidiary").getValue(),
-			costCenter: this.byId("costCenter").getValue()
-		};
+		if (await validatedFieldsText(fieldsValidated, "__component0---Subsidiary--")) {
 
-		if (await saveSubsidiary(SubsidiaryRequest)) {
-			await this.loadSubsidiaries();
+			BusyIndicator.show(0);
+
+			const subsidiaryRequest : Subsidiary = {
+				id: null,
+				subsidiaryId: null,
+				subsidiary: this.byId("subsidiary").getValue(),
+				costCenter: this.byId("costCenter").getValue()
+			};
+
+			if (await saveSubsidiary(subsidiaryRequest)) {
+				await this.loadSubsidiaries();
+			}
+
+			this._onCloseSubsidiary(null);
+
+			BusyIndicator.hide();
+
+		} else {
+			MessageBox.alert("Los campos no pueden ser vacios.",
+				{
+					actions: ["Aceptar"],
+					emphasizedAction: "Aceptar"
+				});
 		}
-
-		this.byId("addSubsidiary").close();
-
-		BusyIndicator.hide();
 	}
 
 	public async _onUpdateSubsidiary(oEvent): void {
 
 		BusyIndicator.show(0);
 
-		const SubsidiaryRequest : Subsidiary = {
+		const subsidiaryRequest : Subsidiary = {
 			id: null,
 			subsidiaryId: this.byId("idSubsidiary").getValue(),
 			subsidiary: this.byId("subsidiary").getValue(),
 			costCenter: this.byId("costCenter").getValue()
 		};
 
-		if (await updateSubsidiary(SubsidiaryRequest)) {
+		if (await updateSubsidiary(subsidiaryRequest)) {
 			await this.loadSubsidiaries();
 		}
 
-		this.byId("addSubsidiary").close();
+		this._onCloseSubsidiary(null);
 
 		BusyIndicator.hide();
 	}
@@ -175,17 +163,35 @@ export default class Subsidiary extends BaseController {
 
 	public async loadSubsidiaries(): Promise<void> {
 
-		BusyIndicator.show(0);
-
-		const subsidiaryData: SubsidiaryResponse = await getSubsidiaries();
+		const subsidiaryData: SubsidiaryDto = await getSubsidiaries();
 
 		await this.setModel(new JSONModel({
 			...subsidiaryData
 		}), "subsidiariesModel");
 
-		BusyIndicator.hide();
-
 	}
+
+	public async displayPopUp(): Promise<void> {
+
+		const oView: View = this.getView();
+		if (!this.byId("addSubsidiary")) {
+
+			const oDialog: Control = await Fragment.load({
+				id: oView.getId(),
+				name: "com.bmore.portalproveedores.view.fragments.addSubsidiary",
+				controller: this
+			});
+
+			oView.addDependent(oDialog);
+			oDialog.open();
+			oDialog.addStyleClass("sapUiSizeCompact");
+
+		} else {
+			this.byId("addSubsidiary").open();
+			this.byId("addSubsidiary").addStyleClass("sapUiSizeCompact");
+		}
+	}
+
 
 	public onSave(oEvent): void {
 		this.byId("editButton").setVisible(true);

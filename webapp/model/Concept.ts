@@ -1,4 +1,4 @@
-export interface Concep {
+export interface Concept {
 	id:                 number;
 	conceptId:          number;
 	concept:            string;

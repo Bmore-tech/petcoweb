@@ -3,11 +3,11 @@ import {SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT} from "com/bmore/portalproveedo
 import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
 import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
 import {ErrorResponse} from "com/bmore/portalproveedores/model/response/ErrorResponse";
-import {Concep} from "com/bmore/portalproveedores/model/Concep";
+import {Concept} from "com/bmore/portalproveedores/model/Concept";
 
-export const getConceps = async (): Promise<Concep> => {
+export const getConceps = async (): Promise<Concept> => {
 
-	let concepResponse: Concep;
+	let concepResponse: Concept;
 
 	try {
 
@@ -46,7 +46,7 @@ export const getConceps = async (): Promise<Concep> => {
 }
 
 
-export const saveConcep = async (concep : Concep): Promise<boolean> => {
+export const saveConcept = async (concep : Concept): Promise<boolean> => {
 
 	let isSaveConcep: boolean = false;
 
@@ -87,7 +87,7 @@ export const saveConcep = async (concep : Concep): Promise<boolean> => {
 	return isSaveConcep;
 }
 
-export const updateConcep = async (concep : Concep): Promise<boolean> => {
+export const updateConcept = async (concep : Concept): Promise<boolean> => {
 
 	let isUpdateConcep: boolean = false;
 
@@ -131,7 +131,7 @@ export const updateConcep = async (concep : Concep): Promise<boolean> => {
 
 
 
-export const deleteConcep = async (conceptId : string): Promise<boolean> => {
+export const deleteConcept = async (conceptId : string): Promise<boolean> => {
 
 	let isDeleteConcep: boolean = false;
 
