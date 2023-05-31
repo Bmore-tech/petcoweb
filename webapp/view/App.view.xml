@@ -72,7 +72,7 @@
 							<tnt:NavigationListItem icon="sap-icon://course-book" expanded="true" hasExpander="true" text="Catálogos">
 							<tnt:items>
 								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Conceptos"
-									select="navToConveps">
+									select="navToConcepts">
 									<tnt:items/>
 								</tnt:NavigationListItem>
 								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Sucursales"
