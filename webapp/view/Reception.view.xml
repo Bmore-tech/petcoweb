@@ -1,105 +1,66 @@
-<mvc:View
-        xmlns:mvc="sap.ui.core.mvc"
-        controllerName="com.bmore.portalproveedores.controller.Reception"
-        displayBlock="true"
-        xmlns="sap.m"
-        xmlns:form="sap.ui.layout.form"
-        xmlns:core="sap.ui.core">
-
-
-            <form:Form width="100%" editable="true" visible="true">
-                <form:title>
-                    <core:Title text="Recepción de CFDI" level="Auto"/>
-                </form:title>
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.portalproveedores.controller.Reception" displayBlock="true" xmlns="sap.uxap" xmlns:m="sap.m" xmlns:f="sap.f" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core">
+	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
+		<headerTitle>
+			<ObjectPageDynamicHeaderTitle>
+				<expandedHeading>
+					<m:Title text="Recepción de CFDI" wrapping="true" />
+				</expandedHeading>
+				<navigationActions />
+				<actions>
+					<ObjectPageHeaderActionButton text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="onConfirmationMessageBoxPress" />
+					<ObjectPageHeaderActionButton text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="onRejectDialogPress" />
+				</actions>
+			</ObjectPageDynamicHeaderTitle>
+		</headerTitle>
+		<headerContent>
+    <form:Form width="100%" editable="true" visible="true">
                 <form:formContainers>
                     <form:FormContainer visible="true">
                         <form:formElements>
                             <form:FormElement visible="true">
                                 <form:label>
-                                    <Label text="Folio Factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <m:Label text="Folio Factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="203px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <m:Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
                                 <form:label>
-                                    <Label text="Subtotal Factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <m:Label text="Subtotal factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="202.00000000px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <m:Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
                                 <form:label>
-                                    <Label text="Prorrateo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <m:Label text="ID/ Tipo trabajo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
-                                <form:fields/>
-                            </form:FormElement>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields/>
+                                <form:fields>
+                                    <m:Input type="Text" showValueHelp="true" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <m:Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                </form:fields>
                             </form:FormElement>
                         </form:formElements>
                         <form:title/>
                     </form:FormContainer>
-                </form:formContainers>
-                <form:layout>
-                    <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-                </form:layout>
-            </form:Form>
-
-            <form:Form width="100%" editable="true" visible="true">
-                <form:title>
-                    <core:Title text="" level="Auto"/>
-                </form:title>
-                <form:formContainers>
                     <form:FormContainer visible="true">
                         <form:formElements>
                             <form:FormElement visible="true">
                                 <form:label>
-                                    <Label text="Subtotal Prorrateo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <m:Label text="Concepto especifico" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="202px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
-                                    <Button text="Button" type="Default" iconFirst="true" width="202px" enabled="true" visible="true" iconDensityAware="false"/>
+                                    <m:Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
                                 <form:label>
-                                    <Label text="Id / Tipo de Trabajo:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    <m:Label text="Comentario" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="202px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="202px" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
-                                    <Button text="Button" type="Default" iconFirst="true" width="60px" enabled="true" visible="true" iconDensityAware="false"/>
-                                </form:fields>
-                            </form:FormElement>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="Concepto en Especifico" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
-                                </form:fields>
-                            </form:FormElement>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="Comentario" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
-                                </form:fields>
-                            </form:FormElement>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields>
-                                    <Button text="Guardar Borrador" type="Default" icon="sap-icon://save" iconFirst="true" width="162px" enabled="true" visible="true" iconDensityAware="false"/>
-                                    <Button text="Enviar Solicitud" type="Accept" icon="sap-icon://accept" iconFirst="true" width="163px" enabled="true" visible="true" iconDensityAware="false"/>
+                                    <m:TextArea rows="3" cols="20" maxLength="0" wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
                                 </form:fields>
                             </form:FormElement>
                         </form:formElements>
@@ -107,18 +68,85 @@
                     </form:FormContainer>
                 </form:formContainers>
                 <form:layout>
-                    <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+                    <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="3" labelSpanS="12"/>
                 </form:layout>
             </form:Form>
 
-            <form:Form width="100%" editable="true" visible="true">
-                <form:title>
-                    <core:Title text="Archivos" level="Auto"/>
-                </form:title>
-                <form:formContainers/>
-                <form:layout>
-                    <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-                </form:layout>
-            </form:Form>
 
+		</headerContent>
+		<sections>
+			<ObjectPageSection title="Prorrateo" id="ProrrateoSection">
+				<subSections>
+					<ObjectPageSubSection id="ProrrateoSubSection">
+						<blocks>
+							<m:Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                                <m:infoToolbar>
+                                    <m:Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+                                        <m:content>
+                                            <m:Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </m:content>
+                                    </m:Toolbar>
+                                </m:infoToolbar>
+                                <m:headerToolbar>
+                                    <m:OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                                        <m:content>
+                                            <m:Title text="" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+                                            <m:ToolbarSpacer width=""/>
+                                            <m:OverflowToolbarButton text="Settings" type="Accept" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                                        </m:content>
+                                    </m:OverflowToolbar>
+                                </m:headerToolbar>
+                                <m:columns>
+                                    <m:Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+                                        <m:header>
+                                            <m:Text text="Tienda" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </m:header>
+                                        <m:footer/>
+                                    </m:Column>
+                                    <m:Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <m:header>
+                                            <m:Text text="Monto" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </m:header>
+                                        <m:footer>
+                                            <m:Text text="Subtotal prorrateo $0" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </m:footer>
+                                    </m:Column>
+                                    <m:Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                        <m:header>
+                                            <m:Text text="Acción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                        </m:header>
+                                        <m:footer/>
+                                    </m:Column>
+                                </m:columns>
+                                <m:items>
+                                    <m:ColumnListItem type="Active">
+                                        <m:cells>
+                                            <layout:HorizontalLayout>
+                                                <layout:content/>
+                                            </layout:HorizontalLayout>
+                                            <layout:HorizontalLayout>
+                                                <layout:content/>
+                                            </layout:HorizontalLayout>
+                                            <layout:HorizontalLayout>
+                                                <layout:content/>
+                                            </layout:HorizontalLayout>
+                                        </m:cells>
+                                    </m:ColumnListItem>
+                                </m:items>
+                            </m:Table>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection title="Adjuntos" id="ComentariosSection">
+				<subSections>
+					<ObjectPageSubSection id="ComentariosSubSection">
+						<blocks>
+							<m:UploadCollection id="uploadCollection" />
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+		</sections>
+	</ObjectPageLayout>
 </mvc:View>
