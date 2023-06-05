@@ -12,8 +12,6 @@ import Integer from "sap/ui/model/type/Integer";
  * @namespace com.bmore.portalproveedores.controller
  */
 export default class Main extends BaseController {
-	private formatter = formatter;
-
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();

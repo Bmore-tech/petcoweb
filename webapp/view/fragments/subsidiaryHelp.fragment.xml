@@ -1,0 +1,58 @@
+<core:FragmentDefinition
+  xmlns:core="sap.ui.core" xmlns="sap.m">
+<Dialog id="subsidiaryHelp" horizontalScrolling="true" showHeader="false" state="None" stretch="false" title="" type="Standard" verticalScrolling="true"  resizable="true" draggable="true">
+  <content>
+
+    <Table id="tableHelpSubsidiaries" items="{path: 'subsidiariesModel>/'}" mode="MultiSelect" width="auto" noDataText="No data" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin"
+           sticky="ColumnHeaders,HeaderToolbar">
+      <infoToolbar>
+        <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+          <content>
+            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+          </content>
+        </Toolbar>
+      </infoToolbar>
+      <headerToolbar>
+        <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+          <content>
+            <Title text="Sucursales" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false" />
+            <ToolbarSpacer width="" />
+            <SearchField id="searchSubsidiary" placeholder="Buscar" showSearchButton="true" visible="true" width="auto" search="onFilterSubsidiaries" />
+            <OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortSubsidiaries" />
+          </content>
+        </OverflowToolbar>
+      </headerToolbar>
+      <columns>
+        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+          <header>
+            <Text text="Id Sucursal" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+          </header>
+          <footer />
+        </Column>
+        <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+          <header>
+            <Text text="Sucursal" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+          </header>
+          <footer />
+        </Column>
+      </columns>
+      <items>
+        <ColumnListItem type="Active">
+          <cells>
+            <Input value="{subsidiariesModel>subsidiaryId}" editable="false" />
+            <Input value="{subsidiariesModel>subsidiary}" editable="false" />
+          </cells>
+        </ColumnListItem>
+      </items>
+    </Table>
+  </content>
+  <beginButton/>
+  <buttons>
+    <Button text="Aceptar"  type="Accept" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onSelectSubsidiary"/>
+    <Button text="Cancelar" type="Reject" icon="sap-icon://decline" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onClose('subsidiaryHelp')"/>
+  </buttons>
+  <customHeader/>
+  <endButton/>
+  <subHeader/>
+</Dialog>
+</core:FragmentDefinition>
