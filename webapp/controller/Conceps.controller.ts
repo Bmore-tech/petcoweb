@@ -15,11 +15,16 @@ import {clearFieldsText, validatedFieldsText} from "com/bmore/portalproveedores/
 import {closeMsgStrip, showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
 import UI5Element from "sap/ui/core/Element";
 import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
+import Sorter from "sap/ui/model/Sorter";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
  */
 export default class Conceps extends BaseController {
+
+	private isDescendingConcepts: boolean = false;
 
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -181,7 +186,6 @@ export default class Conceps extends BaseController {
 		await this.setModel(new JSONModel({
 			...conceptData
 		}), "concepsModel");
-
 	}
 
 	public async displayPopUp(): Promise<void> {
@@ -219,6 +223,30 @@ export default class Conceps extends BaseController {
 		this.byId("cancelButtonConcept").setVisible(false);
 		this.byId("AddConceptButton").setVisible(true);
 		this.byId("DeleteConcept").setVisible(true);
+	}
+
+	public async onFilterConcepts(): void {
+
+		const searchConcept: string = this.byId("searchConcept").getValue();
+		const tableHelpConceps: UI5Element = this.byId("tableConceps");
+		const filter: Filter = new Filter("concept", FilterOperator.Contains, searchConcept);
+		const binding: Binding = tableHelpConceps.getBinding("items");
+
+		binding.filter([filter]);
+	}
+
+	public async onSortConcepts(): void {
+
+		this.isDescendingConcepts = !this.isDescendingConcepts;
+
+		const searchConcept: string = this.byId("searchConcept").getValue();
+		const tableHelpConceps: UI5Element = this.byId("tableConceps");
+		const filter: Filter = new Filter("concept", FilterOperator.Contains, searchConcept);
+		const binding = tableHelpConceps.getBinding("items");
+		let sorters: Array<string> = [];
+
+		sorters.push(new Sorter("concept", this.isDescendingConcepts));
+		binding.filter([filter]).sort(sorters);
 	}
 
 

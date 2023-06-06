@@ -20,9 +20,9 @@
 							<Button id="DeleteConcept" text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteConcept" />
 							<Button id="saveButtonConcept" text="Guardar" icon="sap-icon://save" type="Accept" press="onSaveConcept" visible="false" />
 							<Button id="cancelButtonConcept" text="Cancelar" icon="sap-icon://decline" type="Reject" press="onCancelConcept" visible="false" />
-							<SearchField placeholder="Search" showSearchButton="true" visible="true" width="auto" />
-							<OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />
-							<OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />
+							<SearchField id="searchConcept" placeholder="Search" showSearchButton="true" visible="true" width="auto" search="onFilterConcepts"/>
+							<OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortConcepts"/>
+							<!--<OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />-->
 						</content>
 					</OverflowToolbar>
 				</headerToolbar>
