@@ -3,7 +3,6 @@ import formatter from "../model/formatter";
 import {signIn} from "com/bmore/portalproveedores/service/Login.service";
 import {SignInRequest} from "com/bmore/portalproveedores/model/resquest/SignInRequest";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
-import {validatedRoles} from "com/bmore/portalproveedores/util/JwtHelper";
 import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
 import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
 
@@ -11,7 +10,6 @@ import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripTy
  * @namespace com.bmore.portalproveedores.controller
  */
 export default class Login extends BaseController {
-	private formatter = formatter;
 
 	public async onLogin(): Promise<void> {
 
@@ -34,7 +32,6 @@ export default class Login extends BaseController {
 			if (await signIn(userRequest)) {
 				await this.AppController.navTo_home();
 				this.Main = sap.ui.getCore().byId('__component0---main').getController();
-				await validatedRoles();
 				await this.Main.onInit();
 			}
 		}

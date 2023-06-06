@@ -12,5 +12,7 @@ export const SECURITY_SERVICES : object = {
 export const SOLICITUD_SERVICES : object = {
     dashboard: "/dashboard",
 	subsidiary : "/subsidiary",
-	concep: "/concept"
+	concep: "/concept",
+	saveInvoice: "/invoice/saveDraft",
+	sendInvoice: "/invoice/saveProvider"
 }

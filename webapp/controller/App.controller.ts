@@ -1,6 +1,6 @@
 import BaseController from "./BaseController";
 import Fragment from "sap/ui/core/Fragment";
-import {decodeJWT, getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
+import {decodeJWT, getJWT, validatedRoles} from "com/bmore/portalproveedores/util/JwtHelper";
 import UI5Element from "sap/ui/core/Element";
 
 /**
@@ -27,7 +27,9 @@ export default class App extends BaseController {
 			containerMessage : sap.ui.getCore().byId("__component0---Login--stripContent")
 		}, "coreModel");
 	}
-	public home_navbar(): void {
+	public async home_navbar(): void {
+
+		await validatedRoles();
 		this.byId("avatar").setVisible(true);
 		this.byId("shell_bar_app").setShowMenuButton(false);
 		this.byId("shell_bar_app").setShowNavButton(false);
@@ -40,7 +42,7 @@ export default class App extends BaseController {
 		const jwt: string = sap.ui.getCore().getModel("sessionData")?.payload;
 
 		const oButton: UI5Element = this.byId("avatar");
-		const sMsg = `Bienvenido ${jwt.nameUser}`;
+		const sMsg: string = `Bienvenido ${jwt.nameUser}`;
 
 		if (!this._oPopoverUser) {
 
@@ -61,7 +63,9 @@ export default class App extends BaseController {
 
 		const views: Array<string> = [
 			"__component0---main",
-			"__component0---Subsidiary"
+			"__component0---Conceps",
+			"__component0---Subsidiary",
+			"__component0---Reception"
 		];
 
 		views.forEach((view: string): void => {

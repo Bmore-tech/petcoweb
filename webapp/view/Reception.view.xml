@@ -7,8 +7,8 @@
 				</expandedHeading>
 				<navigationActions />
 				<actions>
-					<ObjectPageHeaderActionButton text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="onConfirmationMessageBoxPress" />
-					<ObjectPageHeaderActionButton text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="onRejectDialogPress" />
+					<ObjectPageHeaderActionButton text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
+					<ObjectPageHeaderActionButton text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="saveInvoice" />
 				</actions>
 			</ObjectPageDynamicHeaderTitle>
 		</headerTitle>
@@ -22,7 +22,7 @@
                                     <m:Label text="Folio Factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <m:Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <m:Input type="Text" id="folio" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -30,7 +30,7 @@
                                     <m:Label text="Subtotal factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <m:Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <m:Input type="Text" id="amount" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -52,7 +52,7 @@
                                     <m:Label text="Concepto especifico" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <m:Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <m:Input type="Text" id="generalConcept" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -60,7 +60,7 @@
                                     <m:Label text="Comentario" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <m:TextArea rows="3" cols="20" maxLength="0" wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
+                                    <m:TextArea id="comment" rows="3" cols="20" maxLength="0" wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
                                 </form:fields>
                             </form:FormElement>
                         </form:formElements>
@@ -93,7 +93,6 @@
                                             <m:Title text="" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
                                             <m:ToolbarSpacer width=""/>
                                             <m:OverflowToolbarButton text="Settings" type="Accept" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="loadSubsidiaries" />
-                                            <m:OverflowToolbarButton text="Settings" type="Attention" icon="sap-icon://attachment" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="loadSubsidiariesFile" />
                                         </m:content>
                                     </m:OverflowToolbar>
                                 </m:headerToolbar>
@@ -130,7 +129,7 @@
                                             </layout:HorizontalLayout>
                                             <layout:HorizontalLayout>
                                               <layout:content>
-                                                <m:Input value="0" editable="true" change="sumAmount" />
+                                                <m:Input value="0" editable="true" change="sumAmount($event)" />
                                               </layout:content>
                                             </layout:HorizontalLayout>
                                             <layout:HorizontalLayout>
@@ -146,18 +145,22 @@
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>
-			<ObjectPageSection title="Adjuntos" id="ComentariosSection">
+			<ObjectPageSection title="Adjuntos" id="FileSection">
 				<subSections>
-					<ObjectPageSubSection id="ComentariosSubSection">
+					<ObjectPageSubSection id="FileSubSection">
 						<blocks>
               <upload:UploadSet
-                id="UploadSet"
+                id="uploadFilesData"
                 instantUpload="true"
                 showIcons="true"
                 uploadEnabled="true"
-                dragDropText="Suelte los archivos para cargar o use el boton Upload."
+                uploadButtonInvisible="false"
+                noDataDescription="Suelte los archivos para cargar o use el boton Upload. Nota: Solo se puede subir un archivo .xlsx para Prorrateo en esta sección."
                 noDataText="No hay archivos para subir."
-                fileTypes="xlsx,pdf,xml">
+                maxFileNameLength="30"
+                maxFileSize="10"
+                fileTypes="xlsx,pdf,xml"
+                uploadCompleted="uploadFiles">
               </upload:UploadSet>
 						</blocks>
 					</ObjectPageSubSection>
