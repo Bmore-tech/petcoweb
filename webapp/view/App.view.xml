@@ -63,7 +63,7 @@
 
 							<tnt:NavigationListItem icon="sap-icon://manager-insight" expanded="true" hasExpander="true" text="Reportes">
 							<tnt:items>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Histórico de facturas">
+								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Histórico de facturas" select="navToHistory">
 									<tnt:items/>
 								</tnt:NavigationListItem>
 								</tnt:items>

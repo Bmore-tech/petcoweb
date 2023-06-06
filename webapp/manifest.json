@@ -101,6 +101,13 @@
           "target": [
             "Subsidiary"
           ]
+        },
+        {
+          "name": "History",
+          "pattern": "History",
+          "target": [
+            "History"
+          ]
         }
       ],
       "targets": {
@@ -127,6 +134,11 @@
           "viewType": "XML",
           "viewId": "Subsidiary",
           "viewName": "Subsidiary"
+        },
+        "History":{
+          "viewType": "XML",
+          "viewId": "History",
+          "viewName": "History"
         },
         "notFound": {
           "viewName": "NotFound",
