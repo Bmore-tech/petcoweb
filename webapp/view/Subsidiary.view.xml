@@ -20,9 +20,9 @@
               <Button id="DeleteSubsidiary" text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteSubsidiary" />
 							<Button id="saveButton" text="Guardar" icon="sap-icon://save" type="Accept" press="onSave" visible="false" />
 							<Button id="cancelButton" text="Cancelar" icon="sap-icon://decline" type="Reject" press="onCancel" visible="false" />
-							<SearchField placeholder="Search" showSearchButton="true" visible="true" width="auto" />
-							<OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />
-							<OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />
+							<SearchField id="searchSubsidiary" placeholder="Search" showSearchButton="true" visible="true" width="auto" search="onFilterSubsidiaries" />
+							<OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortSubsidiaries"/>
+							<!--<OverflowToolbarButton text="Filter" type="Transparent" icon="sap-icon://filter" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" />-->
 						</content>
 					</OverflowToolbar>
 				</headerToolbar>

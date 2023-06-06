@@ -15,11 +15,16 @@ import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripTy
 import { Subsidiary as SubsidiaryDto } from "com/bmore/portalproveedores/model/Subsidiary";
 import View from "sap/ui/core/mvc/View";
 import {clearFieldsText, validatedFieldsText} from "com/bmore/portalproveedores/util/Util";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
+import Sorter from "sap/ui/model/Sorter";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
  */
 export default class Subsidiary extends BaseController {
+
+	private isDescendingSubsidiaries: boolean = false;
 
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -208,5 +213,28 @@ export default class Subsidiary extends BaseController {
 		this.byId("DeleteSubsidiary").setVisible(true);
 	}
 
+	public async onFilterSubsidiaries(): void {
+
+		const searchSubsidiary: string = this.byId("searchSubsidiary").getValue();
+		const tableHelpSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		const filter: Filter = new Filter("subsidiary", FilterOperator.Contains, searchSubsidiary);
+		const binding: Binding = tableHelpSubsidiaries.getBinding("items");
+
+		binding.filter([filter]);
+	}
+
+	public async onSortSubsidiaries(): void {
+
+		this.isDescendingSubsidiaries = !this.isDescendingSubsidiaries;
+
+		const searchSubsidiary: string = this.byId("searchSubsidiary").getValue();
+		const tableHelpSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		const filter: Filter = new Filter("subsidiary", FilterOperator.Contains, searchSubsidiary);
+		const binding = tableHelpSubsidiaries.getBinding("items");
+		let sorters: Array<string> = [];
+
+		sorters.push(new Sorter("subsidiary", this.isDescendingSubsidiaries));
+		binding.filter([filter]).sort(sorters);
+	}
 
 }
