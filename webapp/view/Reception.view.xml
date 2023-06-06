@@ -1,4 +1,4 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.portalproveedores.controller.Reception" displayBlock="true" xmlns="sap.uxap" xmlns:m="sap.m" xmlns:f="sap.f" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:upload="sap.m.upload">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.portalproveedores.controller.Reception" displayBlock="true" xmlns="sap.uxap" xmlns:m="sap.m"  xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:upload="sap.m.upload">
 	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
 		<headerTitle>
 			<ObjectPageDynamicHeaderTitle>
@@ -161,6 +161,12 @@
                 maxFileSize="10"
                 fileTypes="xlsx,pdf,xml"
                 uploadCompleted="uploadFiles">
+                <upload:toolbar>
+                  <m:OverflowToolbar>
+                    <m:ToolbarSpacer/>
+                    <m:Button text="Download" type="Transparent" icon="sap-icon://download-from-cloud" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="downloadFiles"/>
+                  </m:OverflowToolbar>
+                </upload:toolbar>
               </upload:UploadSet>
 						</blocks>
 					</ObjectPageSubSection>

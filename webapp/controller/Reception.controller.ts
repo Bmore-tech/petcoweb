@@ -13,10 +13,11 @@ import FilterOperator from "sap/ui/model/FilterOperator";
 import Binding from "sap/ui/model/Binding";
 import Sorter from "sap/ui/model/Sorter";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
-import {sendInvoiceService} from "com/bmore/portalproveedores/service/Reception.service";
+import {saveDocumentInvoice, sendInvoiceService} from "com/bmore/portalproveedores/service/Reception.service";
 import {Invoice} from "com/bmore/portalproveedores/model/resquest/Invoice";
 import {Apportionment} from "com/bmore/portalproveedores/model/resquest/Apportionment";
 import {Comment} from "com/bmore/portalproveedores/model/resquest/Comment";
+import {InvoiceResponse} from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -32,6 +33,15 @@ export default class Reception extends BaseController {
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();
+	}
+
+	public async onInit(): Promise<void> {
+
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		uploadFilesData.getDefaultFileUploader().setTooltip("");
+		uploadFilesData.getDefaultFileUploader().setIconOnly(false);
+		uploadFilesData.getDefaultFileUploader().setIconFirst(true);
+		uploadFilesData.getDefaultFileUploader().setIcon("sap-icon://attachment");
 	}
 
 	public async _onSelectSubsidiary(oEvent): void {
@@ -260,8 +270,14 @@ export default class Reception extends BaseController {
 
 		console.log("******** Factura: ", invoice);
 
-		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice);
+		//const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice);
+
+		const invoiceResponse: InvoiceResponse = {
+			invoiceId: 179536
+		};
 		console.log("******** Invoice Response id: ", invoiceResponse.invoiceId)
+
+		await saveDocumentInvoice(invoiceResponse, this.filesData);
 
 		BusyIndicator.hide();
 	}
@@ -281,6 +297,22 @@ export default class Reception extends BaseController {
 
 			console.log("Files: ", this.filesData);
 		}
+	}
+
+	public async downloadFiles(): Promise<void> {
+
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		uploadFilesData.getItems().forEach(async (item): void => {
+			if (item.getListItem().getSelected()) {
+				const exportUrl: string = URL.createObjectURL(item.getFileObject());
+				const aElement = document.createElement('a');
+				aElement.href = exportUrl;
+				aElement.setAttribute('download', item.getFileObject().name)
+				aElement.setAttribute('target', '_blank');
+				aElement.click();
+				URL.revokeObjectURL(href);
+			}
+		});
 	}
 
 	public async displayHelp(idViewHelp: string): Promise<void> {

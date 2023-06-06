@@ -85,3 +85,49 @@ export const sendInvoiceService = async (invoice : Invoice): Promise<InvoiceResp
 
 	return response;
 }
+
+
+export const saveDocumentInvoice = async (invoiceResponse : InvoiceResponse, filesData : Array<File>)
+	: Promise<InvoiceResponse> => {
+
+	let response: InvoiceResponse = null;
+
+	try {
+
+		const documents: FormData = new FormData();
+		filesData.forEach((file: File): void => {
+			documents.append("documentos", file, file.name);
+		});
+
+		const jwt : string = await getJWT();
+		const invoiceDocumentDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.saveDocument}${invoiceResponse.invoiceId}`,
+			{
+				method: 'PUT',
+				body: documents,
+				headers: {
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (invoiceDocumentDataResponse.status == 201) {
+			response = await invoiceDocumentDataResponse.json();
+		} else {
+
+			const invoiceDocumentResponseError : ErrorResponse  = await invoiceDocumentDataResponse.json();
+			console.log(invoiceDocumentResponseError)
+			if (invoiceDocumentDataResponse.status >= 500) {
+				showMsgStrip("Error en el servicio al enviar los documentos de la factura.", MessageStripType.ERROR);
+			} else {
+				showMsgStrip(invoiceDocumentResponseError.message, MessageStripType.WARNING);
+			}
+		}
+
+	} catch (e) {
+		console.log(e);
+		showMsgStrip("Error no se pueden enviar los docuemntos de la factura.", MessageStripType.ERROR);
+	}
+
+	return response;
+}

@@ -14,5 +14,6 @@ export const SOLICITUD_SERVICES : object = {
 	subsidiary : "/subsidiary",
 	concep: "/concept",
 	saveInvoice: "/invoice/saveDraft",
-	sendInvoice: "/invoice/saveProvider"
+	sendInvoice: "/invoice/saveProvider",
+	saveDocument: "/document/saveDocument/invoice/"
 }
