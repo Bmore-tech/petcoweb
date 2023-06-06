@@ -79,6 +79,8 @@ export default class Reception extends BaseController {
 				...this.subsidiaryList
 			}), "subsidiaryList");
 
+			await this.sumAmount();
+
 			await this._onClose("subsidiaryHelp");
 		}
 
@@ -116,14 +118,21 @@ export default class Reception extends BaseController {
 		await this.setModel(new JSONModel({
 			...this.subsidiaryList
 		}), "subsidiaryList");
-		this.sumAmount();
+
+		await this.sumAmount();
 	}
 
 	public async sumAmount(oEvent): Promise<void> {
 
 		//  Obtner state para montos
-		const item = oEvent.getSource().getBindingContext("subsidiaryList").getObject();
-		const valueSubsidiaryIdFind = item.idSubsidiary;
+		let item = null;
+		let valueSubsidiaryIdFind = 0;
+
+		if (oEvent != null) {
+			item = oEvent.getSource().getBindingContext("subsidiaryList").getObject();
+			valueSubsidiaryIdFind = item.idSubsidiary;
+		}
+
 		let valueAmountUpdate: number = 0;
 
 		//  Obtener state para sumar cantidades por tienda
@@ -353,6 +362,7 @@ export default class Reception extends BaseController {
 				...this.subsidiaryList
 			}), "subsidiaryList");
 
+			await this.sumAmount();
 		}
 	}
 
