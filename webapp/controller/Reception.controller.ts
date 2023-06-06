@@ -14,6 +14,7 @@ import Binding from "sap/ui/model/Binding";
 import Sorter from "sap/ui/model/Sorter";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import {
+	getInfoProrrateoXlsxService,
 	getInfoXmlService,
 	saveDocumentInvoice,
 	sendInvoiceService
@@ -277,11 +278,11 @@ export default class Reception extends BaseController {
 
 		console.log("******** Factura: ", invoice);
 
-		//const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice);
-
+		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice);
+/*
 		const invoiceResponse: InvoiceResponse = {
 			invoiceId: 179536
-		};
+		};*/
 		console.log("******** Invoice Response id: ", invoiceResponse.invoiceId)
 
 		await saveDocumentInvoice(invoiceResponse, this.filesData);
@@ -302,13 +303,8 @@ export default class Reception extends BaseController {
 				const file: File = item.getFileObject();
 				this.filesData.push(file);
 
-				if (file.type == "text/xml") {
-					let documentInfoXML: DocumentInfoXML = await getInfoXmlService(file);
-					console.log("DocumentInfoXML : ", documentInfoXML);
-
-					this.uuid = documentInfoXML.uuid;
-					this.byId("folio").setValue(documentInfoXML.folio);
-				}
+				await this.validatedXml(file);
+				await this.validatedXlsx(file);
 
 				console.log(window.URL.createObjectURL(file));
 			});
@@ -331,6 +327,33 @@ export default class Reception extends BaseController {
 				URL.revokeObjectURL(href);
 			}
 		});
+	}
+
+	public async validatedXml(file: File): Promise<void> {
+
+		if (file.type == "text/xml") {
+			let documentInfoXML: DocumentInfoXML = await getInfoXmlService(file);
+			console.log("DocumentInfoXML : ", documentInfoXML);
+
+			this.uuid = documentInfoXML.uuid;
+			this.byId("folio").setValue(documentInfoXML.folio);
+		}
+	}
+
+	public async validatedXlsx(file: File): Promise<void> {
+
+		const typeXlsx: string = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+		if (file.type == typeXlsx) {
+			let documentInfoXlsx: DocumentInfoXLSX = await getInfoProrrateoXlsxService(file);
+			console.log("DocumentInfoXlsx : ", documentInfoXlsx);
+
+			this.subsidiaryList = [...documentInfoXlsx];
+
+			await this.setModel(new JSONModel({
+				...this.subsidiaryList
+			}), "subsidiaryList");
+
+		}
 	}
 
 	public async displayHelp(idViewHelp: string): Promise<void> {

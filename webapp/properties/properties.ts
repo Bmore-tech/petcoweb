@@ -16,5 +16,6 @@ export const SOLICITUD_SERVICES : object = {
 	saveInvoice: "/invoice/saveDraft",
 	sendInvoice: "/invoice/saveProvider",
 	saveDocument: "/document/saveDocument/invoice/",
-	getInfoXml: "/document/getInfoXml"
+	getInfoXml: "/document/getInfoXml",
+	getProrrateoXlsx: "/document/getProrrateo"
 }

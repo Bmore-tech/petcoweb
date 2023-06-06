@@ -129,7 +129,7 @@
                                             </layout:HorizontalLayout>
                                             <layout:HorizontalLayout>
                                               <layout:content>
-                                                <m:Input value="0" editable="true" change="sumAmount($event)" />
+                                                <m:Input value="{subsidiaryList>amount}" editable="true" change="sumAmount($event)" />
                                               </layout:content>
                                             </layout:HorizontalLayout>
                                             <layout:HorizontalLayout>

@@ -6,6 +6,7 @@ import {ErrorResponse} from "com/bmore/portalproveedores/model/response/ErrorRes
 import {Invoice} from "com/bmore/portalproveedores/model/resquest/Invoice";
 import {InvoiceResponse} from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 import {DocumentInfoXML} from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
+import {DocumentInfoXLSX} from "com/bmore/portalproveedores/model/response/DocumentInfoXLSX";
 
 export const saveDrafInvoiceService = async (invoice : Invoice): Promise<InvoiceResponse> => {
 
@@ -172,6 +173,50 @@ export const getInfoXmlService = async (file : File)
 	} catch (e) {
 		console.log(e);
 		showMsgStrip("Error no se pueden recuperar los datos del archivo xml.", MessageStripType.ERROR);
+	}
+
+	return response;
+}
+
+
+export const getInfoProrrateoXlsxService = async (file : File)
+	: Promise<DocumentInfoXLSX> => {
+
+	let response: DocumentInfoXLSX = null;
+
+	try {
+
+		const document: FormData = new FormData();
+		document.append("documento", file, file.name);
+
+		const jwt : string = await getJWT();
+		const documentDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.getProrrateoXlsx}`,
+			{
+				method: 'POST',
+				body: document,
+				headers: {
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (documentDataResponse.status == 200) {
+			response = await documentDataResponse.json();
+		} else {
+
+			const documentResponseError : ErrorResponse  = await documentDataResponse.json();
+			console.log(documentResponseError)
+			if (documentDataResponse.status >= 500) {
+				showMsgStrip("Error en el servicio al recuperar los datos del archivo xlsx.", MessageStripType.ERROR);
+			} else {
+				showMsgStrip(documentResponseError.message, MessageStripType.WARNING);
+			}
+		}
+
+	} catch (e) {
+		console.log(e);
+		showMsgStrip("Error no se pueden recuperar los datos del archivo xlsx.", MessageStripType.ERROR);
 	}
 
 	return response;
