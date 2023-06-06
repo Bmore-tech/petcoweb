@@ -128,7 +128,7 @@ export const saveDocumentInvoice = async (invoiceResponse : InvoiceResponse, fil
 
 	} catch (e) {
 		console.log(e);
-		showMsgStrip("Error no se pueden enviar los docuemntos de la factura.", MessageStripType.ERROR);
+		showMsgStrip("Error no se pueden enviar los documentos de la factura.", MessageStripType.ERROR);
 	}
 
 	return response;
