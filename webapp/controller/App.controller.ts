@@ -90,6 +90,9 @@ export default class App extends BaseController {
 	public navToConcepts(): void {
 		this.getRouter().navTo("Concepts");
 	}
+	public navToHistory(): void {
+		this.getRouter().navTo("History");
+	}
 
 
 }

@@ -1,0 +1,54 @@
+<mvc:View controllerName="com.bmore.portalproveedores.controller.History" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+	<IconTabBar id="idIconTabBar" select=".onFilterSelect" class="sapUiResponsiveContentPadding">
+		<items>
+			<IconTabFilter showAll="true" count="{/ProductCollectionStats/Counts/Total}" text="Solicitudes" key="All" />
+			<IconTabSeparator />
+			<IconTabFilter icon="sap-icon://begin" iconColor="Positive" count="{/ProductCollectionStats/Counts/Weight/Ok}" text="Ok" key="Ok" />
+			<IconTabFilter icon="sap-icon://compare" iconColor="Critical" count="{/ProductCollectionStats/Counts/Weight/Heavy}" text="Warning" key="Heavy" />
+			<IconTabFilter icon="sap-icon://inventory" iconColor="Negative" count="{/ProductCollectionStats/Counts/Weight/Overweight}" text="Error" key="Overweight" />
+		</items>
+		<content>
+			<Table id="productsTable" inset="false" showSeparators="Inner" headerText="Solicitudes" items="{
+					path: '/ProductCollection',
+					sorter: {
+						path: 'Name'
+					}
+				}">
+				<columns>
+					<Column width="12em">
+						<Text text="Id de solicitud" />
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Id - Proveedor" />
+					</Column>
+					<Column minScreenWidth="Desktop" demandPopin="true" hAlign="End">
+						<Text text="Folio" />
+					</Column>
+					<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+						<Text text="Monto" />
+					</Column>
+					<Column hAlign="End">
+						<Text text="Fecha de creación" />
+					</Column>
+          <Column hAlign="End">
+						<Text text="Concepto en especifico" />
+					</Column>
+          <Column hAlign="End">
+						<Text text="Última modificación" />
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier title="{Name}" text="{ProductId}" />
+							<Text text="{SupplierName}" />
+							<Text text="{Width} x {Depth} x {Height} {DimUnit}" />
+							<Text text="{SupplierName}" />
+							<Text text="{SupplierName}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</IconTabBar>
+</mvc:View>

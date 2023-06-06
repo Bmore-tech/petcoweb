@@ -13,11 +13,16 @@ import FilterOperator from "sap/ui/model/FilterOperator";
 import Binding from "sap/ui/model/Binding";
 import Sorter from "sap/ui/model/Sorter";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
-import {saveDocumentInvoice, sendInvoiceService} from "com/bmore/portalproveedores/service/Reception.service";
+import {
+	getInfoXmlService,
+	saveDocumentInvoice,
+	sendInvoiceService
+} from "com/bmore/portalproveedores/service/Reception.service";
 import {Invoice} from "com/bmore/portalproveedores/model/resquest/Invoice";
 import {Apportionment} from "com/bmore/portalproveedores/model/resquest/Apportionment";
 import {Comment} from "com/bmore/portalproveedores/model/resquest/Comment";
 import {InvoiceResponse} from "com/bmore/portalproveedores/model/response/InvoiceResponse";
+import {DocumentInfoXML} from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -29,6 +34,8 @@ export default class Reception extends BaseController {
 	private filesData : Array<File> = [];
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
+
+	private uuid: string = "";
 
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -290,9 +297,20 @@ export default class Reception extends BaseController {
 
 		if (filesItems.length > 0) {
 
-			filesItems.forEach(item => {
-				this.filesData.push(item.getFileObject());
-				console.log(window.URL.createObjectURL(item.getFileObject()));
+			filesItems.forEach(async (item): void => {
+
+				const file: File = item.getFileObject();
+				this.filesData.push(file);
+
+				if (file.type == "text/xml") {
+					let documentInfoXML: DocumentInfoXML = await getInfoXmlService(file);
+					console.log("DocumentInfoXML : ", documentInfoXML);
+
+					this.uuid = documentInfoXML.uuid;
+					this.byId("folio").setValue(documentInfoXML.folio);
+				}
+
+				console.log(window.URL.createObjectURL(file));
 			});
 
 			console.log("Files: ", this.filesData);

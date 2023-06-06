@@ -22,7 +22,7 @@
                                     <m:Label text="Folio Factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <m:Input type="Text" id="folio" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <m:Input type="Text" id="folio" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
