@@ -48,20 +48,26 @@ export const saveDrafInvoiceService = async (invoice : Invoice): Promise<Invoice
 	return response;
 }
 
-export const sendInvoiceService = async (invoice : Invoice): Promise<InvoiceResponse> => {
+export const sendInvoiceService = async (invoice : Invoice, filesData : Array<File>)
+	: Promise<InvoiceResponse> => {
 
 	let response: InvoiceResponse = null;
 
 	try {
+
+		const requestInvoice: FormData = new FormData();
+		requestInvoice.append("invoice", JSON.stringify(invoice));
+		filesData.forEach((file: File): void => {
+			requestInvoice.append("documentos", file, file.name);
+		});
 
 		const jwt : string = await getJWT();
 		const invoiceDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.sendInvoice}`,
 			{
 				method: 'PUT',
-				body: JSON.stringify(invoice),
+				body: requestInvoice,
 				headers: {
-					'Content-Type': 'application/json',
 					'Authorization': `Bearer ${jwt}`
 				}
 			}
@@ -69,6 +75,7 @@ export const sendInvoiceService = async (invoice : Invoice): Promise<InvoiceResp
 
 		if (invoiceDataResponse.status == 201) {
 			response = await invoiceDataResponse.json();
+			showMsgStrip(`Los datos de la factura ${response.invoiceId} fueron enviados con exito.`, MessageStripType.SUCCESS);
 		} else {
 
 			const invoiceResponseError : ErrorResponse  = await invoiceDataResponse.json();
@@ -83,52 +90,6 @@ export const sendInvoiceService = async (invoice : Invoice): Promise<InvoiceResp
 	} catch (e) {
 		console.log(e);
 		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
-	}
-
-	return response;
-}
-
-
-export const saveDocumentInvoice = async (invoiceResponse : InvoiceResponse, filesData : Array<File>)
-	: Promise<InvoiceResponse> => {
-
-	let response: InvoiceResponse = null;
-
-	try {
-
-		const documents: FormData = new FormData();
-		filesData.forEach((file: File): void => {
-			documents.append("documentos", file, file.name);
-		});
-
-		const jwt : string = await getJWT();
-		const invoiceDocumentDataResponse: Response = await fetch(
-			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.saveDocument}${invoiceResponse.invoiceId}`,
-			{
-				method: 'PUT',
-				body: documents,
-				headers: {
-					'Authorization': `Bearer ${jwt}`
-				}
-			}
-		);
-
-		if (invoiceDocumentDataResponse.status == 201) {
-			response = await invoiceDocumentDataResponse.json();
-		} else {
-
-			const invoiceDocumentResponseError : ErrorResponse  = await invoiceDocumentDataResponse.json();
-			console.log(invoiceDocumentResponseError)
-			if (invoiceDocumentDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al enviar los documentos de la factura.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(invoiceDocumentResponseError.message, MessageStripType.WARNING);
-			}
-		}
-
-	} catch (e) {
-		console.log(e);
-		showMsgStrip("Error no se pueden enviar los documentos de la factura.", MessageStripType.ERROR);
 	}
 
 	return response;

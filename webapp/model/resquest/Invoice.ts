@@ -9,4 +9,5 @@ export interface Invoice {
 	conceptId:      number;
 	folio:          string;
 	generalConcept: string;
+	uuid: 			string;
 }

@@ -283,18 +283,17 @@ export default class Reception extends BaseController {
 			conceptId: this.byId("conceptId").getValue(),
 			folio: this.byId("folio").getValue(),
 			generalConcept: this.byId("generalConcept").getValue(),
+			uuid: this.uuid
 		}
 
 		console.log("******** Factura: ", invoice);
 
-		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice);
-/*
-		const invoiceResponse: InvoiceResponse = {
-			invoiceId: 179536
-		};*/
-		console.log("******** Invoice Response id: ", invoiceResponse.invoiceId)
+		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
 
-		await saveDocumentInvoice(invoiceResponse, this.filesData);
+		if (invoiceResponse != null) {
+			console.log("******** Invoice Response id: ", invoiceResponse.invoiceId);
+			await this.AppController.navTo_home();
+		}
 
 		BusyIndicator.hide();
 	}
