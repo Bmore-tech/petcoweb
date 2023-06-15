@@ -7,6 +7,7 @@ import {Invoice} from "com/bmore/portalproveedores/model/resquest/Invoice";
 import {InvoiceResponse} from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 import {DocumentInfoXML} from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
 import {DocumentInfoXLSX} from "com/bmore/portalproveedores/model/response/DocumentInfoXLSX";
+import {validatedErrorResponse} from "com/bmore/portalproveedores/util/Util";
 
 export const saveDrafInvoiceService = async (invoice : Invoice): Promise<InvoiceResponse> => {
 
@@ -33,11 +34,9 @@ export const saveDrafInvoiceService = async (invoice : Invoice): Promise<Invoice
 
 			const invoiceResponseError : ErrorResponse  = await invoiceDataResponse.json();
 			console.log(invoiceResponseError)
-			if (invoiceDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al guardar la factura.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(invoiceResponseError.message, MessageStripType.WARNING);
-			}
+
+			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
+				"Error en el servicio al guardar la factura.");
 		}
 
 	} catch (e) {
@@ -79,12 +78,10 @@ export const sendInvoiceService = async (invoice : Invoice, filesData : Array<Fi
 		} else {
 
 			const invoiceResponseError : ErrorResponse  = await invoiceDataResponse.json();
-			console.log(invoiceResponseError)
-			if (invoiceDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al enviar la factura.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(invoiceResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(invoiceResponseError);
+
+			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
+				"Error en el servicio al enviar la factura.");
 		}
 
 	} catch (e) {
@@ -123,12 +120,10 @@ export const getInfoXmlService = async (file : File)
 		} else {
 
 			const documentResponseError : ErrorResponse  = await documentDataResponse.json();
-			console.log(documentResponseError)
-			if (documentDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al recuperar los datos del archivo xml.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(documentResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(documentResponseError);
+
+			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
+				"Error en el servicio al recuperar los datos del archivo xml.");
 		}
 
 	} catch (e) {
@@ -167,12 +162,11 @@ export const getInfoProrrateoXlsxService = async (file : File)
 		} else {
 
 			const documentResponseError : ErrorResponse  = await documentDataResponse.json();
-			console.log(documentResponseError)
-			if (documentDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al recuperar los datos del archivo xlsx.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(documentResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(documentResponseError);
+
+			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
+				"Error en el servicio al recuperar los datos del archivo xlsx.");
+
 		}
 
 	} catch (e) {

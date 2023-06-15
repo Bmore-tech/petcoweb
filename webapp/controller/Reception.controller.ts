@@ -16,7 +16,6 @@ import BusyIndicator from "sap/ui/core/BusyIndicator";
 import {
 	getInfoProrrateoXlsxService,
 	getInfoXmlService,
-	saveDocumentInvoice,
 	sendInvoiceService
 } from "com/bmore/portalproveedores/service/Reception.service";
 import {Invoice} from "com/bmore/portalproveedores/model/resquest/Invoice";
@@ -35,7 +34,6 @@ export default class Reception extends BaseController {
 	private filesData : Array<File> = [];
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
-
 	private uuid: string = "";
 
 	public async onAfterRendering(): Promise<void> {
@@ -387,6 +385,32 @@ export default class Reception extends BaseController {
 	}
 	public _onClose(idViewHelp: string): void {
 		this.byId(idViewHelp).close();
+	}
+
+	public async clear(): void {
+
+		// Clear state
+		this.invoiceId = 0;
+		this.uuid = "";
+		this.subsidiaryList = [];
+		this.filesData = [];
+		this.isDescendingConcepts = false;
+		this.isDescendingSubsidiaries = false;
+
+		// Clear components view
+		this.byId("folio").setValue("");
+		this.byId("amount").setValue("");
+		this.byId("conceptId").setValue("");
+		this.byId("concept").setValue("");
+		this.byId("generalConcept").setValue("");
+		this.byId("comment").setValue("");
+		this.byId("subsidiarySum").setText('Subtotal prorrateo $0');
+
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		uploadFilesData.removeAllItems();
+
+		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		tableSubsidiaries.removeAllItems();
 	}
 
 }

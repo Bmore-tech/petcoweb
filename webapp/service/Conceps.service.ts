@@ -4,6 +4,7 @@ import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.c
 import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
 import {ErrorResponse} from "com/bmore/portalproveedores/model/response/ErrorResponse";
 import {Concept} from "com/bmore/portalproveedores/model/Concept";
+import {validatedErrorResponse} from "com/bmore/portalproveedores/util/Util";
 
 export const getConceps = async (): Promise<Concept> => {
 
@@ -28,12 +29,10 @@ export const getConceps = async (): Promise<Concept> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError)
-			if (concepDataResponse.status >= 500) {
-				showMsgStrip("Error no se puede cargar la información de los conceptos.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(concepResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(concepResponseError);
+
+			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
+				"Error no se puede cargar la información de los conceptos.");
 		}
 
 		console.log(concepResponse);
@@ -71,12 +70,10 @@ export const saveConcept = async (concep : Concept): Promise<boolean> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError)
-			if (concepDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al guardar el concepto.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(concepResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(concepResponseError);
+
+			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
+				"Error en el servicio al guardar el concepto.");
 		}
 
 	} catch (e) {
@@ -112,12 +109,10 @@ export const updateConcept = async (concep : Concept): Promise<boolean> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError)
-			if (concepDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al actualizar el concepto.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(concepResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(concepResponseError);
+
+			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
+				"Error en el servicio al actualizar el concepto.");
 		}
 
 	} catch (e) {
@@ -155,12 +150,10 @@ export const deleteConcept = async (conceptId : string): Promise<boolean> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError)
-			if (concepDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al borrar el concepto.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(concepResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(concepResponseError);
+
+			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
+				"Error en el servicio al borrar el concepto.");
 		}
 
 	} catch (e) {

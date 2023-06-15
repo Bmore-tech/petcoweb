@@ -4,6 +4,7 @@ import {MessageStripType} from "../model/MessageStripType";
 import {SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT} from "../properties/properties";
 import {getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
 import {ErrorResponse} from "com/bmore/portalproveedores/model/response/ErrorResponse";
+import {validatedErrorResponse} from "com/bmore/portalproveedores/util/Util";
 
 
 export const getDashBoard = async (): Promise<Dashboard> => {
@@ -29,12 +30,10 @@ export const getDashBoard = async (): Promise<Dashboard> => {
         } else {
 
             const dashBoardResponseError: ErrorResponse = await dashBoardDataResponse.json();
-            console.log(dashBoardDataResponse)
-            if (dashBoardDataResponse.status >= 500) {
-                showMsgStrip("Error no se puede cargar la información en el dashboard.", MessageStripType.ERROR);
-            } else {
-                showMsgStrip(dashBoardResponseError.message, MessageStripType.WARNING);
-            }
+            console.log(dashBoardDataResponse);
+
+			await validatedErrorResponse(dashBoardDataResponse.status, dashBoardResponseError,
+				"Error no se puede cargar la información en el dashboard.");
         }
 
         console.log(dashBoardResponse);

@@ -78,8 +78,10 @@ export default class App extends BaseController {
 		localStorage.removeItem("sessionData");
 		this.getRouter().navTo("TargetLogin");
 	}
-	public navto_reception(): void {
+	public async navto_reception(): void {
 		this.getRouter().navTo("Reception");
+		this.ReceptionController = sap.ui.getCore().byId('__component0---Reception').getController();
+		await this.ReceptionController.clear();
 	}
 	public async navTo_home(): void {
 		this.getRouter().navTo("Main");

@@ -4,6 +4,7 @@ import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.c
 import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
 import {ErrorResponse} from "com/bmore/portalproveedores/model/response/ErrorResponse";
 import {Subsidiary} from "com/bmore/portalproveedores/model/Subsidiary";
+import {validatedErrorResponse} from "com/bmore/portalproveedores/util/Util";
 
 export const getSubsidiaries = async (): Promise<Subsidiary> => {
 
@@ -28,12 +29,10 @@ export const getSubsidiaries = async (): Promise<Subsidiary> => {
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError)
-			if (subsidiaryDataResponse.status >= 500) {
-				showMsgStrip("Error no se puede cargar la información de las sucursales.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(subsidiaryResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(subsidiaryResponseError);
+
+			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
+				"Error no se puede cargar la información de las sucursales.");
 		}
 
 		console.log(subsidiaryResponse);
@@ -71,12 +70,10 @@ export const saveSubsidiary = async (subsidiary : Subsidiary): Promise<boolean> 
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError)
-			if (subsidiaryDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al guardar la sucursal.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(subsidiaryResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(subsidiaryResponseError);
+
+			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
+				"Error en el servicio al guardar la sucursal.");
 		}
 
 	} catch (e) {
@@ -112,12 +109,10 @@ export const updateSubsidiary = async (subsidiary : Subsidiary): Promise<boolean
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError)
-			if (subsidiaryDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al actualizar la sucursal.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(subsidiaryResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(subsidiaryResponseError);
+
+			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
+				"Error en el servicio al actualizar la sucursal.");
 		}
 
 	} catch (e) {
@@ -155,12 +150,10 @@ export const deleteSubsidiary = async (subsidiaryId : string): Promise<boolean> 
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError)
-			if (subsidiaryDataResponse.status >= 500) {
-				showMsgStrip("Error en el servicio al borrar la sucursal.", MessageStripType.ERROR);
-			} else {
-				showMsgStrip(subsidiaryResponseError.message, MessageStripType.WARNING);
-			}
+			console.log(subsidiaryResponseError);
+
+			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
+				"Error en el servicio al borrar la sucursal.");
 		}
 
 	} catch (e) {

@@ -1,8 +1,8 @@
 import {JwtData} from "com/bmore/portalproveedores/model/response/JwtData";
-import MessageToast from "sap/m/MessageToast";
 import UI5Element from "sap/ui/core/Element";
 import Controller from "sap/ui/core/mvc/Controller";
 import {Roles} from "com/bmore/portalproveedores/model/Roles";
+import MessageBox from "sap/m/MessageBox";
 
 export const decodeJWT  = async (token: string) : void  => {
 
@@ -32,22 +32,13 @@ export const getJWT  = async () : string  => {
 
 const validatedSession  = async () : void  => {
 
-	const appController: Controller = sap.ui.getCore()
-		.byId('__component0---app').getController();
-
 	let token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
 	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
 
 	if (token === undefined) {
 
 		console.log("No tiene sesion valida ..........");
-
-		MessageToast.show('Tu sessión no es valida.',
-{
-			duration: 3000,
-			width: "15rem", // default max width supported
-		});
-		appController._closeSession();
+		messageCloseSession('Tu sessión no es valida.');
 
 	} else {
 
@@ -61,18 +52,26 @@ const validatedSession  = async () : void  => {
 		if (new Date().getTime() > dateExpiration) {
 
 			console.log("Date Expiration timeout..........");
-
-			MessageToast.show('Tu sessión ha expirado.',
-	{
-				duration: 3000,
-				width: "15rem", // default max width supported
-			});
-
-			appController._closeSession();
+			messageCloseSession('Tu sessión ha expirado.');
 		}
 	}
 }
 
+export const messageCloseSession = async (message: string) : void  => {
+
+	const appController: Controller = sap.ui.getCore()
+		.byId('__component0---app').getController();
+
+	MessageBox.information(message, {
+		actions: ["Aceptar"],
+		emphasizedAction: "Aceptar",
+		onClose: async (sAction) => {
+			if (sAction == null || sAction === "Aceptar") {
+				appController._closeSession();
+			}
+		}
+	});
+}
 
 export const validatedRoles  = async () : void  => {
 
