@@ -13,6 +13,7 @@ export const getConceps = async (): Promise<Concept> => {
 	try {
 
 		const jwt : string = await getJWT();
+		console.log("se actualiza");
 		const concepDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.concep}`,
 			{

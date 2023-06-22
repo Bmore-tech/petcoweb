@@ -1,11 +1,12 @@
 import BaseController from "./BaseController";
 import formatter from "../model/formatter";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import {Dashboard} from "../model/resquest/DashBoard";
-import {Carrucel} from "../model/resquest/Carrucel";
+import { Dashboard } from "../model/resquest/DashBoard";
+import { Carrucel } from "../model/resquest/Carrucel";
 import { getDashBoard } from "../service/Main.service";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import Integer from "sap/ui/model/type/Integer";
+import { validatedRoleProvider } from "../util/JwtHelper";
 
 
 /**
@@ -15,12 +16,22 @@ export default class Main extends BaseController {
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();
+
 	}
 	public async onInit(): Promise<void> {
 
 		console.log("onInit Main .............")
 
 		BusyIndicator.show(0);
+
+		const draftItem: UI5Element = sap.ui.getCore().byId('__component0---main--itemList');
+		// console.log("draftItem ", draftItem.getItems()[2]);
+
+		const isProvider: boolean = await validatedRoleProvider();
+		console.log(isProvider);
+		
+		if (!isProvider)
+			draftItem.getItems()[2].removeAllContent();
 
 		const dashBoardData: Dashboard = await getDashBoard();
 		const imagesCarrucel: Array<string> = await this.getCarrucel(dashBoardData);

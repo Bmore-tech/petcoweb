@@ -1,11 +1,11 @@
 import BaseController from "./BaseController";
 import View from "sap/ui/core/mvc/View";
 import Fragment from "sap/ui/core/Fragment";
-import {Concept} from "com/bmore/portalproveedores/model/Concept";
-import {getConceps} from "com/bmore/portalproveedores/service/Conceps.service";
+import { Concept } from "com/bmore/portalproveedores/model/Concept";
+import { getConceps } from "com/bmore/portalproveedores/service/Conceps.service";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import {Subsidiary as SubsidiaryDto} from "com/bmore/portalproveedores/model/Subsidiary";
-import {getSubsidiaries} from "com/bmore/portalproveedores/service/Subsidiary.service";
+import { Subsidiary as SubsidiaryDto } from "com/bmore/portalproveedores/model/Subsidiary";
+import { getSubsidiaries } from "com/bmore/portalproveedores/service/Subsidiary.service";
 import UI5Element from "sap/ui/core/Element";
 import MessageBox from "sap/m/MessageBox";
 import Filter from "sap/ui/model/Filter";
@@ -16,13 +16,15 @@ import BusyIndicator from "sap/ui/core/BusyIndicator";
 import {
 	getInfoProrrateoXlsxService,
 	getInfoXmlService,
+	getInvoiceByIdService,
 	sendInvoiceService
 } from "com/bmore/portalproveedores/service/Reception.service";
-import {Invoice} from "com/bmore/portalproveedores/model/resquest/Invoice";
-import {Apportionment} from "com/bmore/portalproveedores/model/resquest/Apportionment";
-import {Comment} from "com/bmore/portalproveedores/model/resquest/Comment";
-import {InvoiceResponse} from "com/bmore/portalproveedores/model/response/InvoiceResponse";
-import {DocumentInfoXML} from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
+import { Invoice } from "com/bmore/portalproveedores/model/resquest/Invoice";
+import { Apportionment } from "com/bmore/portalproveedores/model/resquest/Apportionment";
+import { Comment } from "com/bmore/portalproveedores/model/resquest/Comment";
+import { InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
+import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
+import { validatedErrorResponse } from "../util/Util";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -31,7 +33,7 @@ export default class Reception extends BaseController {
 
 	private invoiceId: number = 0;
 	private subsidiaryList: Array<object> = [];
-	private filesData : Array<File> = [];
+	private filesData: Array<File> = [];
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
 	private uuid: string = "";
@@ -135,7 +137,7 @@ export default class Reception extends BaseController {
 
 		//  Obtener state para sumar cantidades por tienda
 		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
-		const subsidiaryListData: Array<object>  = tableSubsidiaries.getItems();
+		const subsidiaryListData: Array<object> = tableSubsidiaries.getItems();
 
 		let sum: number = 0;
 		if (subsidiaryListData.length > 0) {
@@ -257,23 +259,38 @@ export default class Reception extends BaseController {
 
 		BusyIndicator.show(0);
 
-		let apportionments : Apportionment = [];
-		this.subsidiaryList
-			.forEach((subsidiary) =>{
-				apportionments.push({
-					subsidiaryId: subsidiary.idSubsidiary,
-					amount: subsidiary.amount
-				});
-			})
 
-		const comment : Array<Comment> = [
+		// check if subsidiarySum is equals to amount
+		let sum: number = 0;
+		const ammt:Number = this.byId("amount").getValue();
+		let apportionments: Apportionment = [];
+		if (this.subsidiaryList.length > 0) {
+
+			this.subsidiaryList
+				.forEach((subsidiary) => {
+					apportionments.push({
+						subsidiaryId: subsidiary.idSubsidiary,
+						amount: subsidiary.amount
+					});
+					sum += Number(subsidiary.amount);
+				})
+		}
+		
+		if (sum != ammt){
+			await validatedErrorResponse(1000,null,
+				"El subtotal de factura y la suma del prorrateo no coinciden");
+			BusyIndicator.hide();
+			return;
+		}
+
+		const comment: Array<Comment> = [
 			{
 				commentId: null,
 				comment: this.byId("comment").getValue()
 			}
 		];
 
-		const invoice : Invoice = {
+		const invoice: Invoice = {
 			amount: Number(this.byId("amount").getValue()),
 			applicationId: this.invoiceId,
 			apportionments,
@@ -284,13 +301,18 @@ export default class Reception extends BaseController {
 			uuid: this.uuid
 		}
 
+
 		console.log("******** Factura: ", invoice);
 
-		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
+		const invoiceExist: InvoiceResponse = await getInvoiceByIdService(invoice);
 
-		if (invoiceResponse != null) {
-			console.log("******** Invoice Response id: ", invoiceResponse.invoiceId);
-			await this.AppController.navTo_home();
+		if (invoiceExist === null) {
+			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
+
+			if (invoiceResponse != null) {
+				console.log("******** Invoice Response id: ", invoiceResponse.invoiceId);
+				await this.AppController.navTo_home();
+			}
 		}
 
 		BusyIndicator.hide();

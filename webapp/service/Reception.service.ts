@@ -91,6 +91,44 @@ export const sendInvoiceService = async (invoice : Invoice, filesData : Array<Fi
 
 	return response;
 }
+export const getInvoiceByIdService = async (invoice : Invoice)
+	: Promise<InvoiceResponse> => {
+
+	let response: InvoiceResponse = null;
+
+	try {
+ 
+		const jwt : string = await getJWT();
+		const documentDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.getInvoice}/${invoice.applicationId}`,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (documentDataResponse.status == 200) {
+			response = await documentDataResponse.json();
+			console.log(response);
+			
+		} else {
+
+			const documentResponseError : ErrorResponse  = await documentDataResponse.json();
+			console.log(documentResponseError);
+
+			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
+				"Error en el servicio al recuperar los datos del archivo xml.");
+		}
+
+	} catch (e) {
+		console.log(e);
+		showMsgStrip("Error no se pueden recuperar los datos del archivo xml.", MessageStripType.ERROR);
+	}
+
+	return response;
+}
 
 
 export const getInfoXmlService = async (file : File)
@@ -99,7 +137,7 @@ export const getInfoXmlService = async (file : File)
 	let response: DocumentInfoXML = null;
 
 	try {
-
+ 
 		const document: FormData = new FormData();
 		document.append("documento", file, file.name);
 

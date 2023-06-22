@@ -17,7 +17,7 @@
 
 			</f:header>
 			<f:content>
-				<List showSeparators="None">
+				<List id="itemList" showSeparators="None">
 					<CustomListItem>
 						<HBox alignItems="Center" justifyContent="SpaceBetween">
 							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >

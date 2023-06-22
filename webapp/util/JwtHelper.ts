@@ -3,6 +3,7 @@ import UI5Element from "sap/ui/core/Element";
 import Controller from "sap/ui/core/mvc/Controller";
 import {Roles} from "com/bmore/portalproveedores/model/Roles";
 import MessageBox from "sap/m/MessageBox";
+import Log from "sap/base/Log";
 
 export const decodeJWT  = async (token: string) : void  => {
 
@@ -90,13 +91,33 @@ export const validatedRoles  = async () : void  => {
 	}
 }
 
+export const validatedRoleProvider  = async () : boolean  => {
 
+	let token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
+	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
+
+	if (token !== undefined) {
+
+		await decodeJWT(token);
+		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
+		const roleUser: boolean = 
+		payload.roles.find((role: string):boolean => Roles[role] === Roles.PROVIDER_ROLE)
+		=== undefined ? false :true;
+			// .find( );
+		return roleUser ;
+
+
+	} else return false; 
+}
 export const validatedMenu  = async (roleUser: Roles) : void  => {
 
 	console.log("############# Role User : " + roleUser);
 
 	// Se oculta catalogos
 	const itemCatalogs: UI5Element = await findMenu("Catálogos");
+	const itemDraft: UI5Element = await findMenu("CFDI");
+	
+	itemDraft.getItems()[2].setVisible(false);
 	itemCatalogs.setVisible(false);
 
 	switch (Roles[roleUser]) {
@@ -106,6 +127,7 @@ export const validatedMenu  = async (roleUser: Roles) : void  => {
 			break;
 		case Roles.PROVIDER_ROLE:
 			console.log("Role Proveedor")
+			itemDraft.getItems()[2].setVisible(true);
 			break;
 		case Roles.PREVALIDATOR_ROLE:
 			console.log("Role prevalidador")
