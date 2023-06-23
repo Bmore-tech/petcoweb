@@ -351,12 +351,10 @@ export default class Reception extends BaseController {
 		}
 
 
-		const comment: Array<Comment> = [
-			{
-				commentId: null,
-				comment: this.byId("comment").getValue()
-			}
-		];
+		const comment : Comment = {
+			commentId: null,
+			comment: this.byId("comment").getValue()
+		};
 
 		const invoice: Invoice = {
 			amount: Number(this.byId("amount").getValue()),
