@@ -32,17 +32,21 @@
 							<Column hAlign="End">
 								<Text text="Última modificación" />
 							</Column>
+							<Column visible="true" hAlign="End">
+								<Text text="Estatus" />
+							</Column>
 						</columns>
 						<items>
 							<ColumnListItem>
 								<cells>
 									<ObjectIdentifier title="{Name}" text="{historyModel>invoiceId}" />
-									<Text  text="{historyModel>providerId}" />
+									<Text text="{historyModel>providerId}" />
 									<Text text="{historyModel>folio}" />
 									<Text text="{historyModel>amount}" />
 									<Text text="{historyModel>creationDate}" />
 									<Text text="{historyModel>generalConcept}" />
 									<Text text="{historyModel>lastModify}" />
+									<Text  text="{historyModel>status}"/>
 
 								</cells>
 							</ColumnListItem>

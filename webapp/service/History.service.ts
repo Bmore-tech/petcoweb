@@ -6,8 +6,8 @@ import { validatedErrorResponse } from "../util/Util";
 import { showMsgStrip } from "../component/MessageStrip.component";
 import { MessageStripType } from "../model/MessageStripType";
 
-export const getHistory = async (): Promise<History> => {
-    let historyResponse: History;
+export const getHistory = async (): Promise<History[]> => {
+    let historyResponse: History[];
 
     try {
 

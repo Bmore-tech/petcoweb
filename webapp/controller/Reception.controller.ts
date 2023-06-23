@@ -259,10 +259,17 @@ export default class Reception extends BaseController {
 
 		BusyIndicator.show(0);
 
+		// Check if there's a folio
 
+		if (this.byId("folio").getValue().length == 0) {
+			await validatedErrorResponse(1000, null,
+				'Debe llenar el campo "Folio Factura".');
+			BusyIndicator.hide();
+			return;
+		}
 		// check if subsidiarySum is equals to amount
 		let sum: number = 0;
-		const ammt:Number = this.byId("amount").getValue();
+		const ammt: Number = this.byId("amount").getValue();
 		let apportionments: Apportionment = [];
 		if (this.subsidiaryList.length > 0) {
 
@@ -274,14 +281,75 @@ export default class Reception extends BaseController {
 					});
 					sum += Number(subsidiary.amount);
 				})
+		} else {
+			await validatedErrorResponse(1000, null,
+				'Es necesario definir al menos una sucursal en "Prorrateo".');
+			BusyIndicator.hide();
+			return;
 		}
-		
-		if (sum != ammt){
-			await validatedErrorResponse(1000,null,
+
+		if (sum != ammt) {
+			await validatedErrorResponse(1000, null,
 				"El subtotal de factura y la suma del prorrateo no coinciden");
 			BusyIndicator.hide();
 			return;
 		}
+		// Check if there's a selected job type
+
+		if (this.byId("conceptId").getValue().length == 0) {
+			await validatedErrorResponse(1000, null,
+				'Debe llenar los campos "Id / Tipo de Trabajo".');
+			BusyIndicator.hide();
+			return;
+		}
+
+		// Check if there's a general concept
+
+		if (this.byId("generalConcept").getValue().length == 0) {
+			await validatedErrorResponse(1000, null,
+				'Debe llenar el campo "Concepto en Especifico".');
+			BusyIndicator.hide();
+			return;
+		}
+
+		// Check if there's at least 2 files
+		if (this.filesData.length < 2) {
+			await validatedErrorResponse(1000, null,
+				'Deben existir al menos 2 archivos: "Factura.xml", "Factura(.pdf, .jpeg, .jpg)".');
+			BusyIndicator.hide();
+			return;
+		}
+		// Check if there's at least one xml files
+		let countXML: boolean = false;
+		let ext: String;
+		this.filesData.forEach(element => {
+			ext = element.name.split('.').pop().toLowerCase();
+			if (ext == 'xml') {
+				countXML = true;
+			}
+		});
+		if (!countXML) {
+			await validatedErrorResponse(1000, null,
+				'Debe cargar la factura en formato XML.');
+			BusyIndicator.hide();
+			return;
+		}
+		// Check if there's at least one pdf files
+		let countpdf: boolean = false;
+		let extpdf: String;
+		this.filesData.forEach(element => {
+			extpdf = element.name.split('.').pop().toLowerCase();
+			if (extpdf == 'pdf') {
+				countpdf = true;
+			}
+		});
+		if (!countpdf) {
+			await validatedErrorResponse(1000, null,
+				'Debe cargar la factura en formato PDF.');
+			BusyIndicator.hide();
+			return;
+		}
+
 
 		const comment: Array<Comment> = [
 			{
@@ -365,6 +433,7 @@ export default class Reception extends BaseController {
 
 			this.uuid = documentInfoXML.uuid;
 			this.byId("folio").setValue(documentInfoXML.folio);
+			this.byId("amount").setValue(0);
 		}
 	}
 
