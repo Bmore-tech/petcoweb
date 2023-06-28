@@ -43,7 +43,7 @@ export default class App extends BaseController {
 
 		const jwtEncode : string = await getJWT();
 		await decodeJWT(jwtEncode);
-		const jwt: string = sap.ui.getCore().getModel("sessionData")?.payload;
+		const jwt: string = sap.ui.getCore().getModel("sessionData")?.oData.payload;
 
 		const oButton: UI5Element = this.byId("avatar");
 		const sMsg: string = `Bienvenido ${jwt.nameUser}`;

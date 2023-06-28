@@ -29,14 +29,14 @@ export const decodeJWT  = async (token: string) : void  => {
 export const getJWT  = async () : string  => {
 
 	await validatedSession();
-	const token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
+	const token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
 
 	return token;
 }
 
 const validatedSession  = async () : void  => {
 
-	let token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
+	let token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
 	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
 
 	if (token === undefined) {
@@ -47,7 +47,7 @@ const validatedSession  = async () : void  => {
 
 		await decodeJWT(token);
 
-		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
+		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.oData.payload;
 
 		const dateExpiration: number = new Date(Number(`${payload.exp}000`)).getTime();
 
@@ -76,7 +76,7 @@ export const messageCloseSession = async (message: string) : void  => {
 
 export const validatedRoles  = async () : void  => {
 
-	let token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
+	let token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
 	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
 
 	if (token !== undefined) {
@@ -93,7 +93,7 @@ export const validatedRoles  = async () : void  => {
 
 export const validatedRoleProvider  = async () : boolean  => {
 
-	let token: string = sap.ui.getCore().getModel("sessionData")?.jwt;
+	let token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
 	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
 
 	if (token !== undefined) {
