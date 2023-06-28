@@ -1,28 +1,33 @@
-import {getJWT} from "com/bmore/portalproveedores/util/JwtHelper";
-import {SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT} from "com/bmore/portalproveedores/properties/properties";
-import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
-import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
-import {ErrorResponse} from "com/bmore/portalproveedores/model/response/ErrorResponse";
-import {Invoice} from "com/bmore/portalproveedores/model/resquest/Invoice";
-import {InvoiceResponse} from "com/bmore/portalproveedores/model/response/InvoiceResponse";
-import {DocumentInfoXML} from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
-import {DocumentInfoXLSX} from "com/bmore/portalproveedores/model/response/DocumentInfoXLSX";
-import {validatedErrorResponse} from "com/bmore/portalproveedores/util/Util";
+import { getJWT } from "com/bmore/portalproveedores/util/JwtHelper";
+import { SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT } from "com/bmore/portalproveedores/properties/properties";
+import { showMsgStrip } from "com/bmore/portalproveedores/component/MessageStrip.component";
+import { MessageStripType } from "com/bmore/portalproveedores/model/MessageStripType";
+import { ErrorResponse } from "com/bmore/portalproveedores/model/response/ErrorResponse";
+import { Invoice } from "com/bmore/portalproveedores/model/resquest/Invoice";
+import { InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
+import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
+import { DocumentInfoXLSX } from "com/bmore/portalproveedores/model/response/DocumentInfoXLSX";
+import { validatedErrorResponse } from "com/bmore/portalproveedores/util/Util";
 
-export const saveDrafInvoiceService = async (invoice : Invoice): Promise<InvoiceResponse> => {
+export const saveDrafInvoiceService = async (invoice: Invoice, filesData: Array<File>): Promise<InvoiceResponse> => {
 
 	let response: InvoiceResponse = null;
 
 	try {
 
-		const jwt : string = await getJWT();
+		const requestInvoice: FormData = new FormData();
+		requestInvoice.append("invoice", JSON.stringify(invoice));
+		filesData.forEach((file: File): void => {
+			requestInvoice.append("documentos", file, file.name);
+		});
+
+		const jwt: string = await getJWT();
 		const invoiceDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.saveInvoice}`,
 			{
 				method: 'PUT',
-				body: JSON.stringify(invoice),
+				body: requestInvoice,
 				headers: {
-					'Content-Type': 'application/json',
 					'Authorization': `Bearer ${jwt}`
 				}
 			}
@@ -32,7 +37,7 @@ export const saveDrafInvoiceService = async (invoice : Invoice): Promise<Invoice
 			response = await invoiceDataResponse.json();
 		} else {
 
-			const invoiceResponseError : ErrorResponse  = await invoiceDataResponse.json();
+			const invoiceResponseError: ErrorResponse = await invoiceDataResponse.json();
 			console.log(invoiceResponseError)
 
 			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
@@ -47,7 +52,7 @@ export const saveDrafInvoiceService = async (invoice : Invoice): Promise<Invoice
 	return response;
 }
 
-export const sendInvoiceService = async (invoice : Invoice, filesData : Array<File>)
+export const sendInvoiceService = async (invoice: Invoice, filesData: Array<File>)
 	: Promise<InvoiceResponse> => {
 
 	let response: InvoiceResponse = null;
@@ -60,7 +65,7 @@ export const sendInvoiceService = async (invoice : Invoice, filesData : Array<Fi
 			requestInvoice.append("documentos", file, file.name);
 		});
 
-		const jwt : string = await getJWT();
+		const jwt: string = await getJWT();
 		const invoiceDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.sendInvoice}`,
 			{
@@ -77,7 +82,7 @@ export const sendInvoiceService = async (invoice : Invoice, filesData : Array<Fi
 			showMsgStrip(`Los datos de la factura ${response.invoiceId} fueron enviados con exito.`, MessageStripType.SUCCESS);
 		} else {
 
-			const invoiceResponseError : ErrorResponse  = await invoiceDataResponse.json();
+			const invoiceResponseError: ErrorResponse = await invoiceDataResponse.json();
 			console.log(invoiceResponseError);
 
 			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
@@ -91,14 +96,14 @@ export const sendInvoiceService = async (invoice : Invoice, filesData : Array<Fi
 
 	return response;
 }
-export const getInvoiceByIdService = async (invoice : Invoice)
+export const getInvoiceByIdService = async (invoice: Invoice)
 	: Promise<InvoiceResponse> => {
 
 	let response: InvoiceResponse = null;
 
 	try {
- 
-		const jwt : string = await getJWT();
+
+		const jwt: string = await getJWT();
 		const documentDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.getInvoice}/${invoice.applicationId}`,
 			{
@@ -112,10 +117,10 @@ export const getInvoiceByIdService = async (invoice : Invoice)
 		if (documentDataResponse.status == 200) {
 			response = await documentDataResponse.json();
 			console.log(response);
-			
+
 		} else {
 
-			const documentResponseError : ErrorResponse  = await documentDataResponse.json();
+			const documentResponseError: ErrorResponse = await documentDataResponse.json();
 			console.log(documentResponseError);
 
 			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
@@ -131,17 +136,17 @@ export const getInvoiceByIdService = async (invoice : Invoice)
 }
 
 
-export const getInfoXmlService = async (file : File)
+export const getInfoXmlService = async (file: File)
 	: Promise<DocumentInfoXML> => {
 
 	let response: DocumentInfoXML = null;
 
 	try {
- 
+
 		const document: FormData = new FormData();
 		document.append("documento", file, file.name);
 
-		const jwt : string = await getJWT();
+		const jwt: string = await getJWT();
 		const documentDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.getInfoXml}`,
 			{
@@ -157,7 +162,7 @@ export const getInfoXmlService = async (file : File)
 			response = await documentDataResponse.json();
 		} else {
 
-			const documentResponseError : ErrorResponse  = await documentDataResponse.json();
+			const documentResponseError: ErrorResponse = await documentDataResponse.json();
 			console.log(documentResponseError);
 
 			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
@@ -173,7 +178,7 @@ export const getInfoXmlService = async (file : File)
 }
 
 
-export const getInfoProrrateoXlsxService = async (file : File)
+export const getInfoProrrateoXlsxService = async (file: File)
 	: Promise<DocumentInfoXLSX> => {
 
 	let response: DocumentInfoXLSX = null;
@@ -183,7 +188,7 @@ export const getInfoProrrateoXlsxService = async (file : File)
 		const document: FormData = new FormData();
 		document.append("documento", file, file.name);
 
-		const jwt : string = await getJWT();
+		const jwt: string = await getJWT();
 		const documentDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.getProrrateoXlsx}`,
 			{
@@ -199,7 +204,7 @@ export const getInfoProrrateoXlsxService = async (file : File)
 			response = await documentDataResponse.json();
 		} else {
 
-			const documentResponseError : ErrorResponse  = await documentDataResponse.json();
+			const documentResponseError: ErrorResponse = await documentDataResponse.json();
 			console.log(documentResponseError);
 
 			await validatedErrorResponse(documentDataResponse.status, documentResponseError,

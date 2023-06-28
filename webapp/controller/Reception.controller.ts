@@ -17,6 +17,7 @@ import {
 	getInfoProrrateoXlsxService,
 	getInfoXmlService,
 	getInvoiceByIdService,
+	saveDrafInvoiceService,
 	sendInvoiceService
 } from "com/bmore/portalproveedores/service/Reception.service";
 import { Invoice } from "com/bmore/portalproveedores/model/resquest/Invoice";
@@ -184,8 +185,8 @@ export default class Reception extends BaseController {
 
 			const item = tableHelpConceps.getSelectedItem().getCells();
 
-			this.byId("conceptId").setValue(item[0].getValue());
-			this.byId("concept").setValue(item[1].getValue());
+			this.byId("conceptId").setValue(item[0].getText());
+			this.byId("concept").setValue(item[1].getText());
 
 			await this._onClose("conceptHelp");
 		}
@@ -384,12 +385,147 @@ export default class Reception extends BaseController {
 
 		BusyIndicator.hide();
 	}
+	public async saveInvoice(): void {
+
+		BusyIndicator.show(0);
+
+		// Check if there's a folio
+
+		if (this.byId("folio").getValue().length == 0) {
+			await validatedErrorResponse(1000, null,
+				'Debe llenar el campo "Folio Factura".');
+			BusyIndicator.hide();
+			return;
+		}
+		// check if subsidiarySum is equals to amount
+		let sum: number = 0;
+		const ammt: Number = this.byId("amount").getValue();
+		let apportionments: Apportionment = [];
+		if (this.subsidiaryList.length > 0) {
+
+			this.subsidiaryList
+				.forEach((subsidiary) => {
+					apportionments.push({
+						subsidiaryId: subsidiary.idSubsidiary,
+						amount: subsidiary.amount
+					});
+					sum += Number(subsidiary.amount);
+				})
+				console.log("suma total",sum);
+				console.log("suma ammtn",ammt);
+				
+		} else {
+			await validatedErrorResponse(1000, null,
+				'Es necesario definir al menos una sucursal en "Prorrateo".');
+			BusyIndicator.hide();
+			return;
+		}
+
+		if (sum != ammt) {
+			await validatedErrorResponse(1000, null,
+				"El subtotal de factura y la suma del prorrateo no coinciden");
+			BusyIndicator.hide();
+			return;
+		}
+		// Check if there's a selected job type
+
+		if (this.byId("conceptId").getValue().length == 0) {
+			await validatedErrorResponse(1000, null,
+				'Debe llenar los campos "Id / Tipo de Trabajo".');
+			BusyIndicator.hide();
+			return;
+		}
+
+		// Check if there's a general concept
+
+		if (this.byId("generalConcept").getValue().length == 0) {
+			await validatedErrorResponse(1000, null,
+				'Debe llenar el campo "Concepto en Especifico".');
+			BusyIndicator.hide();
+			return;
+		}
+
+		// Check if there's at least 2 files
+		if (this.filesData.length < 2) {
+			await validatedErrorResponse(1000, null,
+				'Deben existir al menos 2 archivos: "Factura.xml", "Factura(.pdf, .jpeg, .jpg)".');
+			BusyIndicator.hide();
+			return;
+		}
+		// Check if there's at least one xml files
+		let countXML: boolean = false;
+		let ext: String;
+		this.filesData.forEach(element => {
+			ext = element.name.split('.').pop().toLowerCase();
+			if (ext == 'xml') {
+				countXML = true;
+			}
+		});
+		if (!countXML) {
+			await validatedErrorResponse(1000, null,
+				'Debe cargar la factura en formato XML.');
+			BusyIndicator.hide();
+			return;
+		}
+		// Check if there's at least one pdf files
+		let countpdf: boolean = false;
+		let extpdf: String;
+		this.filesData.forEach(element => {
+			extpdf = element.name.split('.').pop().toLowerCase();
+			if (extpdf == 'pdf') {
+				countpdf = true;
+			}
+		});
+		if (!countpdf) {
+			await validatedErrorResponse(1000, null,
+				'Debe cargar la factura en formato PDF.');
+			BusyIndicator.hide();
+			return;
+		}
+
+
+		const comment: Comment = {
+			commentId: null,
+			comment: this.byId("comment").getValue()
+		};
+
+		const invoice: Invoice = {
+			amount: Number(this.byId("amount").getValue()),
+			applicationId: this.invoiceId,
+			apportionments,
+			comment,
+			conceptId: this.byId("conceptId").getValue(),
+			folio: this.byId("folio").getValue(),
+			generalConcept: this.byId("generalConcept").getValue(),
+			uuid: this.uuid
+		}
+
+
+		console.log("******** Factura: ", invoice);
+
+		// if (!this.uuidExist) {
+			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
+
+			if (invoiceResponse != null) {
+				console.log("******** Invoice Response id: ", invoiceResponse.invoiceId);
+				await this.AppController.navTo_home();
+			}
+		// }
+		//  else {
+		// 	await validatedErrorResponse(1000, null,
+		// 		'La factura ya ha sido registrada en otro proceso.');
+		// 	BusyIndicator.hide();
+		// 	return;
+		// }
+
+		BusyIndicator.hide();
+	}
 
 	public async uploadFiles(): Promise<void> {
 
 		this.filesData = [];
 		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
-		const filesItems:UploadSetItem[] = uploadFilesData.getItems();
+		const filesItems: UploadSetItem[] = uploadFilesData.getItems();
 
 
 		if (filesItems.length > 0) {
@@ -397,7 +533,7 @@ export default class Reception extends BaseController {
 			filesItems.forEach(async (item): void => {
 
 				const file: File = item.getFileObject();
-				
+
 				//Check if file already exists on the list
 				// const exitstTwoTimes: Array<File> = filesItems.filter(item2 => item2.getFileObject().name == file.name)
 				// if (exitstTwoTimes.length > 1) {
@@ -407,10 +543,10 @@ export default class Reception extends BaseController {
 				// 	BusyIndicator.hide();
 				// 	return;
 				// }
-				
+
 
 				this.filesData.push(file);
-				
+
 				await this.validatedXml(file);
 				await this.validatedXlsx(file);
 
