@@ -28,15 +28,11 @@ export const getHistory = async (): Promise<History[]> => {
         } else {
 
             const subsidiaryResponseError: ErrorResponse = await historyDataResponse.json();
-            console.log(subsidiaryResponseError);
 
             await validatedErrorResponse(historyDataResponse.status, subsidiaryResponseError,
                 "Error no se puede cargar la información de las sucursales.");
         }
-
-        console.log(historyResponse);
     } catch (e) {
-        console.log(e);
         showMsgStrip("Error no se puede cargar la información de las sucursales.", MessageStripType.ERROR);
     }
 

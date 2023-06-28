@@ -22,7 +22,7 @@ export const closeMsgStrip = async (): Promise<void> => {
 const generateMsgStrip = async (mesaage : string, type: string): Promise<void> => {
 
     const sType = type;
-    const containerMessage = sap.ui.getCore().getModel("coreModel")?.containerMessage;
+    const containerMessage = sap.ui.getCore().getModel("coreModel")?.oData.containerMessage;
     const oMessageStrip : MessageStrip = new MessageStrip("msgStrip", {
         text: mesaage,
         showCloseButton: true,

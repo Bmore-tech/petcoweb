@@ -170,8 +170,6 @@ export default class Reception extends BaseController {
 					return subsidiary;
 				});
 		}
-
-		console.log("suma tienda: ", sum);
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 	}
 
@@ -370,15 +368,10 @@ export default class Reception extends BaseController {
 			generalConcept: this.byId("generalConcept").getValue(),
 			uuid: this.uuid
 		}
-
-
-		console.log("******** Factura: ", invoice);
-
 		if (!this.uuidExist) {
 			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
 
 			if (invoiceResponse != null) {
-				console.log("******** Invoice Response id: ", invoiceResponse.invoiceId);
 				await this.AppController.navTo_home();
 			}
 		}
@@ -411,9 +404,7 @@ export default class Reception extends BaseController {
 					});
 					sum += Number(subsidiary.amount);
 				})
-				console.log("suma total",sum);
-				console.log("suma ammtn",ammt);
-				
+
 		} else {
 			await validatedErrorResponse(1000, null,
 				'Es necesario definir al menos una sucursal en "Prorrateo".');
@@ -500,23 +491,19 @@ export default class Reception extends BaseController {
 			uuid: this.uuid
 		}
 
-
-		console.log("******** Factura: ", invoice);
-
-		// if (!this.uuidExist) {
+		if (!this.uuidExist) {
 			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
 
 			if (invoiceResponse != null) {
-				console.log("******** Invoice Response id: ", invoiceResponse.invoiceId);
 				await this.AppController.navTo_home();
 			}
-		// }
-		//  else {
-		// 	await validatedErrorResponse(1000, null,
-		// 		'La factura ya ha sido registrada en otro proceso.');
-		// 	BusyIndicator.hide();
-		// 	return;
-		// }
+		}
+		else {
+			await validatedErrorResponse(1000, null,
+				'La factura ya ha sido registrada en otro proceso.');
+			BusyIndicator.hide();
+			return;
+		}
 
 		BusyIndicator.hide();
 	}
@@ -526,33 +513,52 @@ export default class Reception extends BaseController {
 		this.filesData = [];
 		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
 		const filesItems: UploadSetItem[] = uploadFilesData.getItems();
-
-
 		if (filesItems.length > 0) {
-
+			let error: boolean = false;
 			filesItems.forEach(async (item): void => {
+				if (!error) {
 
-				const file: File = item.getFileObject();
+					const file: File = item.getFileObject();
 
-				//Check if file already exists on the list
-				// const exitstTwoTimes: Array<File> = filesItems.filter(item2 => item2.getFileObject().name == file.name)
-				// if (exitstTwoTimes.length > 1) {
-				// 	uploadFilesData.getItems().pop();	
-				// 	await validatedErrorResponse(1000, null,
-				// 		'Archivo ya registrado.');
-				// 	BusyIndicator.hide();
-				// 	return;
-				// }
+					//Check if file already exists on the list
+					const exitstTwoTimes: Array<File> = filesItems.filter(item2 => item2.getFileObject().name == file.name)
+					if (exitstTwoTimes.length > 1) {
+						error = true;
+						filesItems[0].destroy();
+						await validatedErrorResponse(1000, null,
+							'Archivo ya registrado.');
+						BusyIndicator.hide();
+						return;
+					}
+
+					//Check if is xml to allow only one
+
+					const exitstOneXML: Array<File> = filesItems.filter(item2 => item2.getFileObject().type.toLowerCase() == "text/xml")
+					if (exitstOneXML.length > 1) {
+						error = true;
+						filesItems[0].destroy();
+						await validatedErrorResponse(1000, null,
+							'Solo se permite un archivo xml por carga de archivos.');
+						BusyIndicator.hide();
+						return;
+					}
 
 
-				this.filesData.push(file);
 
-				await this.validatedXml(file);
-				await this.validatedXlsx(file);
+					await this.validatedXml(file);
+					await this.validatedXlsx(file);
 
-				console.log(window.URL.createObjectURL(file));
+					if (this.uuidExist) {
+						filesItems[0].destroy();
+						await validatedErrorResponse(1000, null,
+							'La factura ya ha sido registrada en otro proceso.');
+						BusyIndicator.hide();
+						return;
+					}
+					this.filesData.push(file);
+				}
 			});
-			console.log("Files: ", this.filesData);
+
 		}
 	}
 
@@ -576,7 +582,6 @@ export default class Reception extends BaseController {
 
 		if (file.type == "text/xml") {
 			let documentInfoXML: DocumentInfoXML = await getInfoXmlService(file);
-			console.log("DocumentInfoXML : ", documentInfoXML);
 
 			this.uuid = documentInfoXML.uuid;
 			this.byId("folio").setValue(documentInfoXML.folio);
@@ -590,7 +595,6 @@ export default class Reception extends BaseController {
 		const typeXlsx: string = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 		if (file.type == typeXlsx) {
 			let documentInfoXlsx: DocumentInfoXLSX = await getInfoProrrateoXlsxService(file);
-			console.log("DocumentInfoXlsx : ", documentInfoXlsx);
 
 			this.subsidiaryList = [...documentInfoXlsx];
 

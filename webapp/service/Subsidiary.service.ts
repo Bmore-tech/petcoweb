@@ -29,15 +29,11 @@ export const getSubsidiaries = async (): Promise<Subsidiary> => {
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError);
 
 			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
 				"Error no se puede cargar la información de las sucursales.");
 		}
-
-		console.log(subsidiaryResponse);
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede cargar la información de las sucursales.", MessageStripType.ERROR);
 	}
 
@@ -70,14 +66,12 @@ export const saveSubsidiary = async (subsidiary : Subsidiary): Promise<boolean> 
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError);
 
 			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
 				"Error en el servicio al guardar la sucursal.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede guardar la información de la sucursal.", MessageStripType.ERROR);
 	}
 
@@ -109,14 +103,12 @@ export const updateSubsidiary = async (subsidiary : Subsidiary): Promise<boolean
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError);
 
 			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
 				"Error en el servicio al actualizar la sucursal.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede actualizar la información de la sucursal.", MessageStripType.ERROR);
 	}
 
@@ -150,14 +142,12 @@ export const deleteSubsidiary = async (subsidiaryId : string): Promise<boolean> 
 		} else {
 
 			const subsidiaryResponseError : ErrorResponse  = await subsidiaryDataResponse.json();
-			console.log(subsidiaryResponseError);
 
 			await validatedErrorResponse(subsidiaryDataResponse.status, subsidiaryResponseError,
 				"Error en el servicio al borrar la sucursal.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede borrar la información de la sucursal.", MessageStripType.ERROR);
 	}
 

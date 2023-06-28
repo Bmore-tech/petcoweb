@@ -49,10 +49,7 @@ export const signIn = async (userRequest : SignInRequest): Promise<boolean> => {
 				await showMsgStrip("Error interno, no se puede iniciar sesión.", MessageStripType.ERROR);
 			}
 		}
-
-		console.log("Is valid user.... ", isValidUser);
 	} catch (e) {
-		console.log(e);
 		await showMsgStrip("Error no se puede cargar la información de inicio de sesión.", MessageStripType.ERROR);
 	}
 

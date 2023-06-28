@@ -2,6 +2,7 @@ import BaseController from "./BaseController";
 import Fragment from "sap/ui/core/Fragment";
 import {decodeJWT, getJWT, validatedRoles} from "com/bmore/portalproveedores/util/JwtHelper";
 import UI5Element from "sap/ui/core/Element";
+import JSONModel from "sap/ui/model/json/JSONModel";
 
 /**
  * @namespace com.bmore.portalproveedores.controller
@@ -11,9 +12,11 @@ export default class App extends BaseController {
 	public async onInit(): Promise<void> {
 		// apply content density mode to root view
 		//this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
-		sap.ui.getCore().setModel({
+
+		let model: JSONModel = new JSONModel({
 			containerMessage : this.byId("stripContent")
-		}, "coreModel");
+		});
+		sap.ui.getCore().setModel(model, "coreModel");
 	}
 
 	public login_navbar(): void {
@@ -23,9 +26,10 @@ export default class App extends BaseController {
 		this.byId("navbar").setVisible(false);
 		sap.ui.getCore().byId("__component0---Login--stripContent").setVisible(false);
 
-		sap.ui.getCore().setModel({
+		let model: JSONModel = new JSONModel({
 			containerMessage : sap.ui.getCore().byId("__component0---Login--stripContent")
-		}, "coreModel");
+		});
+		sap.ui.getCore().setModel(model, "coreModel");
 	}
 	public async home_navbar(): void {
 

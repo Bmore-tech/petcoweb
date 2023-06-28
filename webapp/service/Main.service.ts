@@ -30,15 +30,12 @@ export const getDashBoard = async (): Promise<Dashboard> => {
         } else {
 
             const dashBoardResponseError: ErrorResponse = await dashBoardDataResponse.json();
-            console.log(dashBoardDataResponse);
 
 			await validatedErrorResponse(dashBoardDataResponse.status, dashBoardResponseError,
 				"Error no se puede cargar la información en el dashboard.");
         }
 
-        console.log(dashBoardResponse);
     } catch (e) {
-        console.log(e);
         showMsgStrip("Error no se puede cargar la información en el dashboard.", MessageStripType.ERROR);
     }
 

@@ -38,14 +38,12 @@ export const saveDrafInvoiceService = async (invoice: Invoice, filesData: Array<
 		} else {
 
 			const invoiceResponseError: ErrorResponse = await invoiceDataResponse.json();
-			console.log(invoiceResponseError)
 
 			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
 				"Error en el servicio al guardar la factura.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede guardar la información de la factura.", MessageStripType.ERROR);
 	}
 
@@ -83,14 +81,12 @@ export const sendInvoiceService = async (invoice: Invoice, filesData: Array<File
 		} else {
 
 			const invoiceResponseError: ErrorResponse = await invoiceDataResponse.json();
-			console.log(invoiceResponseError);
 
 			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
 				"Error en el servicio al enviar la factura.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
 	}
 
@@ -116,19 +112,16 @@ export const getInvoiceByIdService = async (invoice: Invoice)
 
 		if (documentDataResponse.status == 200) {
 			response = await documentDataResponse.json();
-			console.log(response);
 
 		} else {
 
 			const documentResponseError: ErrorResponse = await documentDataResponse.json();
-			console.log(documentResponseError);
 
 			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
 				"Error en el servicio al recuperar los datos del archivo xml.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se pueden recuperar los datos del archivo xml.", MessageStripType.ERROR);
 	}
 
@@ -163,14 +156,12 @@ export const getInfoXmlService = async (file: File)
 		} else {
 
 			const documentResponseError: ErrorResponse = await documentDataResponse.json();
-			console.log(documentResponseError);
 
 			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
 				"Error en el servicio al recuperar los datos del archivo xml.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se pueden recuperar los datos del archivo xml.", MessageStripType.ERROR);
 	}
 
@@ -205,7 +196,6 @@ export const getInfoProrrateoXlsxService = async (file: File)
 		} else {
 
 			const documentResponseError: ErrorResponse = await documentDataResponse.json();
-			console.log(documentResponseError);
 
 			await validatedErrorResponse(documentDataResponse.status, documentResponseError,
 				"Error en el servicio al recuperar los datos del archivo xlsx.");
@@ -213,7 +203,6 @@ export const getInfoProrrateoXlsxService = async (file: File)
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se pueden recuperar los datos del archivo xlsx.", MessageStripType.ERROR);
 	}
 

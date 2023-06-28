@@ -4,6 +4,8 @@ import Controller from "sap/ui/core/mvc/Controller";
 import {Roles} from "com/bmore/portalproveedores/model/Roles";
 import MessageBox from "sap/m/MessageBox";
 import Log from "sap/base/Log";
+import JSONModel from "sap/ui/model/json/JSONModel";
+import Model from "sap/ui/model/Model";
 
 export const decodeJWT  = async (token: string) : void  => {
 
@@ -15,11 +17,12 @@ export const decodeJWT  = async (token: string) : void  => {
 
 	const header: string = JSON.parse(atob(parts[0]));
 	const payload: JwtData = JSON.parse(atob(parts[1]));
-
-	await sap.ui.getCore().setModel({
+	let model: JSONModel = new JSONModel({
 		jwt: token,
 		payload
-	}, "sessionData");
+	});
+
+	await sap.ui.getCore().setModel(model, "sessionData");
 
 }
 
@@ -38,7 +41,6 @@ const validatedSession  = async () : void  => {
 
 	if (token === undefined) {
 
-		console.log("No tiene sesion valida ..........");
 		messageCloseSession('Tu sessión no es valida.');
 
 	} else {
@@ -48,11 +50,9 @@ const validatedSession  = async () : void  => {
 		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
 
 		const dateExpiration: number = new Date(Number(`${payload.exp}000`)).getTime();
-		console.log("Date Expiration : ", dateExpiration);
 
 		if (new Date().getTime() > dateExpiration) {
 
-			console.log("Date Expiration timeout..........");
 			messageCloseSession('Tu sessión ha expirado.');
 		}
 	}
@@ -82,7 +82,7 @@ export const validatedRoles  = async () : void  => {
 	if (token !== undefined) {
 
 		await decodeJWT(token);
-		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
+		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.oData.payload;
 
 		const roleUser: string = Object.values(payload.roles)
 			.find((role: string):boolean => Roles[role] != Roles.EXECUTE_APPLICATION);
@@ -99,7 +99,7 @@ export const validatedRoleProvider  = async () : boolean  => {
 	if (token !== undefined) {
 
 		await decodeJWT(token);
-		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.payload;
+		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.oData.payload;
 		const roleUser: boolean = 
 		payload.roles.find((role: string):boolean => Roles[role] === Roles.PROVIDER_ROLE)
 		=== undefined ? false :true;
@@ -111,8 +111,6 @@ export const validatedRoleProvider  = async () : boolean  => {
 }
 export const validatedMenu  = async (roleUser: Roles) : void  => {
 
-	console.log("############# Role User : " + roleUser);
-
 	// Se oculta catalogos
 	const itemCatalogs: UI5Element = await findMenu("Catálogos");
 	const itemDraft: UI5Element = await findMenu("CFDI");
@@ -122,18 +120,14 @@ export const validatedMenu  = async (roleUser: Roles) : void  => {
 
 	switch (Roles[roleUser]) {
 		case Roles.ADMINGROUP:
-			console.log("Role Admin");
 			itemCatalogs.setVisible(true);
 			break;
 		case Roles.PROVIDER_ROLE:
-			console.log("Role Proveedor")
 			itemDraft.getItems()[2].setVisible(true);
 			break;
 		case Roles.PREVALIDATOR_ROLE:
-			console.log("Role prevalidador")
 			break;
 		case Roles.APPROVER_ROLE:
-			console.log("Role Aprobador")
 			break;
 	}
 

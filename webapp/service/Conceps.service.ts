@@ -13,7 +13,6 @@ export const getConceps = async (): Promise<Concept> => {
 	try {
 
 		const jwt : string = await getJWT();
-		console.log("se actualiza");
 		const concepDataResponse: Response = await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.concep}`,
 			{
@@ -30,15 +29,11 @@ export const getConceps = async (): Promise<Concept> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError);
 
 			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
 				"Error no se puede cargar la información de los conceptos.");
 		}
-
-		console.log(concepResponse);
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede cargar la información de los conceptos.", MessageStripType.ERROR);
 	}
 
@@ -71,14 +66,12 @@ export const saveConcept = async (concep : Concept): Promise<boolean> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError);
 
 			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
 				"Error en el servicio al guardar el concepto.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede guardar la información del concepto.", MessageStripType.ERROR);
 	}
 
@@ -110,14 +103,12 @@ export const updateConcept = async (concep : Concept): Promise<boolean> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError);
 
 			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
 				"Error en el servicio al actualizar el concepto.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede actualizar la información del concepto.", MessageStripType.ERROR);
 	}
 
@@ -151,14 +142,12 @@ export const deleteConcept = async (conceptId : string): Promise<boolean> => {
 		} else {
 
 			const concepResponseError : ErrorResponse  = await concepDataResponse.json();
-			console.log(concepResponseError);
 
 			await validatedErrorResponse(concepDataResponse.status, concepResponseError,
 				"Error en el servicio al borrar el concepto.");
 		}
 
 	} catch (e) {
-		console.log(e);
 		showMsgStrip("Error no se puede borrar la información del concepto.", MessageStripType.ERROR);
 	}
 

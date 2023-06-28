@@ -62,7 +62,6 @@ export default class History extends BaseController {
 		await this.setModel(new JSONModel({
 			...subsidiaryData
 		}), "historyModel");
-		console.log(this.getModel("historyModel"));
 
 		return subsidiaryData;
 	}

@@ -19,16 +19,11 @@ export default class Main extends BaseController {
 
 	}
 	public async onInit(): Promise<void> {
-
-		console.log("onInit Main .............")
-
 		BusyIndicator.show(0);
 
 		const draftItem: UI5Element = sap.ui.getCore().byId('__component0---main--itemList');
-		// console.log("draftItem ", draftItem.getItems()[2]);
 
 		const isProvider: boolean = await validatedRoleProvider();
-		console.log(isProvider);
 		
 		if (!isProvider)
 			draftItem.getItems()[2].removeAllContent();
