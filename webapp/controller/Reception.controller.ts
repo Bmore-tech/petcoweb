@@ -25,6 +25,8 @@ import { Comment } from "com/bmore/portalproveedores/model/resquest/Comment";
 import { InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
 import { validatedErrorResponse } from "../util/Util";
+import UploadSetItem from "sap/m/upload/UploadSetItem";
+import UploadSet from "sap/m/upload/UploadSet";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -37,6 +39,7 @@ export default class Reception extends BaseController {
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
 	private uuid: string = "";
+	private uuidExist: boolean = true;
 
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -351,7 +354,7 @@ export default class Reception extends BaseController {
 		}
 
 
-		const comment : Comment = {
+		const comment: Comment = {
 			commentId: null,
 			comment: this.byId("comment").getValue()
 		};
@@ -370,9 +373,7 @@ export default class Reception extends BaseController {
 
 		console.log("******** Factura: ", invoice);
 
-		const invoiceExist: InvoiceResponse = await getInvoiceByIdService(invoice);
-
-		if (invoiceExist === null) {
+		if (!this.uuidExist) {
 			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
 
 			if (invoiceResponse != null) {
@@ -387,22 +388,34 @@ export default class Reception extends BaseController {
 	public async uploadFiles(): Promise<void> {
 
 		this.filesData = [];
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		const filesItems = uploadFilesData.getItems();
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+		const filesItems:UploadSetItem[] = uploadFilesData.getItems();
+
 
 		if (filesItems.length > 0) {
 
 			filesItems.forEach(async (item): void => {
 
 				const file: File = item.getFileObject();
-				this.filesData.push(file);
+				
+				//Check if file already exists on the list
+				// const exitstTwoTimes: Array<File> = filesItems.filter(item2 => item2.getFileObject().name == file.name)
+				// if (exitstTwoTimes.length > 1) {
+				// 	uploadFilesData.getItems().pop();	
+				// 	await validatedErrorResponse(1000, null,
+				// 		'Archivo ya registrado.');
+				// 	BusyIndicator.hide();
+				// 	return;
+				// }
+				
 
+				this.filesData.push(file);
+				
 				await this.validatedXml(file);
 				await this.validatedXlsx(file);
 
 				console.log(window.URL.createObjectURL(file));
 			});
-
 			console.log("Files: ", this.filesData);
 		}
 	}
@@ -431,7 +444,8 @@ export default class Reception extends BaseController {
 
 			this.uuid = documentInfoXML.uuid;
 			this.byId("folio").setValue(documentInfoXML.folio);
-			this.byId("amount").setValue(0);
+			this.byId("amount").setValue(documentInfoXML.amount);
+			this.uuidExist = documentInfoXML.existeUuid;
 		}
 	}
 

@@ -1,0 +1,45 @@
+<mvc:View controllerName="com.bmore.portalproveedores.controller.TablePendings"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core" displayBlock="true" height="100%">
+    <Page>
+        <headerContent>
+            <Bar>
+                <contentLeft>
+                    <Title titleStyle="H2" text="Pendientes de aprobación"/>
+                </contentLeft>
+            </Bar>
+        </headerContent>
+        <content>
+            <Panel width="auto" class="sapUiResponsiveMargin">
+                <Table inset="true" id="productsTable" showSeparators="Inner" items="{tbModel>/data}">
+                    <columns>
+                        <Column  >
+                            <Text text="Id de solicitud"/>
+                        </Column>
+                        <Column >
+                            <Text text="Fecha de creación"/>
+                        </Column>
+                        <Column >
+                            <Text text="Folio"/>
+                        </Column>
+                        <Column >
+                            <Text text="Concepto en especifico"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem type="Active" vAlign="Middle" press="handleRowClick">
+                            <cells>
+                                <Text text="{tbModel>id}"/>
+                                <Text text="{tbModel>date}"/>
+                                <Text text="{tbModel>folio}"/>
+                                <Text text="{tbModel>concept}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </Panel>
+        </content>
+    </Page>
+
+</mvc:View>

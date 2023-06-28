@@ -108,6 +108,13 @@
           "target": [
             "History"
           ]
+        },
+        {
+          "name": "Pending",
+          "pattern": "Pending",
+          "target": [
+            "Pending"
+          ]
         }
       ],
       "targets": {
@@ -139,6 +146,11 @@
           "viewType": "XML",
           "viewId": "History",
           "viewName": "History"
+        },
+        "Pending":{
+          "viewType": "XML",
+          "viewId": "Pending",
+          "viewName": "TablePendings"
         },
         "notFound": {
           "viewName": "NotFound",

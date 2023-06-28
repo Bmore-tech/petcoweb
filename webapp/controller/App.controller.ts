@@ -95,6 +95,9 @@ export default class App extends BaseController {
 	public navToHistory(): void {
 		this.getRouter().navTo("History");
 	}
+	public navToPending(): void {
+		this.getRouter().navTo("Pending");
+	}
 
 
 }

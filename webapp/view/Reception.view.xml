@@ -1,19 +1,25 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.portalproveedores.controller.Reception" displayBlock="true" xmlns="sap.uxap" xmlns:m="sap.m"  xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:upload="sap.m.upload">
-	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
-		<headerTitle>
-			<ObjectPageDynamicHeaderTitle>
-				<expandedHeading>
-					<m:Title text="Recepción de CFDI" wrapping="true" />
-				</expandedHeading>
-				<navigationActions />
-				<actions>
-					<ObjectPageHeaderActionButton text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
-					<ObjectPageHeaderActionButton text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="saveInvoice" />
-				</actions>
-			</ObjectPageDynamicHeaderTitle>
-		</headerTitle>
-		<headerContent>
-    <form:Form width="100%" editable="true" visible="true">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="com.bmore.portalproveedores.controller.Reception" displayBlock="true"
+    xmlns="sap.uxap"
+    xmlns:m="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:upload="sap.m.upload">
+    <ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
+        <headerTitle>
+            <ObjectPageDynamicHeaderTitle>
+                <expandedHeading>
+                    <m:Title text="Recepción de CFDI" wrapping="true" />
+                </expandedHeading>
+                <navigationActions />
+                <actions>
+                    <ObjectPageHeaderActionButton text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
+                    <ObjectPageHeaderActionButton text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="saveInvoice" />
+                </actions>
+            </ObjectPageDynamicHeaderTitle>
+        </headerTitle>
+        <headerContent>
+            <form:Form width="100%" editable="true" visible="true">
                 <form:formContainers>
                     <form:FormContainer visible="true">
                         <form:formElements>
@@ -73,13 +79,13 @@
             </form:Form>
 
 
-		</headerContent>
-		<sections>
-			<ObjectPageSection title="Prorrateo" id="ProrrateoSection">
-				<subSections>
-					<ObjectPageSubSection id="ProrrateoSubSection">
-						<blocks>
-							<m:Table id="tableSubsidiaries" width="auto" items="{path: 'subsidiaryList>/'}" noDataText="No data" mode="none" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+        </headerContent>
+        <sections>
+            <ObjectPageSection title="Prorrateo" id="ProrrateoSection">
+                <subSections>
+                    <ObjectPageSubSection id="ProrrateoSubSection">
+                        <blocks>
+                            <m:Table id="tableSubsidiaries" width="auto" items="{path: 'subsidiaryList>/'}" noDataText="No data" mode="none" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
                                 <m:infoToolbar>
                                     <m:Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
                                         <m:content>
@@ -122,56 +128,45 @@
                                     <m:ColumnListItem type="Active">
                                         <m:cells>
                                             <layout:HorizontalLayout>
-                                              <layout:content>
-                                                <m:Input value="{subsidiaryList>idSubsidiary}" editable="false" visible="false" />
-                                                <m:Input value="{subsidiaryList>subsidiary}" editable="false" />
-                                              </layout:content>
+                                                <layout:content>
+                                                    <m:Input value="{subsidiaryList>idSubsidiary}" editable="false" visible="false" />
+                                                    <m:Input value="{subsidiaryList>subsidiary}" editable="false" />
+                                                </layout:content>
                                             </layout:HorizontalLayout>
                                             <layout:HorizontalLayout>
-                                              <layout:content>
-                                                <m:Input value="{subsidiaryList>amount}" editable="true" change="sumAmount($event)" />
-                                              </layout:content>
+                                                <layout:content>
+                                                    <m:Input value="{subsidiaryList>amount}" editable="true" change="sumAmount($event)" />
+                                                </layout:content>
                                             </layout:HorizontalLayout>
                                             <layout:HorizontalLayout>
-                                              <layout:content>
-                                                <m:Button id="delete" text="" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteRowSubsidiary($event)" />
-                                              </layout:content>
+                                                <layout:content>
+                                                    <m:Button id="delete" text="" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteRowSubsidiary($event)" />
+                                                </layout:content>
                                             </layout:HorizontalLayout>
                                         </m:cells>
                                     </m:ColumnListItem>
                                 </m:items>
                             </m:Table>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
-			<ObjectPageSection title="Adjuntos" id="FileSection">
-				<subSections>
-					<ObjectPageSubSection id="FileSubSection">
-						<blocks>
-              <upload:UploadSet
-                id="uploadFilesData"
-                instantUpload="true"
-                showIcons="true"
-                uploadEnabled="true"
-                uploadButtonInvisible="false"
-                noDataDescription="Suelte los archivos para cargar o use el boton Upload. Nota: Solo se puede subir un archivo .xlsx para Prorrateo en esta sección."
-                noDataText="No hay archivos para subir."
-                maxFileNameLength="30"
-                maxFileSize="10"
-                fileTypes="xlsx,pdf,xml"
-                uploadCompleted="uploadFiles">
-                <upload:toolbar>
-                  <m:OverflowToolbar>
-                    <m:ToolbarSpacer/>
-                    <m:Button text="Download" type="Transparent" icon="sap-icon://download-from-cloud" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="downloadFiles"/>
-                  </m:OverflowToolbar>
-                </upload:toolbar>
-              </upload:UploadSet>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
-		</sections>
-	</ObjectPageLayout>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+            </ObjectPageSection>
+            <ObjectPageSection title="Adjuntos" id="FileSection">
+                <subSections>
+                    <ObjectPageSubSection id="FileSubSection">
+                        <blocks>
+                            <upload:UploadSet id="uploadFilesData" instantUpload="true" showIcons="true" uploadEnabled="true" uploadButtonInvisible="false" noDataDescription="Suelte los archivos para cargar o use el boton Upload. Nota: Solo se puede subir un archivo .xlsx para Prorrateo en esta sección." noDataText="No hay archivos para subir." maxFileNameLength="30" maxFileSize="10" fileTypes="xlsx,pdf,xml" uploadCompleted="uploadFiles">
+                                <upload:toolbar>
+                                    <m:OverflowToolbar>
+                                        <m:ToolbarSpacer/>
+                                        <m:Button text="Download" type="Transparent" icon="sap-icon://download-from-cloud" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="downloadFiles"/>
+                                    </m:OverflowToolbar>
+                                </upload:toolbar>
+                            </upload:UploadSet>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+            </ObjectPageSection>
+        </sections>
+    </ObjectPageLayout>
 </mvc:View>

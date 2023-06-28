@@ -42,7 +42,7 @@
 									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Recepción" select="navto_reception">
 										<tnt:items/>
 									</tnt:NavigationListItem>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Pendientes">
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Pendientes" select="navToPending">
 										<tnt:items/>
 									</tnt:NavigationListItem>
 									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Borradores">
