@@ -46,8 +46,9 @@ export default class Reception extends BaseController {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();
 	}
-
 	public async onInit(): Promise<void> {
+
+
 
 		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
 		uploadFilesData.getDefaultFileUploader().setTooltip("");
@@ -374,6 +375,12 @@ export default class Reception extends BaseController {
 			if (invoiceResponse != null) {
 				await this.AppController.navTo_home();
 			}
+		}
+		else {
+			await validatedErrorResponse(1000, null,
+				'La factura ya ha sido registrada en otro proceso.');
+			BusyIndicator.hide();
+			return;
 		}
 
 		BusyIndicator.hide();

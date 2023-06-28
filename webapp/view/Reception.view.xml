@@ -85,7 +85,7 @@
                 <subSections>
                     <ObjectPageSubSection id="ProrrateoSubSection">
                         <blocks>
-                            <m:Table id="tableSubsidiaries" width="auto" items="{path: 'subsidiaryList>/'}" noDataText="No data" mode="none" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+                            <m:Table id="tableSubsidiaries" width="auto" items="{path: 'subsidiaryList>/'}" noDataText="No data" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
                                 <m:infoToolbar>
                                     <m:Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
                                         <m:content>
