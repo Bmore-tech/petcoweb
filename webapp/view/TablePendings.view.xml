@@ -12,7 +12,16 @@
         </headerContent>
         <content>
             <Panel width="auto" class="sapUiResponsiveMargin">
-                <Table inset="true" id="productsTable" showSeparators="Inner" items="{tbModel>/data}">
+                <Table inset="true" id="table" showSeparators="Inner" items="{tbModel>/}">
+                    <headerToolbar>
+                        <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                            <content>
+                                <ToolbarSpacer width="" />
+                                <SearchField id="searchConcept" placeholder="Buscar" showSearchButton="true" visible="true" width="auto" search="onFilterConcepts" />
+                                <OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortConcepts" />
+                            </content>
+                        </OverflowToolbar>
+                    </headerToolbar> 
                     <columns>
                         <Column  >
                             <Text text="Id de solicitud"/>
@@ -30,10 +39,10 @@
                     <items>
                         <ColumnListItem type="Active" vAlign="Middle" press="handleRowClick">
                             <cells>
-                                <Text text="{tbModel>id}"/>
-                                <Text text="{tbModel>date}"/>
+                                <Text text="{tbModel>invoiceId}"/>
+                                <Text text="{tbModel>creationDate}"/>
                                 <Text text="{tbModel>folio}"/>
-                                <Text text="{tbModel>concept}"/>
+                                <Text text="{tbModel>generalConcept}"/>
                             </cells>
                         </ColumnListItem>
                     </items>

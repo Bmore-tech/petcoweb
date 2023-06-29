@@ -104,7 +104,7 @@ export default class App extends BaseController {
 		this.getRouter().navTo("History");
 	}
 	public navToPending(): void {
-		this.getRouter().navTo("Pending");
+		this.getRouter().navTo("TablePendings");
 	}
 
 

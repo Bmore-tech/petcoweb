@@ -32,7 +32,7 @@ import UploadSet from "sap/m/upload/UploadSet";
 /**
  * @namespace com.petco.portalproveedorespetco.controller
  */
-export default class Reception extends BaseController {
+export default class Pending extends BaseController {
 
 	private invoiceId: number = 0;
 	private subsidiaryList: Array<object> = [];
@@ -40,15 +40,22 @@ export default class Reception extends BaseController {
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
 	private uuid: string = "";
-	private uuidExist: boolean = false;
+	private uuidExist: boolean = true;
 
 	public async onAfterRendering(): Promise<void> {
+		
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();
+		this.disableAllInputs();
 	}
 	public async onInit(): Promise<void> {
-
-
+		
+		let invoice:Invoice = {
+			 applicationId : "177534"
+		};
+		const response:InvoiceResponse = await getInvoiceByIdService(invoice);
+		console.log(response);
+		
 
 		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
 		uploadFilesData.getDefaultFileUploader().setTooltip("");
@@ -524,7 +531,6 @@ export default class Reception extends BaseController {
 			let error: boolean = false;
 			filesItems.forEach(async (item): void => {
 				if (!error) {
-					console.log("analiza");
 
 					const file: File = item.getFileObject();
 
@@ -538,7 +544,7 @@ export default class Reception extends BaseController {
 						BusyIndicator.hide();
 						return;
 					}
-					console.log("no existe");
+
 					//Check if is xml to allow only one
 
 					const exitstOneXML: Array<File> = filesItems.filter(item2 => item2.getFileObject().type.toLowerCase() == "text/xml")
@@ -550,20 +556,18 @@ export default class Reception extends BaseController {
 						BusyIndicator.hide();
 						return;
 					}
-					console.log("no existen 2 xml");
+
 
 
 					await this.validatedXml(file);
 					await this.validatedXlsx(file);
-					console.log("los valida");
-					if (file.type == "text/xml") {
-						if (this.uuidExist) {
-							filesItems[0].destroy();
-							await validatedErrorResponse(1000, null,
-								'La factura ya ha sido registrada en otro proceso.');
-							BusyIndicator.hide();
-							return;
-						}
+
+					if (this.uuidExist) {
+						filesItems[0].destroy();
+						await validatedErrorResponse(1000, null,
+							'La factura ya ha sido registrada en otro proceso.');
+						BusyIndicator.hide();
+						return;
 					}
 					this.filesData.push(file);
 				}
@@ -640,7 +644,7 @@ export default class Reception extends BaseController {
 		this.byId(idViewHelp).close();
 	}
 
-	public async clear(): void {
+	public  clear(): void {
 
 		// Clear state
 		this.invoiceId = 0;
@@ -664,6 +668,62 @@ export default class Reception extends BaseController {
 
 		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
 		tableSubsidiaries.removeAllItems();
+	}
+	public  disableAllInputs(): void {
+
+		// Clear state
+		this.invoiceId = 0;
+		this.uuid = "";
+		this.subsidiaryList = [];
+		this.filesData = [];
+		this.isDescendingConcepts = false;
+		this.isDescendingSubsidiaries = false;
+
+		// Clear components view
+		this.byId("folio").setEnabled(false);
+		this.byId("amount").setEnabled(false);
+		this.byId("conceptId").setEnabled(false);
+		this.byId("concept").setEnabled(false);
+		this.byId("generalConcept").setEnabled(false);
+		this.byId("comment").setEnabled(false);
+		this.byId("loadSubsidiariesBtn").setEnabled(false);
+
+		// this.byId("subsidiarySum").setEnabled(false);
+
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		// uploadFilesData.removeAllItems();
+
+		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		// tableSubsidiaries.removeAllItems();
+
+	}
+	public  fillAllInputs(invoiceDataResponse:InvoiceResponse): void {
+
+		// Clear state
+		this.invoiceId = invoiceDataResponse.invoiceId;
+		this.uuid = "";
+		this.subsidiaryList = invoiceDataResponse.;
+		this.filesData = [];
+		this.isDescendingConcepts = false;
+		this.isDescendingSubsidiaries = false;
+
+		// Clear components view
+		this.byId("folio").setEnabled(false);
+		this.byId("amount").setEnabled(false);
+		this.byId("conceptId").setEnabled(false);
+		this.byId("concept").setEnabled(false);
+		this.byId("generalConcept").setEnabled(false);
+		this.byId("comment").setEnabled(false);
+		this.byId("loadSubsidiariesBtn").setEnabled(false);
+
+		// this.byId("subsidiarySum").setEnabled(false);
+
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		// uploadFilesData.removeAllItems();
+
+		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		// tableSubsidiaries.removeAllItems();
+
 	}
 
 }

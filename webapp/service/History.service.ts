@@ -39,3 +39,36 @@ export const getHistory = async (): Promise<History[]> => {
     return historyResponse;
 
 }
+export const getHistoryByFilter = async (filter:string): Promise<History[]> => {
+    let historyResponse: History[];
+
+    try {
+
+        const jwt: string = await getJWT();
+        const historyDataResponse: Response = await fetch(
+            `${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.invoiceHistory}/${filter}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                }
+            }
+        );
+
+        if (historyDataResponse.status == 200) {
+            historyResponse = await historyDataResponse.json();
+        } else {
+
+            const subsidiaryResponseError: ErrorResponse = await historyDataResponse.json();
+
+            await validatedErrorResponse(historyDataResponse.status, subsidiaryResponseError,
+                "Error no se puede cargar la información de las sucursales.");
+        }
+    } catch (e) {
+        showMsgStrip("Error no se puede cargar la información de las sucursales.", MessageStripType.ERROR);
+    }
+
+    return historyResponse;
+
+}

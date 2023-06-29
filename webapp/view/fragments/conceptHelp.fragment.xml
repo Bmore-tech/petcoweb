@@ -20,7 +20,7 @@
               <OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortConcepts" />
             </content>
           </OverflowToolbar>
-        </headerToolbar>
+        </headerToolbar> 
         <columns>
           <Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
             <header>

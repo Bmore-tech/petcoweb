@@ -1,5 +1,10 @@
 export enum InvoiceStatus {
 
-    APPROVED, IN_PROGRESS, DRAFT, REJECTED, ALL,
+    APPROVED = "APPROVED",
+    IN_PROGRESS = "IN_PROGRESS", 
+    DRAFT = "DRAFT",
+    REJECTED = "REJECTED",
+    ALL = "ALL",
+
 
 }

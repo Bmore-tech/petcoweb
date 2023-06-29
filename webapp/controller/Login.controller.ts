@@ -1,10 +1,10 @@
 import BaseController from "./BaseController";
 import formatter from "../model/formatter";
-import {signIn} from "com/bmore/portalproveedores/service/Login.service";
-import {SignInRequest} from "com/bmore/portalproveedores/model/resquest/SignInRequest";
+import { signIn } from "com/bmore/portalproveedores/service/Login.service";
+import { SignInRequest } from "com/bmore/portalproveedores/model/resquest/SignInRequest";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
-import {showMsgStrip} from "com/bmore/portalproveedores/component/MessageStrip.component";
-import {MessageStripType} from "com/bmore/portalproveedores/model/MessageStripType";
+import { showMsgStrip } from "com/bmore/portalproveedores/component/MessageStrip.component";
+import { MessageStripType } from "com/bmore/portalproveedores/model/MessageStripType";
 
 /**
  * @namespace com.bmore.portalproveedores.controller
@@ -31,8 +31,10 @@ export default class Login extends BaseController {
 
 			if (await signIn(userRequest)) {
 				await this.AppController.navTo_home();
-				this.Main = sap.ui.getCore().byId('__component0---main').getController();
-				await this.Main.onInit();
+				if (sap.ui.getCore().byId('__component0---main')) {
+					this.Main = sap.ui.getCore().byId('__component0---main').getController();
+					await this.Main.onInit();
+				}
 			}
 		}
 

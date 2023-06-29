@@ -110,8 +110,15 @@
           ]
         },
         {
-          "name": "Pending",
+          "name": "TablePendings",
           "pattern": "Pending",
+          "target": [
+            "TablePendings"
+          ]
+        },
+        {
+          "name": "PendingDetails",
+          "pattern": "Pending/{id}",
           "target": [
             "Pending"
           ]
@@ -147,10 +154,15 @@
           "viewId": "History",
           "viewName": "History"
         },
+        "TablePendings":{
+          "viewType": "XML",
+          "viewId": "TablePendings",
+          "viewName": "TablePendings"
+        },
         "Pending":{
           "viewType": "XML",
           "viewId": "Pending",
-          "viewName": "TablePendings"
+          "viewName": "Pending"
         },
         "notFound": {
           "viewName": "NotFound",

@@ -1,4 +1,3 @@
-import MessageBox from "sap/m/MessageBox";
 import BaseController from "./BaseController";
 import { History as historyDto } from "com/bmore/portalproveedores/model/response/History";
 import UI5Element from "sap/ui/core/Element";
@@ -9,9 +8,9 @@ import BusyIndicator from "sap/ui/core/BusyIndicator";
 import { getHistory } from "../service/History.service";
 import Binding from "sap/ui/model/Binding";
 import Filter from "sap/ui/model/Filter";
-import Model from "sap/ui/model/Model";
 import FilterOperator from "sap/ui/model/FilterOperator";
-import Subsidiary from "./Subsidiary.controller";
+import { InvoiceStatus } from "../model/InvoiceStatus";
+import Sorter from "sap/ui/model/Sorter";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -33,10 +32,10 @@ export default class History extends BaseController {
 		let model: JSONModel = new sap.ui.model.json.JSONModel();
 		const isProvider: boolean = await validatedRoleProvider();
 		let all:Number = subsidiaryData.length;
-		let aprobadas:Number = subsidiaryData.filter(a => a.status == "APPROVED").length;
-		let enProgreso:Number = subsidiaryData.filter(a => a.status == "IN_PROGRESS").length;
-		let borradores:Number = subsidiaryData.filter(a => a.status == "DRAFT").length;
-		let rechazadas:Number = subsidiaryData.filter(a => a.status == "REJECTED").length;
+		let aprobadas:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.APPROVED).length;
+		let enProgreso:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.IN_PROGRESS).length;
+		let borradores:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.DRAFT).length;
+		let rechazadas:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.REJECTED).length;
 
 		model.setData(
 			{
@@ -73,16 +72,16 @@ export default class History extends BaseController {
 		if (sKey === "all") {
 			oBinding.filter();
 		} else if (sKey === "ok") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, "APPROVED") ;
+			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.APPROVED) ;
 			oBinding.filter([aFilter]);
 		} else if (sKey === "process") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, "IN_PROGRESS") ;
+			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.IN_PROGRESS) ;
 			oBinding.filter([aFilter]);
 		}else if (sKey === "draft") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, "DRAFT") ;
+			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.DRAFT) ;
 			oBinding.filter([aFilter]);
 		}else if (sKey === "rejected") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, "REJECTED") ;
+			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.REJECTED) ;
 			oBinding.filter([aFilter]);
 		}
 		else{
@@ -93,4 +92,27 @@ export default class History extends BaseController {
 
 	}
 
+	public async onFilterConcepts(): void {
+
+		const searchConcept: string = this.byId("searchConcept").getValue();
+		const tableHelpConceps: UI5Element = this.byId("productsTable");
+		const filter: Filter = new Filter("generalConcept", FilterOperator.Contains, searchConcept);
+		const binding: Binding = tableHelpConceps.getBinding("items");
+
+		binding.filter([filter]);
+	}
+
+	public async onSortConcepts(): void {
+
+		this.isDescendingConcepts = !this.isDescendingConcepts;
+
+		const searchConcept: string = this.byId("searchConcept").getValue();
+		const tableHelpConceps: UI5Element = this.byId("productsTable");
+		const filter: Filter = new Filter("generalConcept", FilterOperator.Contains, searchConcept);
+		const binding = tableHelpConceps.getBinding("items");
+		let sorters: Array<string> = [];
+
+		sorters.push(new Sorter("generalConcept", this.isDescendingConcepts));
+		binding.filter([filter]).sort(sorters);
+	}
 }

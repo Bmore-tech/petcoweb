@@ -10,6 +10,15 @@
 				</items>
 				<content>
 					<Table id="productsTable" inset="false" showSeparators="Inner" headerText="Solicitudes" items="{historyModel>/}">
+						<headerToolbar>
+							<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+								<content>
+									<ToolbarSpacer width="" />
+									<SearchField id="searchConcept" placeholder="Buscar" showSearchButton="true" visible="true" width="auto" search="onFilterConcepts" />
+									<OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortConcepts" />
+								</content>
+							</OverflowToolbar>
+						</headerToolbar> 
 						<columns>
 							<Column width="12em">
 								<Text text="Id de solicitud" />
