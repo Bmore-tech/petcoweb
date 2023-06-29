@@ -524,7 +524,6 @@ export default class Reception extends BaseController {
 			let error: boolean = false;
 			filesItems.forEach(async (item): void => {
 				if (!error) {
-					console.log("analiza");
 
 					const file: File = item.getFileObject();
 
@@ -538,7 +537,7 @@ export default class Reception extends BaseController {
 						BusyIndicator.hide();
 						return;
 					}
-					console.log("no existe");
+
 					//Check if is xml to allow only one
 
 					const exitstOneXML: Array<File> = filesItems.filter(item2 => item2.getFileObject().type.toLowerCase() == "text/xml")
@@ -550,21 +549,21 @@ export default class Reception extends BaseController {
 						BusyIndicator.hide();
 						return;
 					}
-					console.log("no existen 2 xml");
+
 
 
 					await this.validatedXml(file);
 					await this.validatedXlsx(file);
-					console.log("los valida");
-					if (file.type == "text/xml") {
-						if (this.uuidExist) {
-							filesItems[0].destroy();
-							await validatedErrorResponse(1000, null,
-								'La factura ya ha sido registrada en otro proceso.');
-							BusyIndicator.hide();
-							return;
-						}
-					}
+
+					// if (file.type == "text/xml") {
+					// 	if (this.uuidExist) {
+					// 		filesItems[0].destroy();
+					// 		await validatedErrorResponse(1000, null,
+					// 			'La factura ya ha sido registrada en otro proceso.');
+					// 		BusyIndicator.hide();
+					// 		return;
+					// 	}
+					// }
 					this.filesData.push(file);
 				}
 			});

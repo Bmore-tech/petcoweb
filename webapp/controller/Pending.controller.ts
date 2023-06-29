@@ -43,19 +43,19 @@ export default class Pending extends BaseController {
 	private uuidExist: boolean = true;
 
 	public async onAfterRendering(): Promise<void> {
-		
+
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();
 		this.disableAllInputs();
 	}
 	public async onInit(): Promise<void> {
-		
-		let invoice:Invoice = {
-			 applicationId : "177534"
+		BusyIndicator.show(0);
+		let invoice: Invoice = {
+			applicationId: "177534"
 		};
-		const response:InvoiceResponse = await getInvoiceByIdService(invoice);
+		const response: InvoiceResponse = await getInvoiceByIdService(invoice);
 		console.log(response);
-		
+		BusyIndicator.hide();
 
 		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
 		uploadFilesData.getDefaultFileUploader().setTooltip("");
@@ -562,12 +562,14 @@ export default class Pending extends BaseController {
 					await this.validatedXml(file);
 					await this.validatedXlsx(file);
 
-					if (this.uuidExist) {
-						filesItems[0].destroy();
-						await validatedErrorResponse(1000, null,
-							'La factura ya ha sido registrada en otro proceso.');
-						BusyIndicator.hide();
-						return;
+					if (file.type == "text/xml") {
+						if (this.uuidExist) {
+							filesItems[0].destroy();
+							await validatedErrorResponse(1000, null,
+								'La factura ya ha sido registrada en otro proceso.');
+							BusyIndicator.hide();
+							return;
+						}
 					}
 					this.filesData.push(file);
 				}
@@ -644,7 +646,7 @@ export default class Pending extends BaseController {
 		this.byId(idViewHelp).close();
 	}
 
-	public  clear(): void {
+	public clear(): void {
 
 		// Clear state
 		this.invoiceId = 0;
@@ -669,7 +671,7 @@ export default class Pending extends BaseController {
 		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
 		tableSubsidiaries.removeAllItems();
 	}
-	public  disableAllInputs(): void {
+	public disableAllInputs(): void {
 
 		// Clear state
 		this.invoiceId = 0;
@@ -697,12 +699,12 @@ export default class Pending extends BaseController {
 		// tableSubsidiaries.removeAllItems();
 
 	}
-	public  fillAllInputs(invoiceDataResponse:InvoiceResponse): void {
+	public fillAllInputs(invoiceDataResponse: InvoiceResponse): void {
 
 		// Clear state
 		this.invoiceId = invoiceDataResponse.invoiceId;
 		this.uuid = "";
-		this.subsidiaryList = invoiceDataResponse.;
+		this.subsidiaryList = [] //invoiceDataResponse.;
 		this.filesData = [];
 		this.isDescendingConcepts = false;
 		this.isDescendingSubsidiaries = false;
