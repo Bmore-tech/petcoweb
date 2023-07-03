@@ -14,7 +14,7 @@ import ListItemBase from "sap/m/ListItemBase";
 /**
  * @namespace com.bmore.portalproveedores.controller
  */
-export default class TablePendings extends BaseController {
+export default class TableRejecteds extends BaseController {
     private isDescendingConcepts: boolean = false;
     public async onAfterRendering(): Promise<void> {
         this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -32,7 +32,7 @@ export default class TablePendings extends BaseController {
     }
     public async loadHistory(): Promise<historyDto[]> {
 
-        const historyData: historyDto[] = await getHistoryByFilter(InvoiceStatus.IN_PROGRESS);
+        const historyData: historyDto[] = await getHistoryByFilter(InvoiceStatus.REJECTED);
 
         return historyData;
     }
@@ -65,7 +65,7 @@ export default class TablePendings extends BaseController {
 
         const id: string = oEvent.getSource().getCells()[0].getText();
 
-        this.getRouter().navTo("PendingDetails", { id: id });
+        this.getRouter().navTo("RejectedDetails", { id: id });
 
         if (sap.ui.getCore().byId('__component0---Pending')) {
             this.ReceptionController = sap.ui.getCore().byId('__component0---Pending').getController();

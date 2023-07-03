@@ -45,10 +45,10 @@
 									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Pendientes" select="navToPending">
 										<tnt:items/>
 									</tnt:NavigationListItem>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Borradores">
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Borradores" select="navToDraft">
 										<tnt:items/>
 									</tnt:NavigationListItem>
-									<tnt:NavigationListItem expanded="true" hasExpander="true" text="Rechazados"/>
+									<tnt:NavigationListItem expanded="true" hasExpander="true" text="Rechazados" select="navToRejected"/>
 								</tnt:items>
 							</tnt:NavigationListItem>
 

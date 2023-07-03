@@ -36,7 +36,7 @@ import HashChanger from "sap/ui/core/routing/HashChanger";
 /**
  * @namespace com.petco.portalproveedorespetco.controller
  */
-export default class Pending extends BaseController {
+export default class Draft extends BaseController {
 
 	private invoiceId: number = 0;
 	private subsidiaryList: Array<object> = [];

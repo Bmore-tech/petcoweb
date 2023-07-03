@@ -106,6 +106,12 @@ export default class App extends BaseController {
 	public navToPending(): void {
 		this.getRouter().navTo("TablePendings");
 	}
+	public navToDraft(): void {
+		this.getRouter().navTo("TableDrafts");
+	}
+	public navToRejected(): void {
+		this.getRouter().navTo("TableRejecteds");
+	}
 
 
 }

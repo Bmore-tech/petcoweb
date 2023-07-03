@@ -1,11 +1,11 @@
-<mvc:View controllerName="com.bmore.portalproveedores.controller.Pending" xmlns="sap.uxap" xmlns:m="sap.m"
+<mvc:View controllerName="com.bmore.portalproveedores.controller.Draft" xmlns="sap.uxap" xmlns:m="sap.m"
 	xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core"
 	xmlns:upload="sap.m.upload" displayBlock="true" height="100%">
 	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
 		<headerTitle>
 			<ObjectPageDynamicHeaderTitle>
 				<expandedHeading>
-					<m:Title text="Pendientes de aprobación" wrapping="true" />
+					<m:Title text="Borradores" wrapping="true" />
 				</expandedHeading>
 				<navigationActions />
 				<actions>

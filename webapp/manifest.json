@@ -122,6 +122,34 @@
           "target": [
             "Pending"
           ]
+        },
+        {
+          "name": "TableDrafts",
+          "pattern": "Draft",
+          "target": [
+            "TableDrafts"
+          ]
+        },
+        {
+          "name": "DraftDetails",
+          "pattern": "Draft/{id}",
+          "target": [
+            "Draft"
+          ]
+        },
+        {
+          "name": "TableRejecteds",
+          "pattern": "Rejected",
+          "target": [
+            "TableRejecteds"
+          ]
+        },
+        {
+          "name": "RejectedDetails",
+          "pattern": "Rejected/{id}",
+          "target": [
+            "Rejected"
+          ]
         }
       ],
       "targets": {
@@ -163,6 +191,26 @@
           "viewType": "XML",
           "viewId": "Pending",
           "viewName": "Pending"
+        },
+        "TableDrafts":{
+          "viewType": "XML",
+          "viewId": "TableDrafts",
+          "viewName": "TableDrafts"
+        },
+        "Draft":{
+          "viewType": "XML",
+          "viewId": "Draft",
+          "viewName": "Draft"
+        },
+        "TableRejecteds":{
+          "viewType": "XML",
+          "viewId": "TableRejecteds",
+          "viewName": "TableRejecteds"
+        },
+        "Rejected":{
+          "viewType": "XML",
+          "viewId": "Rejected",
+          "viewName": "Rejected"
         },
         "notFound": {
           "viewName": "NotFound",

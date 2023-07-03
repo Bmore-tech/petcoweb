@@ -112,7 +112,6 @@ export const getInvoiceByIdService = async (invoice: Invoice)
 
 		if (documentDataResponse.status == 200) {
 			response = await documentDataResponse.json();
-			console.log(documentDataResponse.json());
 			
 
 		} else {
