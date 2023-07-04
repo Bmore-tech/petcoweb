@@ -19,4 +19,5 @@ export const SOLICITUD_SERVICES : object = {
 	getInfoXml: "/document/getInfoXml",
 	getProrrateoXlsx: "/document/getProrrateo",
 	invoiceHistory: "/invoice/history",
+	getDocument: "/document"
 }

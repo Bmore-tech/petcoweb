@@ -1,34 +1,19 @@
-<mvc:View
-	controllerName="com.bmore.portalproveedores.controller.App"
-	displayBlock="true"
+<mvc:View controllerName="com.bmore.portalproveedores.controller.App" displayBlock="true"
 	xmlns="sap.m"
-  xmlns:tnt="sap.tnt"
-  xmlns:f="sap.f"
-  xmlns:core="sap.ui.core"
+	xmlns:tnt="sap.tnt"
+	xmlns:f="sap.f"
+	xmlns:core="sap.ui.core"
 	xmlns:mvc="sap.ui.core.mvc">
 	<tnt:ToolPage id="main" class="sapUiDemoToolPage" sideExpanded="true">
 		<tnt:header>
-			<f:ShellBar id="shell_bar_app"
-        		showNavButton="false"
-        		navButtonPressed="onNavBack"
-        		title=""
-				homeIcon="./images/Petco-brand-logo-prd.svg"
-				showMenuButton="false"
-				showCopilot="false"
-        		showSearch="false"
-				showNotifications="false"
-				menuButtonPressed="onSideNavButtonPress"
-				showProductSwitcher="false"
-				productSwitcherPressed="fnOpen"
-        		avatarPressed="handlePopoverPress"
-				notificationsNumber="2">
+			<f:ShellBar id="shell_bar_app" showNavButton="false" navButtonPressed="onNavBack" title="" homeIcon="./images/Petco-brand-logo-prd.svg" showMenuButton="false" showCopilot="false" showSearch="false" showNotifications="false" menuButtonPressed="onSideNavButtonPress" showProductSwitcher="false" productSwitcherPressed="fnOpen" avatarPressed="handlePopoverPress" notificationsNumber="2">
 				<f:profile>
 					<f:Avatar id="avatar"/>
 				</f:profile>
 			</f:ShellBar>
 		</tnt:header>
-    <tnt:sideContent>
-			<tnt:SideNavigation visible="false" id="navbar" >
+		<tnt:sideContent>
+			<tnt:SideNavigation visible="false" id="navbar">
 				<tnt:item>
 					<tnt:NavigationList width="auto" expanded="true">
 
@@ -54,31 +39,36 @@
 
 
 							<tnt:NavigationListItem icon="sap-icon://employee-approvals" expanded="true" hasExpander="true" text="Aprobadores">
-							<tnt:items>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Aprobar Solicitudes">
-									<tnt:items/>
-								</tnt:NavigationListItem>
+								<tnt:items>
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Aprobar Solicitudes">
+										<tnt:items/>
+									</tnt:NavigationListItem>
+								</tnt:items>
+							</tnt:NavigationListItem>
+							<tnt:NavigationListItem icon="sap-icon://employee-approvals" expanded="true" hasExpander="true" text="Prevalidadores">
+								<tnt:items>
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Prevalidar solicitudes">
+										<tnt:items/>
+									</tnt:NavigationListItem>
 								</tnt:items>
 							</tnt:NavigationListItem>
 
 							<tnt:NavigationListItem icon="sap-icon://manager-insight" expanded="true" hasExpander="true" text="Reportes">
-							<tnt:items>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Histórico de facturas" select="navToHistory">
-									<tnt:items/>
-								</tnt:NavigationListItem>
+								<tnt:items>
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Histórico de facturas" select="navToHistory">
+										<tnt:items/>
+									</tnt:NavigationListItem>
 								</tnt:items>
 							</tnt:NavigationListItem>
 
 							<tnt:NavigationListItem icon="sap-icon://course-book" expanded="true" hasExpander="true" text="Catálogos">
-							<tnt:items>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Conceptos"
-									select="navToConcepts">
-									<tnt:items/>
-								</tnt:NavigationListItem>
-								<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Sucursales"
-									select="navToSubsidiary">
-									<tnt:items/>
-								</tnt:NavigationListItem>
+								<tnt:items>
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Conceptos" select="navToConcepts">
+										<tnt:items/>
+									</tnt:NavigationListItem>
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Sucursales" select="navToSubsidiary">
+										<tnt:items/>
+									</tnt:NavigationListItem>
 								</tnt:items>
 							</tnt:NavigationListItem>
 
@@ -90,7 +80,7 @@
 			</tnt:SideNavigation>
 		</tnt:sideContent>
 		<tnt:mainContents>
-      <VBox id="stripContent" visible="false" justifyContent="Center" renderType="Bare"></VBox>
+			<VBox id="stripContent" visible="false" justifyContent="Center" renderType="Bare"></VBox>
 			<App id="app"/>
 		</tnt:mainContents>
 	</tnt:ToolPage>

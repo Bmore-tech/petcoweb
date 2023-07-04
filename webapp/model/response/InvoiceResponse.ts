@@ -24,7 +24,7 @@ export interface Comment {
 
 export interface Document {
     applicationId: number;
-    file:          string;
+    file:          Blob;
     fileName:      string;
     fileSize:      string;
     id:            number;

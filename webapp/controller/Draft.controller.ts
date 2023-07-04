@@ -23,7 +23,7 @@ import {
 import { Invoice } from "com/bmore/portalproveedores/model/resquest/Invoice";
 import { Apportionment } from "com/bmore/portalproveedores/model/resquest/Apportionment";
 import { Comment } from "com/bmore/portalproveedores/model/resquest/Comment";
-import { InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
+import { InvoiceResponse, Document } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
 import { validatedErrorResponse } from "../util/Util";
 import UploadSetItem from "sap/m/upload/UploadSetItem";
@@ -32,6 +32,7 @@ import Table from "sap/m/Table";
 import ListItemBase from "sap/m/ListItemBase";
 import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
+import { getDocument } from "../service/Document.service";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -41,10 +42,12 @@ export default class Draft extends BaseController {
 	private invoiceId: number = 0;
 	private subsidiaryList: Array<object> = [];
 	private filesData: Array<File> = [];
+	private filesArray: Array<Document> = [];
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
 	private uuid: string = "";
 	private uuidExist: boolean = false;
+	private canEdit: boolean = false;
 
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -503,19 +506,19 @@ export default class Draft extends BaseController {
 			uuid: this.uuid
 		}
 
-		if (!this.uuidExist) {
+		// if (!this.uuidExist) {
 			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
 
 			if (invoiceResponse != null) {
 				await this.AppController.navTo_home();
 			}
-		}
-		else {
-			await validatedErrorResponse(1000, null,
-				'La factura ya ha sido registrada en otro proceso.');
-			BusyIndicator.hide();
-			return;
-		}
+		// }
+		// else {
+		// 	await validatedErrorResponse(1000, null,
+		// 		'La factura ya ha sido registrada en otro proceso.');
+		// 	BusyIndicator.hide();
+		// 	return;
+		// }
 
 		BusyIndicator.hide();
 	}
@@ -560,15 +563,15 @@ export default class Draft extends BaseController {
 					await this.validatedXml(file);
 					await this.validatedXlsx(file);
 
-					if (file.type == "text/xml") {
-						if (this.uuidExist) {
-							filesItems[0].destroy();
-							await validatedErrorResponse(1000, null,
-								'La factura ya ha sido registrada en otro proceso.');
-							BusyIndicator.hide();
-							return;
-						}
-					}
+					// if (file.type == "text/xml") {
+					// 	if (this.uuidExist) {
+					// 		filesItems[0].destroy();
+					// 		await validatedErrorResponse(1000, null,
+					// 			'La factura ya ha sido registrada en otro proceso.');
+					// 		BusyIndicator.hide();
+					// 		return;
+					// 	}
+					// }
 					this.filesData.push(file);
 				}
 			});
@@ -578,16 +581,39 @@ export default class Draft extends BaseController {
 
 	public async downloadFiles(): Promise<void> {
 
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		uploadFilesData.getItems().forEach(async (item): void => {
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+		uploadFilesData.getItems().forEach(async (item): Promise<void> => {
 			if (item.getListItem().getSelected()) {
-				const exportUrl: string = URL.createObjectURL(item.getFileObject());
-				const aElement = document.createElement('a');
-				aElement.href = exportUrl;
-				aElement.setAttribute('download', item.getFileObject().name)
-				aElement.setAttribute('target', '_blank');
-				aElement.click();
-				URL.revokeObjectURL(href);
+				try {
+					const exportUrl: string = URL.createObjectURL(item.getFileObject());
+					const aElement = document.createElement('a');
+					aElement.href = exportUrl;
+					aElement.setAttribute('download', item.getFileObject().name)
+					aElement.setAttribute('target', '_blank');
+					aElement.click();
+					//URL.revokeObjectURL(href);
+				} catch (e){
+					// quiere decir que el archivo viene de la base
+					// no lo subio el usuario por lo que hay que descargarlo
+					console.log(e);
+					
+					let fileToDownload: Document = null;
+					this.filesArray.forEach(element => {
+						if (item.getFileName() === element.fileName)
+							fileToDownload = element;
+					});
+
+					const documentData: Document = await getDocument(fileToDownload);
+					
+					const exportUrl:string = URL.createObjectURL(fileToDownload.file);
+					const aElement = document.createElement('a');
+					aElement.href = exportUrl;
+					aElement.setAttribute('download', documentData.fileName)
+					aElement.setAttribute('target', '_blank');
+					aElement.click();
+					 
+				}
+
 			}
 		});
 	}
@@ -699,10 +725,10 @@ export default class Draft extends BaseController {
 		// tableSubsidiaries.removeAllItems();
 
 	}
-	public fillAllInputs(invoiceDataResponse: InvoiceResponse): void {
+	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
 		// Clear state
-		this.invoiceId = invoiceDataResponse.invoiceId;
+		// this.invoiceId = invoiceDataResponse.invoiceId;
 		this.uuid = "";
 		this.subsidiaryList = invoiceDataResponse.apportionments; //invoiceDataResponse.;
 		this.filesData = [];
@@ -724,12 +750,14 @@ export default class Draft extends BaseController {
 		const tableSubsidiaries: Table = this.byId("tableSubsidiaries");
 		let model: JSONModel = new JSONModel();
 		model.setData(invoiceDataResponse.apportionments);
-		tableSubsidiaries.setModel(model, "subsidiaryList");
+		this.setModel(new JSONModel({
+			...this.subsidiaryList
+		}), "subsidiaryList")
 
 		let sum: number = 0;
 		const oItems: ListItemBase[] = tableSubsidiaries.getItems();
 		for (let i: number = 0; i < oItems.length; i++) {
-			
+
 			let oCells = oItems[i].getCells();
 			let oHorizontalLayout = oCells[1];
 			let oInput = oHorizontalLayout.getContent()[0];
@@ -743,16 +771,22 @@ export default class Draft extends BaseController {
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 
 		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
-
-
-		invoiceDataResponse.documents.forEach(doc => {
+		
+		invoiceDataResponse.documents.forEach(async (doc):Promise<void> => {
+			const documentData: Document = await getDocument(doc);
+			const file:File = new File( [documentData.file],documentData.fileName);
 			let uploadSetItem: UploadSetItem = new UploadSetItem();
 			uploadSetItem.setFileName(doc.fileName);
 			uploadSetItem.setEnabledEdit(false);
 			uploadSetItem.setEnabledRemove(false);
+			uploadSetItem._setFileObject(file);
 			console.log(uploadSetItem);
+			// uploadSetItem.setUrl(URL.createObjectURL(documentData.file))
 			uploadFilesData.addItem(uploadSetItem);
-			// oUploadSet.upload();
+
+			
+			this.filesData.push(file);
+			this.filesArray.push(doc);
 		})
 		uploadFilesData.setUploadEnabled(false);
 
@@ -767,10 +801,44 @@ export default class Draft extends BaseController {
 		};
 		const response: InvoiceResponse = await getInvoiceByIdService(invoice);
 		if (response !== null) {
-			console.log(response);
 			this.fillAllInputs(response);
 		}
 		BusyIndicator.hide();
 	}
+	public async activateEdit(): Promise<void> {
+		this.canEdit = !this.canEdit;
+		//this.byId("editBtn").setEnabled(!this.canEdit);
+		this.byId("sendBtn").setEnabled(this.canEdit);
+		this.byId("saveBtn").setEnabled(this.canEdit);
+		this.byId("folio").setEnabled(this.canEdit);
+		this.byId("amount").setEnabled(this.canEdit);
+		this.byId("conceptId").setEnabled(this.canEdit);
+		this.byId("concept").setEnabled(this.canEdit);
+		this.byId("generalConcept").setEnabled(this.canEdit);
+		this.byId("comment").setEnabled(this.canEdit);
+		this.byId("loadSubsidiariesBtn").setEnabled(this.canEdit);
+		this.byId("DownloadBtn").setEnabled(this.canEdit);
 
+		const tableSubsidiaries: Table = this.byId("tableSubsidiaries");
+		const oItems: ListItemBase[] = tableSubsidiaries.getItems();
+		for (let i: number = 0; i < oItems.length; i++) {
+			let oCells = oItems[i].getCells();
+			let oHorizontalLayout = oCells[1];
+			let oInput = oHorizontalLayout.getContent()[0];
+			let oHorizontalLayout2 = oCells[2];
+			let oInput2 = oHorizontalLayout2.getContent()[0];
+			oInput.setEnabled(this.canEdit);
+			oInput2.setEnabled(this.canEdit);
+		}
+
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+
+
+		uploadFilesData.getItems().forEach(doc => {
+			doc.setEnabledEdit(this.canEdit);
+			doc.setEnabledRemove(this.canEdit);
+
+		})
+		uploadFilesData.setUploadEnabled(this.canEdit);
+	}
 }

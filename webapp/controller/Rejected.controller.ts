@@ -45,6 +45,7 @@ export default class Rejected extends BaseController {
 	private isDescendingSubsidiaries: boolean = false;
 	private uuid: string = "";
 	private uuidExist: boolean = false;
+	private canEdit: boolean = false;
 
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -689,15 +690,6 @@ export default class Rejected extends BaseController {
 		this.byId("loadSubsidiariesBtn").setEnabled(false);
 		this.byId("DownloadBtn").setEnabled(false);
 
-
-		// this.byId("subsidiarySum").setEnabled(false);
-
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		// uploadFilesData.removeAllItems();
-
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
-		// tableSubsidiaries.removeAllItems();
-
 	}
 	public fillAllInputs(invoiceDataResponse: InvoiceResponse): void {
 
@@ -729,7 +721,7 @@ export default class Rejected extends BaseController {
 		let sum: number = 0;
 		const oItems: ListItemBase[] = tableSubsidiaries.getItems();
 		for (let i: number = 0; i < oItems.length; i++) {
-			
+
 			let oCells = oItems[i].getCells();
 			let oHorizontalLayout = oCells[1];
 			let oInput = oHorizontalLayout.getContent()[0];
@@ -773,4 +765,15 @@ export default class Rejected extends BaseController {
 		BusyIndicator.hide();
 	}
 
+	public async activateEdit(): Promise<void> {
+		this.canEdit = !this.canEdit;
+		this.byId("folio").setEnabled(this.canEdit);
+		this.byId("amount").setEnabled(this.canEdit);
+		this.byId("conceptId").setEnabled(this.canEdit);
+		this.byId("concept").setEnabled(this.canEdit);
+		this.byId("generalConcept").setEnabled(this.canEdit);
+		this.byId("comment").setEnabled(this.canEdit);
+		this.byId("loadSubsidiariesBtn").setEnabled(this.canEdit);
+		this.byId("DownloadBtn").setEnabled(this.canEdit);
+	}
 }
