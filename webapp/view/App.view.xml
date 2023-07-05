@@ -47,7 +47,7 @@
 							</tnt:NavigationListItem>
 							<tnt:NavigationListItem icon="sap-icon://employee-approvals" expanded="true" hasExpander="true" text="Prevalidadores">
 								<tnt:items>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Prevalidar solicitudes">
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Prevalidar solicitudes" select="navToPreapprove">
 										<tnt:items/>
 									</tnt:NavigationListItem>
 								</tnt:items>

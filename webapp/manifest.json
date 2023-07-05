@@ -150,6 +150,20 @@
           "target": [
             "Rejected"
           ]
+        },
+        {
+          "name": "TablePreapprove",
+          "pattern": "Preapprove",
+          "target": [
+            "TablePreapprove"
+          ]
+        },
+        {
+          "name": "PreapproveDetails",
+          "pattern": "Preapprove/{id}",
+          "target": [
+            "Preapprove"
+          ]
         }
       ],
       "targets": {
@@ -211,6 +225,16 @@
           "viewType": "XML",
           "viewId": "Rejected",
           "viewName": "Rejected"
+        },
+        "TablePreapprove":{
+          "viewType": "XML",
+          "viewId": "TablePreapprove",
+          "viewName": "TablePreapprove"
+        },
+        "Preapprove":{
+          "viewType": "XML",
+          "viewId": "Preapprove",
+          "viewName": "Preapprove"
         },
         "notFound": {
           "viewName": "NotFound",

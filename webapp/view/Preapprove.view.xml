@@ -1,0 +1,168 @@
+<mvc:View controllerName="com.bmore.portalproveedores.controller.Preapprove" xmlns="sap.uxap" xmlns:m="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core"
+	xmlns:upload="sap.m.upload" displayBlock="true" height="100%">
+	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
+		<headerTitle>
+			<ObjectPageDynamicHeaderTitle>
+				<expandedHeading>
+					<m:Title text="Pendientes de aprobación" wrapping="true" />
+				</expandedHeading>
+				<navigationActions />
+				<actions>
+					<!-- <ObjectPageHeaderActionButton text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
+					<ObjectPageHeaderActionButton text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="saveInvoice" /> -->
+				</actions>
+			</ObjectPageDynamicHeaderTitle>
+		</headerTitle>
+		<headerContent>
+			<form:Form width="100%" editable="true" visible="true">
+				<form:formContainers>
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<m:Label text="Folio Factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<m:Input type="Text" id="folio" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<m:Label text="Subtotal factura" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<m:Input type="Number" id="amount" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<m:Label text="ID/ Tipo trabajo" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<m:Input type="Text" id="conceptId" showValueHelp="true" valueHelpRequest=".onLoadConcepts" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<m:Input type="Text" id="concept" showValueHelp="false" enabled="false" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+						<form:title/>
+					</form:FormContainer>
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<m:Label text="Concepto especifico" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<m:Input type="Text" id="generalConcept" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<m:Label text="Comentario" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<m:TextArea id="comment" rows="3" cols="20" maxLength="0" wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+						<form:title/>
+					</form:FormContainer>
+				</form:formContainers>
+				<form:layout>
+					<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="3" labelSpanS="12"/>
+				</form:layout>
+			</form:Form>
+
+
+		</headerContent>
+		<sections>
+			<ObjectPageSection title="Prorrateo" id="ProrrateoSection">
+				<subSections>
+					<ObjectPageSubSection id="ProrrateoSubSection">
+						<blocks>
+							<m:Table id="tableSubsidiaries" width="auto" items="{path: 'subsidiaryList>/'}" noDataText="No data" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
+								<m:infoToolbar>
+									<m:Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+										<m:content>
+											<m:Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</m:content>
+									</m:Toolbar>
+								</m:infoToolbar>
+								<m:headerToolbar>
+									<m:OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+										<m:content>
+											<m:Title text="" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+											<m:ToolbarSpacer width=""/>
+											<m:OverflowToolbarButton id="loadSubsidiariesBtn" text="Settings" type="Accept" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="loadSubsidiaries" />
+										</m:content>
+									</m:OverflowToolbar>
+								</m:headerToolbar>
+								<m:columns>
+									<m:Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Phone" demandPopin="false" popinDisplay="Inline" mergeDuplicates="false">
+										<m:header>
+											<m:Text text="Tienda" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</m:header>
+										<m:footer/>
+									</m:Column>
+									<m:Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<m:header>
+											<m:Text text="Monto" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</m:header>
+										<m:footer>
+											<m:Text text="Subtotal prorrateo $0" id="subsidiarySum" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</m:footer>
+									</m:Column>
+									<m:Column width="auto" hAlign="Left" vAlign="Top" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<m:header>
+											<m:Text text="Acción" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</m:header>
+										<m:footer/>
+									</m:Column>
+								</m:columns>
+								<m:items>
+									<m:ColumnListItem type="Active">
+										<m:cells>
+											<layout:HorizontalLayout>
+												<layout:content>
+													<m:Input value="{subsidiaryList>subsidiaryId}" editable="false" visible="false" />
+													<m:Input value="{subsidiaryList>subsidiary}" editable="false" />
+												</layout:content>
+											</layout:HorizontalLayout>
+											<layout:HorizontalLayout>
+												<layout:content>
+													<m:Input value="{subsidiaryList>amount}" editable="true" change="sumAmount($event)" />
+												</layout:content>
+											</layout:HorizontalLayout>
+											<layout:HorizontalLayout>
+												<layout:content>
+													<m:Button id="delete" text="" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onDeleteRowSubsidiary($event)" />
+												</layout:content>
+											</layout:HorizontalLayout>
+										</m:cells>
+									</m:ColumnListItem>
+								</m:items>
+							</m:Table>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection title="Adjuntos" id="FileSection">
+				<subSections>
+					<ObjectPageSubSection id="FileSubSection">
+						<blocks>
+							<upload:UploadSet id="uploadFilesData" instantUpload="true" showIcons="true" uploadEnabled="true" uploadButtonInvisible="false" noDataDescription="Suelte los archivos para cargar o use el boton Upload. Nota: Solo se puede subir un archivo .xlsx para Prorrateo en esta sección." noDataText="No hay archivos para subir." maxFileNameLength="30" maxFileSize="10" fileTypes="xlsx,pdf,xml" uploadCompleted="uploadFiles">
+								<upload:toolbar>
+									<m:OverflowToolbar>
+										<m:ToolbarSpacer/>
+										<m:Button id="DownloadBtn" text="Download" type="Transparent" icon="sap-icon://download-from-cloud" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="downloadFiles"/>
+									</m:OverflowToolbar>
+								</upload:toolbar>
+							</upload:UploadSet>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+		</sections>
+	</ObjectPageLayout>
+</mvc:View>

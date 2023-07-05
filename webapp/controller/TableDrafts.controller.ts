@@ -67,8 +67,8 @@ export default class TableRejecteds extends BaseController {
 
         this.getRouter().navTo("DraftDetails", { id: id });
 
-        if (sap.ui.getCore().byId('__component0---Pending')) {
-            this.ReceptionController = sap.ui.getCore().byId('__component0---Pending').getController();
+        if (sap.ui.getCore().byId('__component0---Draft')) {
+            this.ReceptionController = sap.ui.getCore().byId('__component0---Draft').getController();
             await this.ReceptionController.loadDetails();
         }
 

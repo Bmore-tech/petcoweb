@@ -23,7 +23,7 @@ import {
 import { Invoice } from "com/bmore/portalproveedores/model/resquest/Invoice";
 import { Apportionment } from "com/bmore/portalproveedores/model/resquest/Apportionment";
 import { Comment } from "com/bmore/portalproveedores/model/resquest/Comment";
-import { InvoiceResponse, Document } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
+import { Document, InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
 import { validatedErrorResponse } from "../util/Util";
 import UploadSetItem from "sap/m/upload/UploadSetItem";
@@ -37,17 +37,15 @@ import { getDocument } from "../service/Document.service";
 /**
  * @namespace com.petco.portalproveedorespetco.controller
  */
-export default class Draft extends BaseController {
+export default class Pending extends BaseController {
 
 	private invoiceId: number = 0;
 	private subsidiaryList: Array<object> = [];
 	private filesData: Array<File> = [];
-	private filesArray: Array<Document> = [];
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
 	private uuid: string = "";
 	private uuidExist: boolean = false;
-	private canEdit: boolean = false;
 
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -506,19 +504,19 @@ export default class Draft extends BaseController {
 			uuid: this.uuid
 		}
 
-		// if (!this.uuidExist) {
-		const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
+		if (!this.uuidExist) {
+			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
 
-		if (invoiceResponse != null) {
-			await this.AppController.navTo_home();
+			if (invoiceResponse != null) {
+				await this.AppController.navTo_home();
+			}
 		}
-		// }
-		// else {
-		// 	await validatedErrorResponse(1000, null,
-		// 		'La factura ya ha sido registrada en otro proceso.');
-		// 	BusyIndicator.hide();
-		// 	return;
-		// }
+		else {
+			await validatedErrorResponse(1000, null,
+				'La factura ya ha sido registrada en otro proceso.');
+			BusyIndicator.hide();
+			return;
+		}
 
 		BusyIndicator.hide();
 	}
@@ -563,15 +561,15 @@ export default class Draft extends BaseController {
 					await this.validatedXml(file);
 					await this.validatedXlsx(file);
 
-					// if (file.type == "text/xml") {
-					// 	if (this.uuidExist) {
-					// 		filesItems[0].destroy();
-					// 		await validatedErrorResponse(1000, null,
-					// 			'La factura ya ha sido registrada en otro proceso.');
-					// 		BusyIndicator.hide();
-					// 		return;
-					// 	}
-					// }
+					if (file.type == "text/xml") {
+						if (this.uuidExist) {
+							filesItems[0].destroy();
+							await validatedErrorResponse(1000, null,
+								'La factura ya ha sido registrada en otro proceso.');
+							BusyIndicator.hide();
+							return;
+						}
+					}
 					this.filesData.push(file);
 				}
 			});
@@ -581,20 +579,16 @@ export default class Draft extends BaseController {
 
 	public async downloadFiles(): Promise<void> {
 
-		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
-		uploadFilesData.getItems().forEach(async (item): Promise<void> => {
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		uploadFilesData.getItems().forEach(async (item): void => {
 			if (item.getListItem().getSelected()) {
-				try {
-					const exportUrl: string = URL.createObjectURL(item.getFileObject());
-					const aElement = document.createElement('a');
-					aElement.href = exportUrl;
-					aElement.setAttribute('download', item.getFileObject().name)
-					aElement.setAttribute('target', '_blank');
-					aElement.click();
-				} catch (e) {
-
-				}
-
+				const exportUrl: string = URL.createObjectURL(item.getFileObject());
+				const aElement = document.createElement('a');
+				aElement.href = exportUrl;
+				aElement.setAttribute('download', item.getFileObject().name)
+				aElement.setAttribute('target', '_blank');
+				aElement.click();
+				URL.revokeObjectURL(href);
 			}
 		});
 	}
@@ -695,6 +689,15 @@ export default class Draft extends BaseController {
 		this.byId("comment").setEnabled(false);
 		this.byId("loadSubsidiariesBtn").setEnabled(false);
 
+
+		// this.byId("subsidiarySum").setEnabled(false);
+
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		// uploadFilesData.removeAllItems();
+
+		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		// tableSubsidiaries.removeAllItems();
+
 	}
 	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
@@ -754,10 +757,8 @@ export default class Draft extends BaseController {
 			uploadSetItem.setEnabledEdit(false);
 			uploadSetItem.setEnabledRemove(false);
 			uploadSetItem._setFileObject(file);
-			console.log(uploadSetItem);
 			uploadFilesData.addItem(uploadSetItem);
 			this.filesData.push(file);
-			this.filesArray.push(doc);
 		})
 		uploadFilesData.setUploadEnabled(false);
 
@@ -776,43 +777,5 @@ export default class Draft extends BaseController {
 		}
 		BusyIndicator.hide();
 	}
-	public async activateEdit(): Promise<void> {
-		this.canEdit = !this.canEdit;
-		//this.byId("editBtn").setEnabled(!this.canEdit);
-		this.byId("sendBtn").setEnabled(this.canEdit);
-		this.byId("saveBtn").setEnabled(this.canEdit);
-		this.byId("folio").setEnabled(this.canEdit);
-		this.byId("amount").setEnabled(this.canEdit);
-		this.byId("conceptId").setEnabled(this.canEdit);
-		this.byId("concept").setEnabled(this.canEdit);
-		this.byId("generalConcept").setEnabled(this.canEdit);
-		this.byId("comment").setEnabled(this.canEdit);
-		this.byId("loadSubsidiariesBtn").setEnabled(this.canEdit);
 
-		const tableSubsidiaries: Table = this.byId("tableSubsidiaries");
-		const oItems: ListItemBase[] = tableSubsidiaries.getItems();
-		for (let i: number = 0; i < oItems.length; i++) {
-
-			let oCells = oItems[i].getCells();
-			let oHorizontalLayout0 = oCells[0];
-			let oInput0 = oHorizontalLayout0.getContent()[1];
-			let oHorizontalLayout1 = oCells[1];
-			let oInput1 = oHorizontalLayout1.getContent()[0];
-			let oHorizontalLayout2 = oCells[2];
-			let oInput2 = oHorizontalLayout2.getContent()[0];
-			oInput0.setEnabled(this.canEdit);
-			oInput1.setEnabled(this.canEdit);
-			oInput2.setEnabled(this.canEdit);
-		}
-
-		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
-
-
-		uploadFilesData.getItems().forEach(doc => {
-			doc.setEnabledEdit(this.canEdit);
-			doc.setEnabledRemove(this.canEdit);
-
-		})
-		uploadFilesData.setUploadEnabled(this.canEdit);
-	}
 }

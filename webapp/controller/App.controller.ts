@@ -112,6 +112,8 @@ export default class App extends BaseController {
 	public navToRejected(): void {
 		this.getRouter().navTo("TableRejecteds");
 	}
-
+	public navToPreapprove(): void {
+		this.getRouter().navTo("TablePreapprove");
+	}
 
 }

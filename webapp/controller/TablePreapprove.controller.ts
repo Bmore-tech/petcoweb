@@ -14,7 +14,7 @@ import ListItemBase from "sap/m/ListItemBase";
 /**
  * @namespace com.bmore.portalproveedores.controller
  */
-export default class TableRejecteds extends BaseController {
+export default class TablePreapprove extends BaseController {
     private isDescendingConcepts: boolean = false;
     public async onAfterRendering(): Promise<void> {
         this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -32,7 +32,7 @@ export default class TableRejecteds extends BaseController {
     }
     public async loadHistory(): Promise<historyDto[]> {
 
-        const historyData: historyDto[] = await getHistoryByFilter(InvoiceStatus.REJECTED);
+        const historyData: historyDto[] = await getHistoryByFilter(InvoiceStatus.APPROVED);
 
         return historyData;
     }
@@ -65,10 +65,10 @@ export default class TableRejecteds extends BaseController {
 
         const id: string = oEvent.getSource().getCells()[0].getText();
 
-        this.getRouter().navTo("RejectedDetails", { id: id });
+        this.getRouter().navTo("RejectedPreapprove", { id: id });
 
-        if (sap.ui.getCore().byId('__component0---Rejected')) {
-            this.ReceptionController = sap.ui.getCore().byId('__component0---Rejected').getController();
+        if (sap.ui.getCore().byId('__component0---Draft')) {
+            this.ReceptionController = sap.ui.getCore().byId('__component0---Preapprove').getController();
             await this.ReceptionController.loadDetails();
         }
 

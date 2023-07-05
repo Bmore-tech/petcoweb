@@ -21,7 +21,6 @@ export const getDocument = async (documentData: Document): Promise<Document> => 
             }
         ).then((response) => response.blob())
             .then((myBlob) => {
-                // URL.revokeObjectURL(href);
                 documentData.file = myBlob;
             });
     } catch (e) {
