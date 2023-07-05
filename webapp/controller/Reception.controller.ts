@@ -57,7 +57,7 @@ export default class Reception extends BaseController {
 		uploadFilesData.getDefaultFileUploader().setIcon("sap-icon://attachment");
 	}
 
-	public async _onSelectSubsidiary(oEvent): void {
+	public async _onSelectSubsidiary(oEvent): Promise<void> {
 
 		const tableHelpSubsidiaries: UI5Element = this.byId("tableHelpSubsidiaries");
 
@@ -174,7 +174,7 @@ export default class Reception extends BaseController {
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 	}
 
-	public async _onSelectConcept(oEvent): void {
+	public async _onSelectConcept(oEvent): Promise<void> {
 
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
 
@@ -191,7 +191,7 @@ export default class Reception extends BaseController {
 		}
 	}
 
-	public async onLoadConcepts(): void {
+	public async onLoadConcepts(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -209,7 +209,7 @@ export default class Reception extends BaseController {
 		BusyIndicator.hide();
 	}
 
-	public async onFilterConcepts(): void {
+	public async onFilterConcepts(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchConcept").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
@@ -219,7 +219,7 @@ export default class Reception extends BaseController {
 		binding.filter([filter]);
 	}
 
-	public async onSortConcepts(): void {
+	public async onSortConcepts(): Promise<void> {
 
 		this.isDescendingConcepts = !this.isDescendingConcepts;
 
@@ -233,7 +233,7 @@ export default class Reception extends BaseController {
 		binding.filter([filter]).sort(sorters);
 	}
 
-	public async onFilterSubsidiaries(): void {
+	public async onFilterSubsidiaries(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchSubsidiary").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpSubsidiaries");
@@ -244,7 +244,7 @@ export default class Reception extends BaseController {
 
 	}
 
-	public async onSortSubsidiaries(): void {
+	public async onSortSubsidiaries(): Promise<void> {
 
 		this.isDescendingSubsidiaries = !this.isDescendingSubsidiaries;
 
@@ -258,7 +258,7 @@ export default class Reception extends BaseController {
 		binding.filter([filter]).sort(sorters);
 	}
 
-	public async sendInvoice(): void {
+	public async sendInvoice(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -314,6 +314,16 @@ export default class Reception extends BaseController {
 			BusyIndicator.hide();
 			return;
 		}
+
+		this.filesData = [];
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+		const filesItems: UploadSetItem[] = uploadFilesData.getItems();
+
+		filesItems.forEach(async (item): void => {
+			const file: File = item.getFileObject();
+			this.filesData.push(file);
+
+		});
 
 		// Check if there's at least 2 files
 		if (this.filesData.length < 2) {
@@ -385,7 +395,7 @@ export default class Reception extends BaseController {
 
 		BusyIndicator.hide();
 	}
-	public async saveInvoice(): void {
+	public async saveInvoice(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -442,6 +452,16 @@ export default class Reception extends BaseController {
 			BusyIndicator.hide();
 			return;
 		}
+
+		this.filesData = [];
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+		const filesItems: UploadSetItem[] = uploadFilesData.getItems();
+
+		filesItems.forEach(async (item): void => {
+			const file: File = item.getFileObject();
+			this.filesData.push(file);
+
+		});
 
 		// Check if there's at least 2 files
 		if (this.filesData.length < 2) {
@@ -639,7 +659,7 @@ export default class Reception extends BaseController {
 		this.byId(idViewHelp).close();
 	}
 
-	public async clear(): void {
+	public async clear(): Promise<void> {
 
 		// Clear state
 		this.invoiceId = 0;

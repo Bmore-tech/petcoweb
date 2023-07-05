@@ -40,7 +40,7 @@ import { getDocument } from "../service/Document.service";
 export default class Draft extends BaseController {
 
 	private invoiceId: number = 0;
-	private subsidiaryList: Array<object> = [];
+	private subsidiaryList: Array<Apportionment> = [];
 	private filesData: Array<File> = [];
 	private filesArray: Array<Document> = [];
 	private isDescendingConcepts: boolean = false;
@@ -52,12 +52,10 @@ export default class Draft extends BaseController {
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();
-		this.disableAllInputs();
 	}
 	public async onInit(): Promise<void> {
-
+		this.disableAllInputs();
 		await this.loadDetails();
-
 		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
 		uploadFilesData.getDefaultFileUploader().setTooltip("");
 		uploadFilesData.getDefaultFileUploader().setIconOnly(false);
@@ -65,7 +63,7 @@ export default class Draft extends BaseController {
 		uploadFilesData.getDefaultFileUploader().setIcon("sap-icon://attachment");
 	}
 
-	public async _onSelectSubsidiary(oEvent): void {
+	public async _onSelectSubsidiary(oEvent): Promise<void> {
 
 		const tableHelpSubsidiaries: UI5Element = this.byId("tableHelpSubsidiaries");
 
@@ -81,7 +79,7 @@ export default class Draft extends BaseController {
 				items.forEach((itemData): void => {
 					const item = itemData.getCells();
 					this.subsidiaryList.push({
-						idSubsidiary: item[0].getValue(),
+						subsidiaryId: item[0].getValue(),
 						subsidiary: item[1].getValue(),
 						amount: 0
 					})
@@ -120,11 +118,11 @@ export default class Draft extends BaseController {
 	public async _onDeleteRowSubsidiary(oEvent): Promise<void> {
 
 		const item = oEvent.getSource().getBindingContext("subsidiaryList").getObject();
-		let subsidiaryListFilter: Array<object> = [];
+		let subsidiaryListFilter: Array<Apportionment> = [];
 		if (this.subsidiaryList.length > 0) {
 
 			subsidiaryListFilter = this.subsidiaryList
-				.filter(subsidiary => parseInt(subsidiary.idSubsidiary) != parseInt(item.idSubsidiary));
+				.filter(subsidiary => subsidiary.subsidiaryId != parseInt(item.subsidiaryId));
 		}
 
 		this.subsidiaryList = subsidiaryListFilter;
@@ -150,7 +148,7 @@ export default class Draft extends BaseController {
 
 		//  Obtener state para sumar cantidades por tienda
 		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
-		const subsidiaryListData: Array<object> = tableSubsidiaries.getItems();
+		const subsidiaryListData: Array<Apportionment> = tableSubsidiaries.getItems();
 
 		let sum: number = 0;
 		if (subsidiaryListData.length > 0) {
@@ -171,9 +169,9 @@ export default class Draft extends BaseController {
 
 			// Actualizar state subsidiaryList
 			this.subsidiaryList
-				.map(async (subsidiary: object) => {
+				.map(async (subsidiary: Apportionment) => {
 
-					if (Number(subsidiary.idSubsidiary) == Number(valueSubsidiaryIdFind)) {
+					if (Number(subsidiary.subsidiaryId) == Number(valueSubsidiaryIdFind)) {
 						subsidiary.amount = valueAmountUpdate;
 					}
 					return subsidiary;
@@ -182,7 +180,7 @@ export default class Draft extends BaseController {
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 	}
 
-	public async _onSelectConcept(oEvent): void {
+	public async _onSelectConcept(oEvent): Promise<void> {
 
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
 
@@ -199,7 +197,7 @@ export default class Draft extends BaseController {
 		}
 	}
 
-	public async onLoadConcepts(): void {
+	public async onLoadConcepts(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -217,7 +215,7 @@ export default class Draft extends BaseController {
 		BusyIndicator.hide();
 	}
 
-	public async onFilterConcepts(): void {
+	public async onFilterConcepts(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchConcept").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
@@ -227,7 +225,7 @@ export default class Draft extends BaseController {
 		binding.filter([filter]);
 	}
 
-	public async onSortConcepts(): void {
+	public async onSortConcepts(): Promise<void> {
 
 		this.isDescendingConcepts = !this.isDescendingConcepts;
 
@@ -241,7 +239,7 @@ export default class Draft extends BaseController {
 		binding.filter([filter]).sort(sorters);
 	}
 
-	public async onFilterSubsidiaries(): void {
+	public async onFilterSubsidiaries(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchSubsidiary").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpSubsidiaries");
@@ -252,7 +250,7 @@ export default class Draft extends BaseController {
 
 	}
 
-	public async onSortSubsidiaries(): void {
+	public async onSortSubsidiaries(): Promise<void> {
 
 		this.isDescendingSubsidiaries = !this.isDescendingSubsidiaries;
 
@@ -266,7 +264,7 @@ export default class Draft extends BaseController {
 		binding.filter([filter]).sort(sorters);
 	}
 
-	public async sendInvoice(): void {
+	public async sendInvoice(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -287,7 +285,7 @@ export default class Draft extends BaseController {
 			this.subsidiaryList
 				.forEach((subsidiary) => {
 					apportionments.push({
-						subsidiaryId: subsidiary.idSubsidiary,
+						subsidiaryId: subsidiary.subsidiaryId,
 						amount: subsidiary.amount
 					});
 					sum += Number(subsidiary.amount);
@@ -322,6 +320,16 @@ export default class Draft extends BaseController {
 			BusyIndicator.hide();
 			return;
 		}
+
+		this.filesData = [];
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+		const filesItems: UploadSetItem[] = uploadFilesData.getItems();
+
+		filesItems.forEach(async (item): void => {
+			const file: File = item.getFileObject();
+			this.filesData.push(file);
+
+		});
 
 		// Check if there's at least 2 files
 		if (this.filesData.length < 2) {
@@ -393,7 +401,7 @@ export default class Draft extends BaseController {
 
 		BusyIndicator.hide();
 	}
-	public async saveInvoice(): void {
+	public async saveInvoice(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -408,13 +416,13 @@ export default class Draft extends BaseController {
 		// check if subsidiarySum is equals to amount
 		let sum: number = 0;
 		const ammt: Number = this.byId("amount").getValue();
-		let apportionments: Apportionment = [];
+		let apportionments: Apportionment[] = [];
 		if (this.subsidiaryList.length > 0) {
 
 			this.subsidiaryList
 				.forEach((subsidiary) => {
 					apportionments.push({
-						subsidiaryId: subsidiary.idSubsidiary,
+						subsidiaryId: subsidiary.subsidiaryId,
 						amount: subsidiary.amount
 					});
 					sum += Number(subsidiary.amount);
@@ -450,6 +458,16 @@ export default class Draft extends BaseController {
 			BusyIndicator.hide();
 			return;
 		}
+
+		this.filesData = [];
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+		const filesItems: UploadSetItem[] = uploadFilesData.getItems();
+
+		filesItems.forEach(async (item): void => {
+			const file: File = item.getFileObject();
+			this.filesData.push(file);
+
+		});
 
 		// Check if there's at least 2 files
 		if (this.filesData.length < 2) {
@@ -600,14 +618,14 @@ export default class Draft extends BaseController {
 	}
 
 	public async validatedXml(file: File): Promise<void> {
-
-		if (file.type == "text/xml") {
+		if (file.type == "text/xml" || file.type == "xml") {
 			let documentInfoXML: DocumentInfoXML = await getInfoXmlService(file);
 
 			this.uuid = documentInfoXML.uuid;
 			this.byId("folio").setValue(documentInfoXML.folio);
 			this.byId("amount").setValue(documentInfoXML.amount);
 			this.uuidExist = documentInfoXML.existeUuid;
+
 		}
 	}
 
@@ -699,12 +717,17 @@ export default class Draft extends BaseController {
 	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
 		// Clear state
-		// this.invoiceId = invoiceDataResponse.invoiceId;
+		this.invoiceId = invoiceDataResponse.applicationId;
 		this.uuid = "";
 		this.subsidiaryList = invoiceDataResponse.apportionments; //invoiceDataResponse.;
 		this.filesData = [];
 		this.isDescendingConcepts = false;
 		this.isDescendingSubsidiaries = false;
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		uploadFilesData.removeAllItems();
+
+		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		tableSubsidiaries.removeAllItems();
 
 		let comments: string = "";
 		invoiceDataResponse.comments.forEach(element => {
@@ -718,7 +741,6 @@ export default class Draft extends BaseController {
 		this.byId("generalConcept").setValue(invoiceDataResponse.generalConcept);
 		this.byId("comment").setValue(comments);
 
-		const tableSubsidiaries: Table = this.byId("tableSubsidiaries");
 		let model: JSONModel = new JSONModel();
 		model.setData(invoiceDataResponse.apportionments);
 		this.setModel(new JSONModel({
@@ -740,22 +762,24 @@ export default class Draft extends BaseController {
 			oInput0.setEnabled(false);
 			oInput1.setEnabled(false);
 			oInput2.setEnabled(false);
+
+			await this.sumAmount();
+
 		}
 
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 
-		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
-
 		invoiceDataResponse.documents.forEach(async (doc): Promise<void> => {
 			const documentData: Document = await getDocument(doc);
-			const file: File = new File([documentData.file], documentData.fileName);
+			const file: File = new File([documentData.file], documentData.fileName, { type: documentData.fileName.split(/[.]+/).pop() });
 			let uploadSetItem: UploadSetItem = new UploadSetItem();
 			uploadSetItem.setFileName(doc.fileName);
 			uploadSetItem.setEnabledEdit(false);
 			uploadSetItem.setEnabledRemove(false);
 			uploadSetItem._setFileObject(file);
-			console.log(uploadSetItem);
 			uploadFilesData.addItem(uploadSetItem);
+
+			this.validatedXml(file);
 			this.filesData.push(file);
 			this.filesArray.push(doc);
 		})

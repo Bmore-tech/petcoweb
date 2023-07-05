@@ -14,7 +14,7 @@ export interface InvoiceResponse {
 export interface Apportionment {
     amount:       number;
     subsidiaryId: number;
-	//subsidiary:   string; //agregar campo con el nombre
+	subsidiary:   string;
 }
 
 export interface Comment {
