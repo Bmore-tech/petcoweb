@@ -32,6 +32,7 @@ import Table from "sap/m/Table";
 import ListItemBase from "sap/m/ListItemBase";
 import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
+import { getDocument } from "../service/Document.service";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -39,7 +40,7 @@ import HashChanger from "sap/ui/core/routing/HashChanger";
 export default class Pending extends BaseController {
 
 	private invoiceId: number = 0;
-	private subsidiaryList: Array<object> = [];
+	private subsidiaryList: Array<Apportionment> = [];
 	private filesData: Array<File> = [];
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
@@ -49,10 +50,9 @@ export default class Pending extends BaseController {
 	public async onAfterRendering(): Promise<void> {
 		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
 		await this.AppController.home_navbar();
-		this.disableAllInputs();
 	}
 	public async onInit(): Promise<void> {
-
+		this.disableAllInputs();
 		await this.loadDetails();
 
 		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
@@ -62,7 +62,7 @@ export default class Pending extends BaseController {
 		uploadFilesData.getDefaultFileUploader().setIcon("sap-icon://attachment");
 	}
 
-	public async _onSelectSubsidiary(oEvent): void {
+	public async _onSelectSubsidiary(oEvent): Promise<void> {
 
 		const tableHelpSubsidiaries: UI5Element = this.byId("tableHelpSubsidiaries");
 
@@ -78,7 +78,7 @@ export default class Pending extends BaseController {
 				items.forEach((itemData): void => {
 					const item = itemData.getCells();
 					this.subsidiaryList.push({
-						idSubsidiary: item[0].getValue(),
+						subsidiaryId: item[0].getValue(),
 						subsidiary: item[1].getValue(),
 						amount: 0
 					})
@@ -117,11 +117,11 @@ export default class Pending extends BaseController {
 	public async _onDeleteRowSubsidiary(oEvent): Promise<void> {
 
 		const item = oEvent.getSource().getBindingContext("subsidiaryList").getObject();
-		let subsidiaryListFilter: Array<object> = [];
+		let subsidiaryListFilter: Array<Apportionment> = [];
 		if (this.subsidiaryList.length > 0) {
 
 			subsidiaryListFilter = this.subsidiaryList
-				.filter(subsidiary => parseInt(subsidiary.idSubsidiary) != parseInt(item.idSubsidiary));
+				.filter(subsidiary => subsidiary.subsidiaryId != parseInt(item.subsidiaryId));
 		}
 
 		this.subsidiaryList = subsidiaryListFilter;
@@ -147,7 +147,7 @@ export default class Pending extends BaseController {
 
 		//  Obtener state para sumar cantidades por tienda
 		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
-		const subsidiaryListData: Array<object> = tableSubsidiaries.getItems();
+		const subsidiaryListData: Array<Apportionment> = tableSubsidiaries.getItems();
 
 		let sum: number = 0;
 		if (subsidiaryListData.length > 0) {
@@ -168,9 +168,9 @@ export default class Pending extends BaseController {
 
 			// Actualizar state subsidiaryList
 			this.subsidiaryList
-				.map(async (subsidiary: object) => {
+				.map(async (subsidiary: Apportionment) => {
 
-					if (Number(subsidiary.idSubsidiary) == Number(valueSubsidiaryIdFind)) {
+					if (Number(subsidiary.subsidiaryId) == Number(valueSubsidiaryIdFind)) {
 						subsidiary.amount = valueAmountUpdate;
 					}
 					return subsidiary;
@@ -179,7 +179,7 @@ export default class Pending extends BaseController {
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 	}
 
-	public async _onSelectConcept(oEvent): void {
+	public async _onSelectConcept(oEvent): Promise<void> {
 
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
 
@@ -196,7 +196,7 @@ export default class Pending extends BaseController {
 		}
 	}
 
-	public async onLoadConcepts(): void {
+	public async onLoadConcepts(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -214,7 +214,7 @@ export default class Pending extends BaseController {
 		BusyIndicator.hide();
 	}
 
-	public async onFilterConcepts(): void {
+	public async onFilterConcepts(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchConcept").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
@@ -224,7 +224,7 @@ export default class Pending extends BaseController {
 		binding.filter([filter]);
 	}
 
-	public async onSortConcepts(): void {
+	public async onSortConcepts(): Promise<void> {
 
 		this.isDescendingConcepts = !this.isDescendingConcepts;
 
@@ -238,7 +238,7 @@ export default class Pending extends BaseController {
 		binding.filter([filter]).sort(sorters);
 	}
 
-	public async onFilterSubsidiaries(): void {
+	public async onFilterSubsidiaries(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchSubsidiary").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpSubsidiaries");
@@ -249,7 +249,7 @@ export default class Pending extends BaseController {
 
 	}
 
-	public async onSortSubsidiaries(): void {
+	public async onSortSubsidiaries(): Promise<void> {
 
 		this.isDescendingSubsidiaries = !this.isDescendingSubsidiaries;
 
@@ -261,263 +261,6 @@ export default class Pending extends BaseController {
 
 		sorters.push(new Sorter("subsidiary", this.isDescendingSubsidiaries));
 		binding.filter([filter]).sort(sorters);
-	}
-
-	public async sendInvoice(): void {
-
-		BusyIndicator.show(0);
-
-		// Check if there's a folio
-
-		if (this.byId("folio").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Folio Factura".');
-			BusyIndicator.hide();
-			return;
-		}
-		// check if subsidiarySum is equals to amount
-		let sum: number = 0;
-		const ammt: Number = this.byId("amount").getValue();
-		let apportionments: Apportionment = [];
-		if (this.subsidiaryList.length > 0) {
-
-			this.subsidiaryList
-				.forEach((subsidiary) => {
-					apportionments.push({
-						subsidiaryId: subsidiary.idSubsidiary,
-						amount: subsidiary.amount
-					});
-					sum += Number(subsidiary.amount);
-				})
-		} else {
-			await validatedErrorResponse(1000, null,
-				'Es necesario definir al menos una sucursal en "Prorrateo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		if (sum != ammt) {
-			await validatedErrorResponse(1000, null,
-				"El subtotal de factura y la suma del prorrateo no coinciden");
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's a selected job type
-
-		if (this.byId("conceptId").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar los campos "Id / Tipo de Trabajo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's a general concept
-
-		if (this.byId("generalConcept").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Concepto en Especifico".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's at least 2 files
-		if (this.filesData.length < 2) {
-			await validatedErrorResponse(1000, null,
-				'Deben existir al menos 2 archivos: "Factura.xml", "Factura(.pdf, .jpeg, .jpg)".');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one xml files
-		let countXML: boolean = false;
-		let ext: String;
-		this.filesData.forEach(element => {
-			ext = element.name.split('.').pop().toLowerCase();
-			if (ext == 'xml') {
-				countXML = true;
-			}
-		});
-		if (!countXML) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato XML.');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one pdf files
-		let countpdf: boolean = false;
-		let extpdf: String;
-		this.filesData.forEach(element => {
-			extpdf = element.name.split('.').pop().toLowerCase();
-			if (extpdf == 'pdf') {
-				countpdf = true;
-			}
-		});
-		if (!countpdf) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato PDF.');
-			BusyIndicator.hide();
-			return;
-		}
-
-
-		const comment: Comment = {
-			commentId: null,
-			comment: this.byId("comment").getValue()
-		};
-
-		const invoice: Invoice = {
-			amount: Number(this.byId("amount").getValue()),
-			applicationId: this.invoiceId,
-			apportionments,
-			comment,
-			conceptId: this.byId("conceptId").getValue(),
-			folio: this.byId("folio").getValue(),
-			generalConcept: this.byId("generalConcept").getValue(),
-			uuid: this.uuid
-		}
-		if (!this.uuidExist) {
-			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
-
-			if (invoiceResponse != null) {
-				await this.AppController.navTo_home();
-			}
-		}
-		else {
-			await validatedErrorResponse(1000, null,
-				'La factura ya ha sido registrada en otro proceso.');
-			BusyIndicator.hide();
-			return;
-		}
-
-		BusyIndicator.hide();
-	}
-	public async saveInvoice(): void {
-
-		BusyIndicator.show(0);
-
-		// Check if there's a folio
-
-		if (this.byId("folio").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Folio Factura".');
-			BusyIndicator.hide();
-			return;
-		}
-		// check if subsidiarySum is equals to amount
-		let sum: number = 0;
-		const ammt: Number = this.byId("amount").getValue();
-		let apportionments: Apportionment = [];
-		if (this.subsidiaryList.length > 0) {
-
-			this.subsidiaryList
-				.forEach((subsidiary) => {
-					apportionments.push({
-						subsidiaryId: subsidiary.idSubsidiary,
-						amount: subsidiary.amount
-					});
-					sum += Number(subsidiary.amount);
-				})
-
-		} else {
-			await validatedErrorResponse(1000, null,
-				'Es necesario definir al menos una sucursal en "Prorrateo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		if (sum != ammt) {
-			await validatedErrorResponse(1000, null,
-				"El subtotal de factura y la suma del prorrateo no coinciden");
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's a selected job type
-
-		if (this.byId("conceptId").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar los campos "Id / Tipo de Trabajo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's a general concept
-
-		if (this.byId("generalConcept").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Concepto en Especifico".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's at least 2 files
-		if (this.filesData.length < 2) {
-			await validatedErrorResponse(1000, null,
-				'Deben existir al menos 2 archivos: "Factura.xml", "Factura(.pdf, .jpeg, .jpg)".');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one xml files
-		let countXML: boolean = false;
-		let ext: String;
-		this.filesData.forEach(element => {
-			ext = element.name.split('.').pop().toLowerCase();
-			if (ext == 'xml') {
-				countXML = true;
-			}
-		});
-		if (!countXML) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato XML.');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one pdf files
-		let countpdf: boolean = false;
-		let extpdf: String;
-		this.filesData.forEach(element => {
-			extpdf = element.name.split('.').pop().toLowerCase();
-			if (extpdf == 'pdf') {
-				countpdf = true;
-			}
-		});
-		if (!countpdf) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato PDF.');
-			BusyIndicator.hide();
-			return;
-		}
-
-
-		const comment: Comment = {
-			commentId: null,
-			comment: this.byId("comment").getValue()
-		};
-
-		const invoice: Invoice = {
-			amount: Number(this.byId("amount").getValue()),
-			applicationId: this.invoiceId,
-			apportionments,
-			comment,
-			conceptId: this.byId("conceptId").getValue(),
-			folio: this.byId("folio").getValue(),
-			generalConcept: this.byId("generalConcept").getValue(),
-			uuid: this.uuid
-		}
-
-		if (!this.uuidExist) {
-			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
-
-			if (invoiceResponse != null) {
-				await this.AppController.navTo_home();
-			}
-		}
-		else {
-			await validatedErrorResponse(1000, null,
-				'La factura ya ha sido registrada en otro proceso.');
-			BusyIndicator.hide();
-			return;
-		}
-
-		BusyIndicator.hide();
 	}
 
 	public async uploadFiles(): Promise<void> {
@@ -578,29 +321,33 @@ export default class Pending extends BaseController {
 
 	public async downloadFiles(): Promise<void> {
 
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		uploadFilesData.getItems().forEach(async (item): void => {
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
+		uploadFilesData.getItems().forEach(async (item): Promise<void> => {
 			if (item.getListItem().getSelected()) {
-				const exportUrl: string = URL.createObjectURL(item.getFileObject());
-				const aElement = document.createElement('a');
-				aElement.href = exportUrl;
-				aElement.setAttribute('download', item.getFileObject().name)
-				aElement.setAttribute('target', '_blank');
-				aElement.click();
-				URL.revokeObjectURL(href);
+				try {
+					const exportUrl: string = URL.createObjectURL(item.getFileObject());
+					const aElement = document.createElement('a');
+					aElement.href = exportUrl;
+					aElement.setAttribute('download', item.getFileObject().name)
+					aElement.setAttribute('target', '_blank');
+					aElement.click();
+				} catch (e) {
+
+				}
+
 			}
 		});
 	}
 
 	public async validatedXml(file: File): Promise<void> {
-
-		if (file.type == "text/xml") {
+		if (file.type == "text/xml" || file.type == "xml") {
 			let documentInfoXML: DocumentInfoXML = await getInfoXmlService(file);
 
 			this.uuid = documentInfoXML.uuid;
 			this.byId("folio").setValue(documentInfoXML.folio);
 			this.byId("amount").setValue(documentInfoXML.amount);
 			this.uuidExist = documentInfoXML.existeUuid;
+
 		}
 	}
 
@@ -643,32 +390,6 @@ export default class Pending extends BaseController {
 	public _onClose(idViewHelp: string): void {
 		this.byId(idViewHelp).close();
 	}
-
-	public clear(): void {
-
-		// Clear state
-		this.invoiceId = 0;
-		this.uuid = "";
-		this.subsidiaryList = [];
-		this.filesData = [];
-		this.isDescendingConcepts = false;
-		this.isDescendingSubsidiaries = false;
-
-		// Clear components view
-		this.byId("folio").setValue("");
-		this.byId("amount").setValue("");
-		this.byId("conceptId").setValue("");
-		this.byId("concept").setValue("");
-		this.byId("generalConcept").setValue("");
-		this.byId("comment").setValue("");
-		this.byId("subsidiarySum").setText('Subtotal prorrateo $0');
-
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		uploadFilesData.removeAllItems();
-
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
-		tableSubsidiaries.removeAllItems();
-	}
 	public disableAllInputs(): void {
 
 		// Clear state
@@ -687,7 +408,6 @@ export default class Pending extends BaseController {
 		this.byId("generalConcept").setEnabled(false);
 		this.byId("comment").setEnabled(false);
 		this.byId("loadSubsidiariesBtn").setEnabled(false);
-		this.byId("DownloadBtn").setEnabled(false);
 
 
 		// this.byId("subsidiarySum").setEnabled(false);
@@ -699,15 +419,20 @@ export default class Pending extends BaseController {
 		// tableSubsidiaries.removeAllItems();
 
 	}
-	public fillAllInputs(invoiceDataResponse: InvoiceResponse): void {
+	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
-		// Clear state
-		this.invoiceId = invoiceDataResponse.invoiceId;
+		// Clear state]
+		this.invoiceId = invoiceDataResponse.applicationId;
 		this.uuid = "";
 		this.subsidiaryList = invoiceDataResponse.apportionments; //invoiceDataResponse.;
 		this.filesData = [];
 		this.isDescendingConcepts = false;
 		this.isDescendingSubsidiaries = false;
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		uploadFilesData.removeAllItems();
+
+		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		tableSubsidiaries.removeAllItems();
 
 		let comments: string = "";
 		invoiceDataResponse.comments.forEach(element => {
@@ -721,42 +446,42 @@ export default class Pending extends BaseController {
 		this.byId("generalConcept").setValue(invoiceDataResponse.generalConcept);
 		this.byId("comment").setValue(comments);
 
-		const tableSubsidiaries: Table = this.byId("tableSubsidiaries");
 		let model: JSONModel = new JSONModel();
 		model.setData(invoiceDataResponse.apportionments);
-		tableSubsidiaries.setModel(model, "subsidiaryList");
-
-		let sum: number = 0;
+		this.setModel(new JSONModel({
+			...this.subsidiaryList
+		}), "subsidiaryList")
 		const oItems: ListItemBase[] = tableSubsidiaries.getItems();
 		for (let i: number = 0; i < oItems.length; i++) {
-			
+
 			let oCells = oItems[i].getCells();
-			let oHorizontalLayout = oCells[1];
-			let oInput = oHorizontalLayout.getContent()[0];
-			sum = +oInput.getValue();
+			let oHorizontalLayout0 = oCells[0];
+			let oInput0 = oHorizontalLayout0.getContent()[1];
+			let oHorizontalLayout1 = oCells[1];
+			let oInput1 = oHorizontalLayout1.getContent()[0];
 			let oHorizontalLayout2 = oCells[2];
 			let oInput2 = oHorizontalLayout2.getContent()[0];
-			oInput.setEnabled(false);
+			oInput0.setEnabled(false);
+			oInput1.setEnabled(false);
 			oInput2.setEnabled(false);
+			await this.sumAmount();
+
 		}
 
-		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
-
-		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
-
-
-		invoiceDataResponse.documents.forEach(doc => {
+		invoiceDataResponse.documents.forEach(async (doc): Promise<void> => {
+			const documentData: Document = await getDocument(doc);
+			const file: File = new File([documentData.file], documentData.fileName, { type: documentData.fileName.split(/[.]+/).pop() });
 			let uploadSetItem: UploadSetItem = new UploadSetItem();
 			uploadSetItem.setFileName(doc.fileName);
 			uploadSetItem.setEnabledEdit(false);
 			uploadSetItem.setEnabledRemove(false);
-			console.log(uploadSetItem);
+			uploadSetItem._setFileObject(file);
 			uploadFilesData.addItem(uploadSetItem);
-			// oUploadSet.upload();
+
+			this.validatedXml(file);
+			this.filesData.push(file);
 		})
 		uploadFilesData.setUploadEnabled(false);
-
-
 	}
 	public async loadDetails(): Promise<void> {
 		BusyIndicator.show(0);
@@ -767,7 +492,6 @@ export default class Pending extends BaseController {
 		};
 		const response: InvoiceResponse = await getInvoiceByIdService(invoice);
 		if (response !== null) {
-			console.log(response);
 			this.fillAllInputs(response);
 		}
 		BusyIndicator.hide();

@@ -668,32 +668,6 @@ export default class Draft extends BaseController {
 	public _onClose(idViewHelp: string): void {
 		this.byId(idViewHelp).close();
 	}
-
-	public clear(): void {
-
-		// Clear state
-		this.invoiceId = 0;
-		this.uuid = "";
-		this.subsidiaryList = [];
-		this.filesData = [];
-		this.isDescendingConcepts = false;
-		this.isDescendingSubsidiaries = false;
-
-		// Clear components view
-		this.byId("folio").setValue("");
-		this.byId("amount").setValue("");
-		this.byId("conceptId").setValue("");
-		this.byId("concept").setValue("");
-		this.byId("generalConcept").setValue("");
-		this.byId("comment").setValue("");
-		this.byId("subsidiarySum").setText('Subtotal prorrateo $0');
-
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		uploadFilesData.removeAllItems();
-
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
-		tableSubsidiaries.removeAllItems();
-	}
 	public disableAllInputs(): void {
 
 		// Clear state
@@ -717,6 +691,9 @@ export default class Draft extends BaseController {
 	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
 		// Clear state
+		if(this.canEdit)
+			this.activateEdit();
+		this.canEdit = false;
 		this.invoiceId = invoiceDataResponse.applicationId;
 		this.uuid = "";
 		this.subsidiaryList = invoiceDataResponse.apportionments; //invoiceDataResponse.;
@@ -747,7 +724,6 @@ export default class Draft extends BaseController {
 			...this.subsidiaryList
 		}), "subsidiaryList")
 
-		let sum: number = 0;
 		const oItems: ListItemBase[] = tableSubsidiaries.getItems();
 		for (let i: number = 0; i < oItems.length; i++) {
 
@@ -756,7 +732,6 @@ export default class Draft extends BaseController {
 			let oInput0 = oHorizontalLayout0.getContent()[1];
 			let oHorizontalLayout1 = oCells[1];
 			let oInput1 = oHorizontalLayout1.getContent()[0];
-			sum = +oInput1.getValue();
 			let oHorizontalLayout2 = oCells[2];
 			let oInput2 = oHorizontalLayout2.getContent()[0];
 			oInput0.setEnabled(false);
@@ -766,8 +741,6 @@ export default class Draft extends BaseController {
 			await this.sumAmount();
 
 		}
-
-		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 
 		invoiceDataResponse.documents.forEach(async (doc): Promise<void> => {
 			const documentData: Document = await getDocument(doc);
@@ -784,8 +757,6 @@ export default class Draft extends BaseController {
 			this.filesArray.push(doc);
 		})
 		uploadFilesData.setUploadEnabled(false);
-
-
 	}
 	public async loadDetails(): Promise<void> {
 		BusyIndicator.show(0);
