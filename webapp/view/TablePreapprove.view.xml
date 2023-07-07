@@ -6,7 +6,7 @@
         <headerContent>
             <Bar>
                 <contentLeft>
-                    <Title titleStyle="H2" text="Pendientes de aprobación"/>
+                    <Title titleStyle="H2" text="Prevalidar"/>
                 </contentLeft>
             </Bar>
         </headerContent>

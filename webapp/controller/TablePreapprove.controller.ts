@@ -32,7 +32,7 @@ export default class TablePreapprove extends BaseController {
     }
     public async loadHistory(): Promise<historyDto[]> {
 
-        const historyData: historyDto[] = await getHistoryByFilter(InvoiceStatus.APPROVED);
+        const historyData: historyDto[] = await getHistoryByFilter(InvoiceStatus.IN_PROGRESS);
 
         return historyData;
     }

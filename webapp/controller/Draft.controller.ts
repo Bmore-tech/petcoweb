@@ -385,19 +385,19 @@ export default class Draft extends BaseController {
 			generalConcept: this.byId("generalConcept").getValue(),
 			uuid: this.uuid
 		}
-		if (!this.uuidExist) {
+		// if (!this.uuidExist) {
 			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
 
 			if (invoiceResponse != null) {
 				await this.AppController.navTo_home();
 			}
-		}
-		else {
-			await validatedErrorResponse(1000, null,
-				'La factura ya ha sido registrada en otro proceso.');
-			BusyIndicator.hide();
-			return;
-		}
+		// }
+		// else {
+		// 	await validatedErrorResponse(1000, null,
+		// 		'La factura ya ha sido registrada en otro proceso.');
+		// 	BusyIndicator.hide();
+		// 	return;
+		// }
 
 		BusyIndicator.hide();
 	}

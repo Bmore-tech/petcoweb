@@ -9,8 +9,8 @@
 				</expandedHeading>
 				<navigationActions />
 				<actions>
-					<!-- <ObjectPageHeaderActionButton text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
-					<ObjectPageHeaderActionButton text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="saveInvoice" /> -->
+					<ObjectPageHeaderActionButton text="Aceptar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
+					<ObjectPageHeaderActionButton text="Rechazar" type="Negative" hideText="false" icon="sap-icon://cancel" iconFirst="true" press="saveInvoice" />
 				</actions>
 			</ObjectPageDynamicHeaderTitle>
 		</headerTitle>
