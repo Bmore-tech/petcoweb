@@ -1,0 +1,54 @@
+<mvc:View controllerName="com.bmore.portalproveedores.controller.TableApprove"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core" displayBlock="true" height="100%">
+    <Page>
+        <headerContent>
+            <Bar>
+                <contentLeft>
+                    <Title titleStyle="H2" text="Aprobar"/>
+                </contentLeft>
+            </Bar>
+        </headerContent>
+        <content>
+            <Panel width="auto" class="sapUiResponsiveMargin">
+                <Table inset="true" id="table" showSeparators="Inner" items="{tbModel>/}">
+                    <headerToolbar>
+                        <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+                            <content>
+                                <ToolbarSpacer width="" />
+                                <SearchField id="searchConcept" placeholder="Buscar" showSearchButton="true" visible="true" width="auto" search="onFilterConcepts" />
+                                <OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortConcepts" />
+                            </content>
+                        </OverflowToolbar>
+                    </headerToolbar> 
+                    <columns>
+                        <Column  >
+                            <Text text="Id de solicitud"/>
+                        </Column>
+                        <Column >
+                            <Text text="Fecha de creación"/>
+                        </Column>
+                        <Column >
+                            <Text text="Folio"/>
+                        </Column>
+                        <Column >
+                            <Text text="Concepto en especifico"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem type="Active" vAlign="Middle" press="handleRowClick">
+                            <cells>
+                                <Text text="{tbModel>invoiceId}"/>
+                                <Text text="{tbModel>creationDate}"/>
+                                <Text text="{tbModel>folio}"/>
+                                <Text text="{tbModel>generalConcept}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </Panel>
+        </content>
+    </Page>
+
+</mvc:View>

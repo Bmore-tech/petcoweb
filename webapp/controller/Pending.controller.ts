@@ -436,7 +436,7 @@ export default class Pending extends BaseController {
 
 		let comments: string = "";
 		invoiceDataResponse.comments.forEach(element => {
-			comments += element.comment + "\n"
+			comments += element.comment
 		})
 		// Clear components view
 		this.byId("folio").setValue(invoiceDataResponse.folio);

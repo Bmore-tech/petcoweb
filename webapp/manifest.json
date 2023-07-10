@@ -164,6 +164,20 @@
           "target": [
             "Preapprove"
           ]
+        },
+        {
+          "name": "TableApprove",
+          "pattern": "Approve",
+          "target": [
+            "TableApprove"
+          ]
+        },
+        {
+          "name": "ApproveDetails",
+          "pattern": "Approve/{id}",
+          "target": [
+            "Approve"
+          ]
         }
       ],
       "targets": {
@@ -235,6 +249,16 @@
           "viewType": "XML",
           "viewId": "Preapprove",
           "viewName": "Preapprove"
+        },
+        "TableApprove":{
+          "viewType": "XML",
+          "viewId": "TableApprove",
+          "viewName": "TableApprove"
+        },
+        "Approve":{
+          "viewType": "XML",
+          "viewId": "Approve",
+          "viewName": "Approve"
         },
         "notFound": {
           "viewName": "NotFound",

@@ -5,12 +5,12 @@
 		<headerTitle>
 			<ObjectPageDynamicHeaderTitle>
 				<expandedHeading>
-					<m:Title text="Pendientes de aprobación" wrapping="true" />
+					<m:Title text="Prevalidar" wrapping="true" />
 				</expandedHeading>
 				<navigationActions />
 				<actions>
-					<ObjectPageHeaderActionButton text="Aceptar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
-					<ObjectPageHeaderActionButton text="Rechazar" type="Negative" hideText="false" icon="sap-icon://cancel" iconFirst="true" press="saveInvoice" />
+					<ObjectPageHeaderActionButton text="Aceptar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="ApproveInvoice" />
+					<ObjectPageHeaderActionButton text="Rechazar" type="Negative" hideText="false" icon="sap-icon://cancel" iconFirst="true" press="RejectInvoice" />
 				</actions>
 			</ObjectPageDynamicHeaderTitle>
 		</headerTitle>
@@ -55,6 +55,14 @@
 								</form:label>
 								<form:fields>
 									<m:Input type="Text" id="generalConcept" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<m:Label text="Historial de comentarios" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<m:TextArea id="HComment" rows="3" cols="20" maxLength="0" wrapping="None" enabled="true" required="false" valueStateText="Invalid entry" visible="true"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">

@@ -14,13 +14,15 @@ import Binding from "sap/ui/model/Binding";
 import Sorter from "sap/ui/model/Sorter";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import {
+	cancelPreapproveInvoiceService,
 	getInfoProrrateoXlsxService,
 	getInfoXmlService,
 	getInvoiceByIdService,
+	preapproveInvoiceService,
 	saveDrafInvoiceService,
 	sendInvoiceService
 } from "com/bmore/portalproveedores/service/Reception.service";
-import { Invoice } from "com/bmore/portalproveedores/model/resquest/Invoice";
+import { Invoice, InvoiceToApprove } from "com/bmore/portalproveedores/model/resquest/Invoice";
 import { Apportionment } from "com/bmore/portalproveedores/model/resquest/Apportionment";
 import { Comment } from "com/bmore/portalproveedores/model/resquest/Comment";
 import { Document, InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
@@ -37,7 +39,7 @@ import { getDocument } from "../service/Document.service";
 /**
  * @namespace com.petco.portalproveedorespetco.controller
  */
-export default class Pending extends BaseController {
+export default class Preapprove extends BaseController {
 
 	private invoiceId: number = 0;
 	private subsidiaryList: Array<object> = [];
@@ -63,7 +65,7 @@ export default class Pending extends BaseController {
 		uploadFilesData.getDefaultFileUploader().setIcon("sap-icon://attachment");
 	}
 
-	public async _onSelectSubsidiary(oEvent): void {
+	public async _onSelectSubsidiary(oEvent): Promise<void> {
 
 		const tableHelpSubsidiaries: UI5Element = this.byId("tableHelpSubsidiaries");
 
@@ -180,7 +182,7 @@ export default class Pending extends BaseController {
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 	}
 
-	public async _onSelectConcept(oEvent): void {
+	public async _onSelectConcept(oEvent): Promise<void> {
 
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
 
@@ -197,7 +199,7 @@ export default class Pending extends BaseController {
 		}
 	}
 
-	public async onLoadConcepts(): void {
+	public async onLoadConcepts(): Promise<void> {
 
 		BusyIndicator.show(0);
 
@@ -215,7 +217,7 @@ export default class Pending extends BaseController {
 		BusyIndicator.hide();
 	}
 
-	public async onFilterConcepts(): void {
+	public async onFilterConcepts(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchConcept").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
@@ -225,7 +227,7 @@ export default class Pending extends BaseController {
 		binding.filter([filter]);
 	}
 
-	public async onSortConcepts(): void {
+	public async onSortConcepts(): Promise<void> {
 
 		this.isDescendingConcepts = !this.isDescendingConcepts;
 
@@ -239,7 +241,7 @@ export default class Pending extends BaseController {
 		binding.filter([filter]).sort(sorters);
 	}
 
-	public async onFilterSubsidiaries(): void {
+	public async onFilterSubsidiaries(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchSubsidiary").getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpSubsidiaries");
@@ -250,7 +252,7 @@ export default class Pending extends BaseController {
 
 	}
 
-	public async onSortSubsidiaries(): void {
+	public async onSortSubsidiaries(): Promise<void> {
 
 		this.isDescendingSubsidiaries = !this.isDescendingSubsidiaries;
 
@@ -263,264 +265,6 @@ export default class Pending extends BaseController {
 		sorters.push(new Sorter("subsidiary", this.isDescendingSubsidiaries));
 		binding.filter([filter]).sort(sorters);
 	}
-
-	public async sendInvoice(): void {
-
-		BusyIndicator.show(0);
-
-		// Check if there's a folio
-
-		if (this.byId("folio").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Folio Factura".');
-			BusyIndicator.hide();
-			return;
-		}
-		// check if subsidiarySum is equals to amount
-		let sum: number = 0;
-		const ammt: Number = this.byId("amount").getValue();
-		let apportionments: Apportionment = [];
-		if (this.subsidiaryList.length > 0) {
-
-			this.subsidiaryList
-				.forEach((subsidiary) => {
-					apportionments.push({
-						subsidiaryId: subsidiary.idSubsidiary,
-						amount: subsidiary.amount
-					});
-					sum += Number(subsidiary.amount);
-				})
-		} else {
-			await validatedErrorResponse(1000, null,
-				'Es necesario definir al menos una sucursal en "Prorrateo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		if (sum != ammt) {
-			await validatedErrorResponse(1000, null,
-				"El subtotal de factura y la suma del prorrateo no coinciden");
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's a selected job type
-
-		if (this.byId("conceptId").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar los campos "Id / Tipo de Trabajo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's a general concept
-
-		if (this.byId("generalConcept").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Concepto en Especifico".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's at least 2 files
-		if (this.filesData.length < 2) {
-			await validatedErrorResponse(1000, null,
-				'Deben existir al menos 2 archivos: "Factura.xml", "Factura(.pdf, .jpeg, .jpg)".');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one xml files
-		let countXML: boolean = false;
-		let ext: String;
-		this.filesData.forEach(element => {
-			ext = element.name.split('.').pop().toLowerCase();
-			if (ext == 'xml') {
-				countXML = true;
-			}
-		});
-		if (!countXML) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato XML.');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one pdf files
-		let countpdf: boolean = false;
-		let extpdf: String;
-		this.filesData.forEach(element => {
-			extpdf = element.name.split('.').pop().toLowerCase();
-			if (extpdf == 'pdf') {
-				countpdf = true;
-			}
-		});
-		if (!countpdf) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato PDF.');
-			BusyIndicator.hide();
-			return;
-		}
-
-
-		const comment: Comment = {
-			commentId: null,
-			comment: this.byId("comment").getValue()
-		};
-
-		const invoice: Invoice = {
-			amount: Number(this.byId("amount").getValue()),
-			applicationId: this.invoiceId,
-			apportionments,
-			comment,
-			conceptId: this.byId("conceptId").getValue(),
-			folio: this.byId("folio").getValue(),
-			generalConcept: this.byId("generalConcept").getValue(),
-			uuid: this.uuid
-		}
-		if (!this.uuidExist) {
-			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
-
-			if (invoiceResponse != null) {
-				await this.AppController.navTo_home();
-			}
-		}
-		else {
-			await validatedErrorResponse(1000, null,
-				'La factura ya ha sido registrada en otro proceso.');
-			BusyIndicator.hide();
-			return;
-		}
-
-		BusyIndicator.hide();
-	}
-	public async saveInvoice(): void {
-
-		BusyIndicator.show(0);
-
-		// Check if there's a folio
-
-		if (this.byId("folio").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Folio Factura".');
-			BusyIndicator.hide();
-			return;
-		}
-		// check if subsidiarySum is equals to amount
-		let sum: number = 0;
-		const ammt: Number = this.byId("amount").getValue();
-		let apportionments: Apportionment = [];
-		if (this.subsidiaryList.length > 0) {
-
-			this.subsidiaryList
-				.forEach((subsidiary) => {
-					apportionments.push({
-						subsidiaryId: subsidiary.idSubsidiary,
-						amount: subsidiary.amount
-					});
-					sum += Number(subsidiary.amount);
-				})
-
-		} else {
-			await validatedErrorResponse(1000, null,
-				'Es necesario definir al menos una sucursal en "Prorrateo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		if (sum != ammt) {
-			await validatedErrorResponse(1000, null,
-				"El subtotal de factura y la suma del prorrateo no coinciden");
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's a selected job type
-
-		if (this.byId("conceptId").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar los campos "Id / Tipo de Trabajo".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's a general concept
-
-		if (this.byId("generalConcept").getValue().length == 0) {
-			await validatedErrorResponse(1000, null,
-				'Debe llenar el campo "Concepto en Especifico".');
-			BusyIndicator.hide();
-			return;
-		}
-
-		// Check if there's at least 2 files
-		if (this.filesData.length < 2) {
-			await validatedErrorResponse(1000, null,
-				'Deben existir al menos 2 archivos: "Factura.xml", "Factura(.pdf, .jpeg, .jpg)".');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one xml files
-		let countXML: boolean = false;
-		let ext: String;
-		this.filesData.forEach(element => {
-			ext = element.name.split('.').pop().toLowerCase();
-			if (ext == 'xml') {
-				countXML = true;
-			}
-		});
-		if (!countXML) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato XML.');
-			BusyIndicator.hide();
-			return;
-		}
-		// Check if there's at least one pdf files
-		let countpdf: boolean = false;
-		let extpdf: String;
-		this.filesData.forEach(element => {
-			extpdf = element.name.split('.').pop().toLowerCase();
-			if (extpdf == 'pdf') {
-				countpdf = true;
-			}
-		});
-		if (!countpdf) {
-			await validatedErrorResponse(1000, null,
-				'Debe cargar la factura en formato PDF.');
-			BusyIndicator.hide();
-			return;
-		}
-
-
-		const comment: Comment = {
-			commentId: null,
-			comment: this.byId("comment").getValue()
-		};
-
-		const invoice: Invoice = {
-			amount: Number(this.byId("amount").getValue()),
-			applicationId: this.invoiceId,
-			apportionments,
-			comment,
-			conceptId: this.byId("conceptId").getValue(),
-			folio: this.byId("folio").getValue(),
-			generalConcept: this.byId("generalConcept").getValue(),
-			uuid: this.uuid
-		}
-
-		if (!this.uuidExist) {
-			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
-
-			if (invoiceResponse != null) {
-				await this.AppController.navTo_home();
-			}
-		}
-		else {
-			await validatedErrorResponse(1000, null,
-				'La factura ya ha sido registrada en otro proceso.');
-			BusyIndicator.hide();
-			return;
-		}
-
-		BusyIndicator.hide();
-	}
-
 	public async uploadFiles(): Promise<void> {
 
 		this.filesData = [];
@@ -686,7 +430,7 @@ export default class Pending extends BaseController {
 		this.byId("conceptId").setEnabled(false);
 		this.byId("concept").setEnabled(false);
 		this.byId("generalConcept").setEnabled(false);
-		this.byId("comment").setEnabled(false);
+		this.byId("HComment").setEnabled(false);
 		this.byId("loadSubsidiariesBtn").setEnabled(false);
 
 
@@ -702,16 +446,21 @@ export default class Pending extends BaseController {
 	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
 		// Clear state
-		// this.invoiceId = invoiceDataResponse.invoiceId;
+		this.invoiceId = invoiceDataResponse.applicationId;
 		this.uuid = "";
 		this.subsidiaryList = invoiceDataResponse.apportionments; //invoiceDataResponse.;
 		this.filesData = [];
 		this.isDescendingConcepts = false;
 		this.isDescendingSubsidiaries = false;
+		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		uploadFilesData.removeAllItems();
+
+		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		tableSubsidiaries.removeAllItems();
 
 		let comments: string = "";
 		invoiceDataResponse.comments.forEach(element => {
-			comments += element.comment + "\n"
+			comments += element.comment
 		})
 		// Clear components view
 		this.byId("folio").setValue(invoiceDataResponse.folio);
@@ -719,9 +468,10 @@ export default class Pending extends BaseController {
 		this.byId("conceptId").setValue(invoiceDataResponse.conceptId);
 		this.byId("concept").setValue(invoiceDataResponse.concept);
 		this.byId("generalConcept").setValue(invoiceDataResponse.generalConcept);
-		this.byId("comment").setValue(comments);
 
-		const tableSubsidiaries: Table = this.byId("tableSubsidiaries");
+		this.byId("HComment").setValue(comments);
+
+
 		let model: JSONModel = new JSONModel();
 		model.setData(invoiceDataResponse.apportionments);
 		this.setModel(new JSONModel({
@@ -746,8 +496,6 @@ export default class Pending extends BaseController {
 		}
 
 		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
-
-		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
 
 		invoiceDataResponse.documents.forEach(async (doc): Promise<void> => {
 			const documentData: Document = await getDocument(doc);
@@ -776,6 +524,44 @@ export default class Pending extends BaseController {
 			this.fillAllInputs(response);
 		}
 		BusyIndicator.hide();
+	}
+
+	public async ApproveInvoice(): Promise<void> {
+		BusyIndicator.show(0);
+		const comment: Comment = {
+			commentId: 0,
+			comment: this.byId("comment").getValue()
+		};
+
+		const invoice: InvoiceToApprove = {
+			applicationId: this.invoiceId,
+			comment
+		}
+		const invoiceResponse: InvoiceResponse = await preapproveInvoiceService(invoice);
+		if (invoiceResponse != null) {
+			await this.AppController.navTo_home();
+		}
+		BusyIndicator.hide();
+	}
+	public async RejectInvoice(): Promise<void> {
+
+		BusyIndicator.show(0);
+		const comment: Comment = {
+			commentId: 0,
+			comment: this.byId("comment").getValue()
+		};
+
+		const invoice: InvoiceToApprove = {
+			applicationId: this.invoiceId,
+			comment
+		}
+		const invoiceResponse: InvoiceResponse = await cancelPreapproveInvoiceService(invoice);
+		if (invoiceResponse != null) {
+			await this.AppController.navTo_home();
+		}
+		BusyIndicator.hide();
+
+
 	}
 
 }

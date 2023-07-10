@@ -3,7 +3,7 @@ import { SOLICITUD_SERVICES, SOLICITUDES_ENDPOINT } from "com/bmore/portalprovee
 import { showMsgStrip } from "com/bmore/portalproveedores/component/MessageStrip.component";
 import { MessageStripType } from "com/bmore/portalproveedores/model/MessageStripType";
 import { ErrorResponse } from "com/bmore/portalproveedores/model/response/ErrorResponse";
-import { Invoice } from "com/bmore/portalproveedores/model/resquest/Invoice";
+import { Invoice, InvoiceToApprove } from "com/bmore/portalproveedores/model/resquest/Invoice";
 import { InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
 import { DocumentInfoXLSX } from "com/bmore/portalproveedores/model/response/DocumentInfoXLSX";
@@ -112,7 +112,7 @@ export const getInvoiceByIdService = async (invoice: Invoice)
 
 		if (documentDataResponse.status == 200) {
 			response = await documentDataResponse.json();
-			
+
 
 		} else {
 
@@ -128,8 +128,6 @@ export const getInvoiceByIdService = async (invoice: Invoice)
 
 	return response;
 }
-
-
 export const getInfoXmlService = async (file: File)
 	: Promise<DocumentInfoXML> => {
 
@@ -168,8 +166,6 @@ export const getInfoXmlService = async (file: File)
 
 	return response;
 }
-
-
 export const getInfoProrrateoXlsxService = async (file: File)
 	: Promise<DocumentInfoXLSX> => {
 
@@ -205,6 +201,161 @@ export const getInfoProrrateoXlsxService = async (file: File)
 
 	} catch (e) {
 		showMsgStrip("Error no se pueden recuperar los datos del archivo xlsx.", MessageStripType.ERROR);
+	}
+
+	return response;
+}
+export const preapproveInvoiceService = async (invoice: InvoiceToApprove)
+	: Promise<InvoiceResponse> => {
+
+	let response: InvoiceResponse = null;
+
+	try {
+
+		const jwt: string = await getJWT();
+		const invoiceDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.prevalidateInvoice}`,
+			{
+				method: 'POST',
+				body: JSON.stringify(invoice),
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (invoiceDataResponse.status == 201) {
+			// response = await invoiceDataResponse.json();
+			showMsgStrip(`Los datos de la factura ${response.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+		} else {
+
+			console.log(invoiceDataResponse.status);
+			
+			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
+
+			await validatedErrorResponse(invoiceDataResponse.status,invoiceResponseError ,
+				"Error en el servicio al enviar la factura.");
+		}
+
+	} catch (e) {
+		
+		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
+	}
+
+	return response;
+}
+export const cancelPreapproveInvoiceService = async (invoice: InvoiceToApprove)
+	: Promise<InvoiceResponse> => {
+
+	let response: InvoiceResponse = null;
+
+	try {
+
+		const jwt: string = await getJWT();
+		const invoiceDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.cancelPrevalidator}`,
+			{
+				method: 'POST',
+				body: JSON.stringify(invoice),
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (invoiceDataResponse.status == 201) {
+			// response = await invoiceDataResponse.json();
+			showMsgStrip(`Los datos de la factura ${response.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+		} else {
+
+			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
+
+			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
+				"Error en el servicio al enviar la factura.");
+		}
+
+	} catch (e) {
+		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
+	}
+
+	return response;
+}
+
+export const approveInvoiceService = async (invoice: InvoiceToApprove)
+	: Promise<InvoiceResponse> => {
+
+	let response: InvoiceResponse = null;
+
+	try {
+
+		const jwt: string = await getJWT();
+		const invoiceDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.approveInvoice}`,
+			{
+				method: 'POST',
+				body: JSON.stringify(invoice),
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (invoiceDataResponse.status == 201) {
+			// response = await invoiceDataResponse.json();
+			showMsgStrip(`Los datos de la factura ${response.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+		} else {
+
+			console.log(invoiceDataResponse.status);
+			
+			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
+
+			await validatedErrorResponse(invoiceDataResponse.status,invoiceResponseError ,
+				"Error en el servicio al enviar la factura.");
+		}
+
+	} catch (e) {
+		
+		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
+	}
+
+	return response;
+}
+export const cancelApproveInvoiceService = async (invoice: InvoiceToApprove)
+	: Promise<InvoiceResponse> => {
+
+	let response: InvoiceResponse = null;
+
+	try {
+
+		const jwt: string = await getJWT();
+		const invoiceDataResponse: Response = await fetch(
+			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.cancelApprove}`,
+			{
+				method: 'POST',
+				body: JSON.stringify(invoice),
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${jwt}`
+				}
+			}
+		);
+
+		if (invoiceDataResponse.status == 201) {
+			// response = await invoiceDataResponse.json();
+			showMsgStrip(`Los datos de la factura ${response.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+		} else {
+
+			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
+
+			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
+				"Error en el servicio al enviar la factura.");
+		}
+
+	} catch (e) {
+		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
 	}
 
 	return response;

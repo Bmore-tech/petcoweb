@@ -11,3 +11,8 @@ export interface Invoice {
 	generalConcept: string;
 	uuid: 			string;
 }
+
+export interface InvoiceToApprove {
+	applicationId:  Number;
+	comment:        Comment;
+}

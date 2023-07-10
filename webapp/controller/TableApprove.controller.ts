@@ -14,7 +14,7 @@ import ListItemBase from "sap/m/ListItemBase";
 /**
  * @namespace com.bmore.portalproveedores.controller
  */
-export default class TablePreapprove extends BaseController {
+export default class TableApprove extends BaseController {
     private isDescendingConcepts: boolean = false;
     public async onAfterRendering(): Promise<void> {
         this.AppController = sap.ui.getCore().byId('__component0---app').getController();
@@ -65,10 +65,10 @@ export default class TablePreapprove extends BaseController {
 
         const id: string = oEvent.getSource().getCells()[0].getText();
 
-        this.getRouter().navTo("PreapproveDetails", { id: id });
+        this.getRouter().navTo("ApproveDetails", { id: id });
 
-        if (sap.ui.getCore().byId('__component0---Preapprove')) {
-            this.ReceptionController = sap.ui.getCore().byId('__component0---Preapprove').getController();
+        if (sap.ui.getCore().byId('__component0---Approve')) {
+            this.ReceptionController = sap.ui.getCore().byId('__component0---Approve').getController();
             await this.ReceptionController.loadDetails();
         }
 

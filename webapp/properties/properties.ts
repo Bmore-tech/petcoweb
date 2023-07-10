@@ -19,5 +19,9 @@ export const SOLICITUD_SERVICES : object = {
 	getInfoXml: "/document/getInfoXml",
 	getProrrateoXlsx: "/document/getProrrateo",
 	invoiceHistory: "/invoice/history",
-	getDocument: "/document"
+	getDocument: "/document",
+	prevalidateInvoice: "/invoice/sendPrevalidator",
+	cancelPrevalidator: "invoice/cancelPrevalidator",
+	approveInvoice: "/invoice/sendApprover",
+	cancelApprove: "invoice/cancelApprover"
 }

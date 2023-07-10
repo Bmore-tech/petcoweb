@@ -40,7 +40,7 @@
 
 							<tnt:NavigationListItem icon="sap-icon://employee-approvals" expanded="true" hasExpander="true" text="Aprobadores">
 								<tnt:items>
-									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Aprobar Solicitudes">
+									<tnt:NavigationListItem icon="" expanded="true" hasExpander="true" text="Aprobar Solicitudes" select="navToApprove">
 										<tnt:items/>
 									</tnt:NavigationListItem>
 								</tnt:items>

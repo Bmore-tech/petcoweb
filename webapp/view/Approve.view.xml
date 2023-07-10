@@ -1,22 +1,16 @@
-<mvc:View controllerName="com.bmore.portalproveedores.controller.Rejected"
-	xmlns="sap.uxap"
-	xmlns:m="sap.m"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:form="sap.ui.layout.form"
-	xmlns:layout="sap.ui.layout"
-	xmlns:core="sap.ui.core"
+<mvc:View controllerName="com.bmore.portalproveedores.controller.Approve" xmlns="sap.uxap" xmlns:m="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:core="sap.ui.core"
 	xmlns:upload="sap.m.upload" displayBlock="true" height="100%">
 	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
 		<headerTitle>
 			<ObjectPageDynamicHeaderTitle>
 				<expandedHeading>
-					<m:Title text="Rechazados" wrapping="true" />
+					<m:Title text="Aprobar" wrapping="true" />
 				</expandedHeading>
 				<navigationActions />
 				<actions>
-					<ObjectPageHeaderActionButton id="editBtn" text="Editar" type="Ghost" hideText="false" icon="sap-icon://edit" iconFirst="true" press="activateEdit" />
-					<ObjectPageHeaderActionButton enabled="false" id="sendBtn" text="Enviar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="sendInvoice" />
-					<ObjectPageHeaderActionButton enabled="false" id="saveBtn" text="Guardar" type="Attention" hideText="false" icon="sap-icon://save" iconFirst="true" press="saveInvoice" />
+					<ObjectPageHeaderActionButton text="Aceptar" type="Accept" hideText="false" icon="sap-icon://accept" iconFirst="true" press="ApproveInvoice" />
+					<ObjectPageHeaderActionButton text="Rechazar" type="Negative" hideText="false" icon="sap-icon://cancel" iconFirst="true" press="RejectInvoice" />
 				</actions>
 			</ObjectPageDynamicHeaderTitle>
 		</headerTitle>
