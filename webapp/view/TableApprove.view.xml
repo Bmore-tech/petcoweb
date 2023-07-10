@@ -21,7 +21,7 @@
                                 <OverflowToolbarButton text="Sort" type="Transparent" icon="sap-icon://sort" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onSortConcepts" />
                             </content>
                         </OverflowToolbar>
-                    </headerToolbar> 
+                    </headerToolbar>
                     <columns>
                         <Column  >
                             <Text text="Id de solicitud"/>
@@ -35,6 +35,9 @@
                         <Column >
                             <Text text="Concepto en especifico"/>
                         </Column>
+                        <Column >
+                            <Text text="Id - Proveedor"/>
+                        </Column>
                     </columns>
                     <items>
                         <ColumnListItem type="Active" vAlign="Middle" press="handleRowClick">
@@ -43,6 +46,7 @@
                                 <Text text="{tbModel>creationDate}"/>
                                 <Text text="{tbModel>folio}"/>
                                 <Text text="{tbModel>generalConcept}"/>
+                                <Text text="{tbModel>providerId}"/>
                             </cells>
                         </ColumnListItem>
                     </items>
