@@ -92,7 +92,7 @@ export default class History extends BaseController {
 
 	}
 
-	public async onFilterConcepts(): void {
+	public async onFilterConcepts(): Promise<void> {
 
 		const searchConcept: string = this.byId("searchConcept").getValue();
 		const tableHelpConceps: UI5Element = this.byId("productsTable");
@@ -102,7 +102,7 @@ export default class History extends BaseController {
 		binding.filter([filter]);
 	}
 
-	public async onSortConcepts(): void {
+	public async onSortConcepts(): Promise<void> {
 
 		this.isDescendingConcepts = !this.isDescendingConcepts;
 
@@ -115,4 +115,16 @@ export default class History extends BaseController {
 		sorters.push(new Sorter("generalConcept", this.isDescendingConcepts));
 		binding.filter([filter]).sort(sorters);
 	}
+	public async handleRowClick(oEvent: Event): Promise<void> {
+		
+        const id: string = oEvent.getSource().getCells()[0].getText();
+
+        this.getRouter().navTo("HistoryDetails", { id: id });
+
+        if (sap.ui.getCore().byId('__component0---HistoryDetails')) {
+            this.ReceptionController = sap.ui.getCore().byId('__component0---HistoryDetails').getController();
+            await this.ReceptionController.loadDetails();
+        }
+
+    }
 }

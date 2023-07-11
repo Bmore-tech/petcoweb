@@ -110,6 +110,13 @@
           ]
         },
         {
+          "name": "HistoryDetails",
+          "pattern": "History/{id}",
+          "target": [
+            "HistoryDetails"
+          ]
+        },
+        {
           "name": "TablePendings",
           "pattern": "Pending",
           "target": [
@@ -209,6 +216,11 @@
           "viewType": "XML",
           "viewId": "History",
           "viewName": "History"
+        },
+        "HistoryDetails":{
+          "viewType": "XML",
+          "viewId": "HistoryDetails",
+          "viewName": "HistoryDetails"
         },
         "TablePendings":{
           "viewType": "XML",

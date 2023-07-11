@@ -19,7 +19,7 @@
 								</content>
 							</OverflowToolbar>
 						</headerToolbar> 
-						<columns>
+						<columns >
 							<Column width="12em">
 								<Text text="Id de solicitud" />
 							</Column>
@@ -46,7 +46,7 @@
 							</Column>
 						</columns>
 						<items>
-							<ColumnListItem>
+							<ColumnListItem type="Active" press="handleRowClick">
 								<cells>
 									<ObjectIdentifier title="{Name}" text="{historyModel>invoiceId}" />
 									<Text text="{historyModel>providerId}" />
