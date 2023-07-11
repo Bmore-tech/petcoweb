@@ -33,7 +33,7 @@ export const saveDrafInvoiceService = async (invoice: Invoice, filesData: Array<
 			}
 		);
 
-		if (invoiceDataResponse.status == 201) {
+		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			response = await invoiceDataResponse.json();
 			showMsgStrip(`Los datos de la factura ${response.invoiceId} fueron guardados con exito.`, MessageStripType.SUCCESS);
 		} else {
@@ -76,7 +76,7 @@ export const sendInvoiceService = async (invoice: Invoice, filesData: Array<File
 			}
 		);
 
-		if (invoiceDataResponse.status == 201) {
+		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			response = await invoiceDataResponse.json();
 			showMsgStrip(`Los datos de la factura ${response.invoiceId} fueron enviados con exito.`, MessageStripType.SUCCESS);
 		} else {
@@ -226,12 +226,11 @@ export const preapproveInvoiceService = async (invoice: InvoiceToApprove)
 			}
 		);
 
-		if (invoiceDataResponse.status == 200) {
-			response = await invoiceDataResponse;
+		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron prevalidados con exito.`, MessageStripType.SUCCESS);
+			response = await invoiceDataResponse;
+			
 		} else {
-
-			console.log(invoiceDataResponse.status);
 			
 			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
 
@@ -268,9 +267,10 @@ export const cancelPreapproveInvoiceService = async (invoice: InvoiceToApprove)
 			}
 		);
 
-		if (invoiceDataResponse.status == 200) {
-			response = await invoiceDataResponse;
+		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron rechazados con exito.`, MessageStripType.SUCCESS);
+			response = await invoiceDataResponse;
+			
 		} else {
 
 			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
@@ -306,12 +306,11 @@ export const approveInvoiceService = async (invoice: InvoiceToApprove)
 			}
 		);
 
-		if (invoiceDataResponse.status == 200) {
-			response = await invoiceDataResponse.json();
+		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron aprobados con exito.`, MessageStripType.SUCCESS);
+			response = await invoiceDataResponse;
+			
 		} else {
-
-			console.log(invoiceDataResponse.status);
 			
 			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
 
@@ -345,10 +344,11 @@ export const cancelApproveInvoiceService = async (invoice: InvoiceToApprove)
 				}
 			}
 		);
-
-		if (invoiceDataResponse.status == 200) {
-			response = await invoiceDataResponse;
+			
+		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron rechazados con exito.`, MessageStripType.SUCCESS);
+			response = await invoiceDataResponse;
+			
 		} else {
 
 			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;

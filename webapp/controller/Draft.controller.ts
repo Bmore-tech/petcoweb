@@ -709,7 +709,7 @@ export default class Draft extends BaseController {
 
 		let comments: string = "";
 		invoiceDataResponse.comments.forEach(element => {
-			comments += element.comment
+			element.comment != "" ? comments += element.comment + '\n' : ""
 		})
 		// Clear components view
 		this.byId("folio").setValue(invoiceDataResponse.folio);

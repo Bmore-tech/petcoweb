@@ -33,6 +33,7 @@ import ListItemBase from "sap/m/ListItemBase";
 import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
 import { InvoiceStatus } from "../model/InvoiceStatus";
+import { getDocument } from "../service/Document.service";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -707,7 +708,7 @@ export default class Rejected extends BaseController {
 
 		let comments: string = "";
 		invoiceDataResponse.comments.forEach(element => {
-			comments += element.comment
+			element.comment != "" ? comments += element.comment + '\n' : ""
 		})
 		// Clear components view
 		this.byId("folio").setValue(invoiceDataResponse.folio);

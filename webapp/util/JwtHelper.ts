@@ -100,8 +100,9 @@ export const validatedRoleProvider = async (): boolean => {
 
 		await decodeJWT(token);
 		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.oData.payload;
+
 		const roleUser: boolean =
-			payload.roles.find((role: string): boolean => Roles[role] === Roles.PROVIDER_ROLE)
+			payload.roles.find((role: string): boolean => ((Roles[role] === Roles.PROVIDER_ROLE) || (Roles[role] === Roles.ADMINGROUP)))
 				=== undefined ? false : true;
 		// .find( );
 		return roleUser;
