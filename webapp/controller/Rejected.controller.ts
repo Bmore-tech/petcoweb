@@ -32,6 +32,7 @@ import Table from "sap/m/Table";
 import ListItemBase from "sap/m/ListItemBase";
 import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
+import { InvoiceStatus } from "../model/InvoiceStatus";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -765,7 +766,11 @@ export default class Rejected extends BaseController {
 		};
 		const response: InvoiceResponse = await getInvoiceByIdService(invoice);
 		if (response !== null) {
-			this.fillAllInputs(response);
+			if (response.status === InvoiceStatus.REJECTED)
+				this.fillAllInputs(response);
+			else
+				await this.AppController.navTo_home();
+
 		}
 		BusyIndicator.hide();
 	}

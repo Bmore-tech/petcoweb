@@ -21,7 +21,7 @@ export const SOLICITUD_SERVICES : object = {
 	invoiceHistory: "/invoice/history",
 	getDocument: "/document",
 	prevalidateInvoice: "/invoice/sendPrevalidator",
-	cancelPrevalidator: "invoice/cancelPrevalidator",
+	cancelPrevalidator: "/invoice/cancelPrevalidator",
 	approveInvoice: "/invoice/sendApprover",
-	cancelApprove: "invoice/cancelApprover"
+	cancelApprove: "/invoice/cancelApprover"
 }

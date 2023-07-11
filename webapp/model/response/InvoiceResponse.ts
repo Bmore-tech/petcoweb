@@ -3,12 +3,12 @@ export interface InvoiceResponse {
     applicationId:  number;
     apportionments: Apportionment[];
     comments:       Comment[];
-    concept:        string; // lo regresa null
+    concept:        string; 
     conceptId:      number;
     documents:      Document[];
     folio:          string;
     generalConcept: string;
-	//status // para validar que si es del status donde se trae la pantalla
+	status:         string;
 }
 
 export interface Apportionment {

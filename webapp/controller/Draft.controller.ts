@@ -33,6 +33,7 @@ import ListItemBase from "sap/m/ListItemBase";
 import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
 import { getDocument } from "../service/Document.service";
+import { InvoiceStatus } from "../model/InvoiceStatus";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -386,11 +387,11 @@ export default class Draft extends BaseController {
 			uuid: this.uuid
 		}
 		// if (!this.uuidExist) {
-			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
+		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
 
-			if (invoiceResponse != null) {
-				await this.AppController.navTo_home();
-			}
+		if (invoiceResponse != null) {
+			await this.AppController.navTo_home();
+		}
 		// }
 		// else {
 		// 	await validatedErrorResponse(1000, null,
@@ -691,7 +692,7 @@ export default class Draft extends BaseController {
 	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
 		// Clear state
-		if(this.canEdit)
+		if (this.canEdit)
 			this.activateEdit();
 		this.canEdit = false;
 		this.invoiceId = invoiceDataResponse.applicationId;
@@ -767,7 +768,11 @@ export default class Draft extends BaseController {
 		};
 		const response: InvoiceResponse = await getInvoiceByIdService(invoice);
 		if (response !== null) {
-			this.fillAllInputs(response);
+			if (response.status === InvoiceStatus.DRAFT)
+				this.fillAllInputs(response);
+			else
+				await this.AppController.navTo_home();
+
 		}
 		BusyIndicator.hide();
 	}

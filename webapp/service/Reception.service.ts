@@ -261,7 +261,9 @@ export const cancelPreapproveInvoiceService = async (invoice: InvoiceToApprove)
 				body: JSON.stringify(invoice),
 				headers: {
 					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${jwt}`
+					'Authorization': `Bearer ${jwt}`,
+					'Access-Control-Allow-Origin':'*',
+					'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'
 				}
 			}
 		);
