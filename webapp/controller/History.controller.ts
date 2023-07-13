@@ -11,6 +11,7 @@ import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
 import { InvoiceStatus } from "../model/InvoiceStatus";
 import Sorter from "sap/ui/model/Sorter";
+import IconTabSeparator from "sap/m/IconTabSeparator";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -29,30 +30,23 @@ export default class History extends BaseController {
 		const subsidiaryData: historyDto[] = await this.loadHistory();
 		BusyIndicator.hide();
 
-		let model: JSONModel = new sap.ui.model.json.JSONModel();
 		const isProvider: boolean = await validatedRoleProvider();
-		let all:Number = subsidiaryData.length;
-		let aprobadas:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.APPROVED).length;
-		let enProgreso:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.IN_PROGRESS).length;
-		let borradores:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.DRAFT).length;
-		let rechazadas:Number = subsidiaryData.filter(a => a.status == InvoiceStatus.REJECTED).length;
-
-		model.setData(
-			{
-				filter: [
-					{}, {},
-					{ icon: "sap-icon://multiselect-all", iconColor: "Default", count: all, text: 'Todos', key: "all", visible: true },
-					{ icon: "sap-icon://message-success", iconColor: "Positive", count: aprobadas, text: 'Aprobadas', key: "ok", visible: true },
-					{ icon: "sap-icon://begin", iconColor: "Critical", count: enProgreso, text: 'En progreso', key: "process", visible: true },
-					{ icon: "sap-icon://sap-box", iconColor: "Neutral", count: borradores, text: 'Borradores', key: "draft", visible: isProvider },
-					{ icon: "sap-icon://error", iconColor: "Negative", count: rechazadas, text: 'Rechazadas', key: "rejected", visible: true }
-				]
-			});
+		let all: Number = subsidiaryData.length;
+		let aprobadas: Number = subsidiaryData.filter(a => a.status == InvoiceStatus.APPROVED).length;
+		let enProgreso: Number = subsidiaryData.filter(a => a.status == InvoiceStatus.IN_PROGRESS).length;
+		let borradores: Number = subsidiaryData.filter(a => a.status == InvoiceStatus.DRAFT).length;
+		let rechazadas: Number = subsidiaryData.filter(a => a.status == InvoiceStatus.REJECTED).length;
 
 		const iconTabBar: UI5Element = this.byId("idIconTabBar");
-		// var items:JSONModel = model.getProperty("/filter");
-		iconTabBar.setModel(model, "itbModel");
-		await iconTabBar.bindAggregation("items", "itbModel>/filter", new IconTabFilter({ icon: "{itbModel>icon}", iconColor: "{itbModel>iconColor}", count: "{itbModel>count}", text: "{itbModel>text}", key: "{itbModel>key}", visible: "{itbModel>visible}" }));
+		iconTabBar.destroyItems();
+
+		iconTabBar.addItem(new IconTabFilter({ showAll: true, text: "Solicitudes", key: "all" }));
+		iconTabBar.addItem(new IconTabSeparator());
+		iconTabBar.addItem(new IconTabFilter({ icon: "sap-icon://multiselect-all", iconColor: "Default", count: all, text: 'Todos', key: "all", visible: true }));
+		iconTabBar.addItem(new IconTabFilter({ icon: "sap-icon://message-success", iconColor: "Positive", count: aprobadas, text: 'Aprobadas', key: "ok", visible: true }));
+		iconTabBar.addItem(new IconTabFilter({ icon: "sap-icon://begin", iconColor: "Critical", count: enProgreso, text: 'En progreso', key: "process", visible: true }));
+		iconTabBar.addItem(new IconTabFilter({ icon: "sap-icon://sap-box", iconColor: "Neutral", count: borradores, text: 'Borradores', key: "draft", visible: isProvider }));
+		iconTabBar.addItem(new IconTabFilter({ icon: "sap-icon://error", iconColor: "Negative", count: rechazadas, text: 'Rechazadas', key: "rejected", visible: true }));
 	}
 	public async loadHistory(): Promise<historyDto[]> {
 
@@ -64,7 +58,7 @@ export default class History extends BaseController {
 
 		return subsidiaryData;
 	}
-	public async onFilterSelect(oEvent:any): Promise<void> {
+	public async onFilterSelect(oEvent: any): Promise<void> {
 
 		let oBinding: Binding = this.byId("productsTable").getBinding("items"),
 			sKey: String = oEvent.getParameter("key");
@@ -72,23 +66,23 @@ export default class History extends BaseController {
 		if (sKey === "all") {
 			oBinding.filter();
 		} else if (sKey === "ok") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.APPROVED) ;
+			var aFilter: Filter = new Filter("status", FilterOperator.Contains, InvoiceStatus.APPROVED);
 			oBinding.filter([aFilter]);
 		} else if (sKey === "process") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.IN_PROGRESS) ;
+			var aFilter: Filter = new Filter("status", FilterOperator.Contains, InvoiceStatus.IN_PROGRESS);
 			oBinding.filter([aFilter]);
-		}else if (sKey === "draft") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.DRAFT) ;
+		} else if (sKey === "draft") {
+			var aFilter: Filter = new Filter("status", FilterOperator.Contains, InvoiceStatus.DRAFT);
 			oBinding.filter([aFilter]);
-		}else if (sKey === "rejected") {
-			var aFilter:Filter = new Filter( "status", FilterOperator.Contains, InvoiceStatus.REJECTED) ;
+		} else if (sKey === "rejected") {
+			var aFilter: Filter = new Filter("status", FilterOperator.Contains, InvoiceStatus.REJECTED);
 			oBinding.filter([aFilter]);
 		}
-		else{
+		else {
 			oBinding.filter();
 		}
 
-		
+
 
 	}
 
@@ -116,15 +110,15 @@ export default class History extends BaseController {
 		binding.filter([filter]).sort(sorters);
 	}
 	public async handleRowClick(oEvent: Event): Promise<void> {
-		
-        const id: string = oEvent.getSource().getCells()[0].getText();
 
-        this.getRouter().navTo("HistoryDetails", { id: id });
+		const id: string = oEvent.getSource().getCells()[0].getText();
 
-        if (sap.ui.getCore().byId('__component0---HistoryDetails')) {
-            this.ReceptionController = sap.ui.getCore().byId('__component0---HistoryDetails').getController();
-            await this.ReceptionController.loadDetails();
-        }
+		this.getRouter().navTo("HistoryDetails", { id: id });
 
-    }
+		if (sap.ui.getCore().byId('__component0---HistoryDetails')) {
+			this.ReceptionController = sap.ui.getCore().byId('__component0---HistoryDetails').getController();
+			await this.ReceptionController.loadDetails();
+		}
+
+	}
 }

@@ -31,7 +31,7 @@ export default class App extends BaseController {
 		});
 		sap.ui.getCore().setModel(model, "coreModel");
 	}
-	public async home_navbar(): void {
+	public async home_navbar(): Promise<void> {
 
 		await validatedRoles();
 		this.byId("avatar").setVisible(true);
@@ -39,7 +39,7 @@ export default class App extends BaseController {
 		this.byId("shell_bar_app").setShowNavButton(false);
 		this.byId("navbar").setVisible(true);
 	}
-	public async handlePopoverPress(oEvent): void {
+	public async handlePopoverPress(oEvent:Event): Promise<void> {
 
 		const jwtEncode : string = await getJWT();
 		await decodeJWT(jwtEncode);
@@ -69,7 +69,19 @@ export default class App extends BaseController {
 			"__component0---main",
 			"__component0---Conceps",
 			"__component0---Subsidiary",
-			"__component0---Reception"
+			"__component0---Reception",
+			"__component0---History",
+			"__component0---TablePendings",
+			"__component0---TableDrafts",
+			"__component0---TableRejecteds",
+			"__component0---TablePreapprove",
+			"__component0---TableApprove",
+			"__component0---Preapprove",
+			"__component0---Approve",
+			"__component0---Draft",
+			"__component0---Pending",
+			"__component0---Rejected",
+			"__component0---HistoryDetails"
 		];
 
 		views.forEach((view: string): void => {
@@ -81,8 +93,9 @@ export default class App extends BaseController {
 
 		localStorage.removeItem("sessionData");
 		this.getRouter().navTo("TargetLogin");
+		window.location.href = "/index.html#"
 	}
-	public async navto_reception(): void {
+	public async navto_reception(): Promise<void> {
 		this.getRouter().navTo("Reception");
 		
 		if(sap.ui.getCore().byId('__component0---Reception')){
@@ -91,32 +104,70 @@ export default class App extends BaseController {
 		}
 		
 	}
-	public async navTo_home(): void {
+	public async navTo_home(): Promise<void> {
+
 		this.getRouter().navTo("Main");
+		if(sap.ui.getCore().byId('__component0---main')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---main').getController();
+			await this.ReceptionController.onInit();
+		}
+		
 	}
-	public navToSubsidiary(): void {
+	public async navToSubsidiary(): Promise<void> {
 		this.getRouter().navTo("Subsidiary");
+		if(sap.ui.getCore().byId('__component0---Subsidiary')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---Subsidiary').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
-	public navToConcepts(): void {
+	public async navToConcepts(): Promise<void> {
 		this.getRouter().navTo("Concepts");
+		if(sap.ui.getCore().byId('__component0---Conceps')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---Conceps').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
-	public navToHistory(): void {
+	public async navToHistory(): Promise<void> {
 		this.getRouter().navTo("History");
+		if(sap.ui.getCore().byId('__component0---History')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---History').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
-	public navToPending(): void {
+	public async navToPending(): Promise<void> {
 		this.getRouter().navTo("TablePendings");
+		if(sap.ui.getCore().byId('__component0---TablePendings')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---TablePendings').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
-	public navToDraft(): void {
+	public async navToDraft(): Promise<void> {
 		this.getRouter().navTo("TableDrafts");
+		if(sap.ui.getCore().byId('__component0---TableDrafts')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---TableDrafts').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
-	public navToRejected(): void {
+	public async navToRejected(): Promise<void> {
 		this.getRouter().navTo("TableRejecteds");
+		if(sap.ui.getCore().byId('__component0---TableRejecteds')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---TableRejecteds').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
-	public navToPreapprove(): void {
+	public async navToPreapprove(): Promise<void> {
 		this.getRouter().navTo("TablePreapprove");
+		if(sap.ui.getCore().byId('__component0---TablePreapprove')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---TablePreapprove').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
-	public navToApprove(): void {
+	public async navToApprove(): Promise<void> {
 		this.getRouter().navTo("TableApprove");
+		if(sap.ui.getCore().byId('__component0---TableApprove')){
+			this.ReceptionController = sap.ui.getCore().byId('__component0---TableApprove').getController();
+			await this.ReceptionController.onInit();
+		}
 	}
 
 }

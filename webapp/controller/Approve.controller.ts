@@ -38,6 +38,8 @@ import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
 import { getDocument } from "../service/Document.service";
 import { InvoiceStatus } from "../model/InvoiceStatus";
+import { MessageStripType } from "../model/MessageStripType";
+import { showMsgStrip } from "../component/MessageStrip.component";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -546,6 +548,10 @@ export default class Approve extends BaseController {
 		const invoiceResponse: InvoiceResponse = await approveInvoiceService(invoice);
 		if (invoiceResponse != null) {
 			await this.AppController.navTo_home();
+			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron aprobados con exito.`, MessageStripType.SUCCESS);
+		} else {
+			await validatedErrorResponse(1000, null,
+				"Error en el servicio al enviar la factura.");
 		}
 		BusyIndicator.hide();
 	}
@@ -564,6 +570,10 @@ export default class Approve extends BaseController {
 		const invoiceResponse: InvoiceResponse = await cancelApproveInvoiceService(invoice);
 		if (invoiceResponse != null) {
 			await this.AppController.navTo_home();
+			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron rechazados con exito.`, MessageStripType.SUCCESS);
+		} else {
+			await validatedErrorResponse(1000, null,
+				"Error en el servicio al enviar la factura.");
 		}
 		BusyIndicator.hide();
 

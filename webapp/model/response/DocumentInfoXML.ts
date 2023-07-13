@@ -3,4 +3,8 @@ export interface DocumentInfoXML {
 	uuid:  string;
 	amount: Number;
 	existeUuid: boolean;
+	amount: Number;
+	existeUuid: boolean;
+	amount: Number;
+	existeUuid: boolean;
 }

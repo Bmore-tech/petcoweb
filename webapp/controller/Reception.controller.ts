@@ -28,6 +28,8 @@ import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/Docu
 import { validatedErrorResponse } from "../util/Util";
 import UploadSetItem from "sap/m/upload/UploadSetItem";
 import UploadSet from "sap/m/upload/UploadSet";
+import { showMsgStrip } from "../component/MessageStrip.component";
+import { MessageStripType } from "../model/MessageStripType";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -380,11 +382,15 @@ export default class Reception extends BaseController {
 			uuid: this.uuid
 		}
 		// if (!this.uuidExist) {
-			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
+		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
 
-			if (invoiceResponse != null) {
-				await this.AppController.navTo_home();
-			}
+		if (invoiceResponse != null) {
+			await this.AppController.navTo_home();
+			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+		} else {
+			await validatedErrorResponse(1000, null,
+				"Error en el servicio al enviar la factura.");
+		}
 		// }
 		// else {
 		// 	await validatedErrorResponse(1000, null,
@@ -519,11 +525,15 @@ export default class Reception extends BaseController {
 		}
 
 		// if (!this.uuidExist) {
-			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
+		const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
 
-			if (invoiceResponse != null) {
-				await this.AppController.navTo_home();
-			}
+		if (invoiceResponse != null) {
+			await this.AppController.navTo_home();
+			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron guardados con exito.`, MessageStripType.SUCCESS);
+		} else {
+			await validatedErrorResponse(1000, null,
+				"Error en el servicio al guardar la factura.");
+		}
 		// }
 		// else {
 		// 	await validatedErrorResponse(1000, null,

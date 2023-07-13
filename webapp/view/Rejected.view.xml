@@ -6,7 +6,7 @@
 	xmlns:layout="sap.ui.layout"
 	xmlns:core="sap.ui.core"
 	xmlns:upload="sap.m.upload" displayBlock="true" height="100%">
-	<ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="false" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="true" headerContentPinnable="true" isChildPage="true" upperCaseAnchorBar="false">
+	<ObjectPageLayout id="ObjectPageLayout" headerContentPinnable="false" >
 		<headerTitle>
 			<ObjectPageDynamicHeaderTitle>
 				<expandedHeading>

@@ -4,10 +4,7 @@
 	<Page showHeader="false">
 		<content>
 			<IconTabBar id="idIconTabBar" select=".onFilterSelect" class="sapUiResponsiveContentPadding">
-				<items>
-					<IconTabFilter showAll="true" text="Solicitudes" key="all" />
-					<IconTabSeparator />
-				</items>
+				
 				<content>
 					<Table id="productsTable" inset="false" showSeparators="Inner" headerText="Solicitudes" items="{historyModel>/}">
 						<headerToolbar>

@@ -7,7 +7,6 @@ import MessageStrip from "sap/m/MessageStrip";
 const oInvisibleMessage = InvisibleMessage.getInstance();
 
 export const showMsgStrip = async (mesaage : string, type: string): Promise<void> => {
-
 	await closeMsgStrip();
     await generateMsgStrip(mesaage, type);
 }
@@ -29,7 +28,6 @@ const generateMsgStrip = async (mesaage : string, type: string): Promise<void> =
         showIcon: true,
         type
     });
-
     oInvisibleMessage.announce("New Information Bar of type " + sType + " " + mesaage, InvisibleMessageMode.Assertive);
 	containerMessage.addItem(oMessageStrip);
 	containerMessage.setVisible(true);

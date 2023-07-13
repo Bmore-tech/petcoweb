@@ -15,8 +15,8 @@
 								<items>
 									<Image src="./images/Petco_Logo.png" height="auto" width="200px" visible="true" densityAware="false" class="sapUiLargeMarginTop sapUiTinyMarginBottom" />
 									<Title text="Portal de proveedores" titleStyle="H2" width="auto" textAlign="Begin" visible="true" wrapping="false" class="sapUiTinyMarginBottom sapUiLargeMarginBegin sapUiLargeMarginEnd" />
-									<Input id="user" placeholder="Usuario" type="Text" showValueHelp="false" valueHelpOnly="false" />
-									<Input id="pass" placeholder="Contraseña" type="Password" showValueHelp="false" valueHelpOnly="false" />
+									<Input id="user" placeholder="Usuario" type="Text" showValueHelp="false" valueHelpOnly="false"  submit="enter" />
+									<Input id="pass" placeholder="Contraseña" type="Password" showValueHelp="false" valueHelpOnly="false"  submit="enter"/>
                   <Button text="Iniciar sesión" type="Emphasized" width="auto" enabled="true" visible="true" press="onLogin" />
 								</items>
 								<layoutData />

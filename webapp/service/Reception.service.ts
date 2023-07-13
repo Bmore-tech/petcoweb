@@ -35,13 +35,7 @@ export const saveDrafInvoiceService = async (invoice: Invoice, filesData: Array<
 
 		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			response = await invoiceDataResponse.json();
-			showMsgStrip(`Los datos de la factura ${response.invoiceId} fueron guardados con exito.`, MessageStripType.SUCCESS);
-		} else {
-
-			const invoiceResponseError: ErrorResponse = await invoiceDataResponse.json();
-
-			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
-				"Error en el servicio al guardar la factura.");
+			
 		}
 
 	} catch (e) {
@@ -78,13 +72,6 @@ export const sendInvoiceService = async (invoice: Invoice, filesData: Array<File
 
 		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			response = await invoiceDataResponse.json();
-			showMsgStrip(`Los datos de la factura ${response.invoiceId} fueron enviados con exito.`, MessageStripType.SUCCESS);
-		} else {
-
-			const invoiceResponseError: ErrorResponse = await invoiceDataResponse.json();
-
-			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
-				"Error en el servicio al enviar la factura.");
 		}
 
 	} catch (e) {
@@ -214,7 +201,7 @@ export const preapproveInvoiceService = async (invoice: InvoiceToApprove)
 	try {
 
 		const jwt: string = await getJWT();
-		const invoiceDataResponse: Response = await fetch(
+		await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.prevalidateInvoice}`,
 			{
 				method: 'POST',
@@ -224,22 +211,12 @@ export const preapproveInvoiceService = async (invoice: InvoiceToApprove)
 					'Authorization': `Bearer ${jwt}`
 				}
 			}
-		);
-
-		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
-			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron prevalidados con exito.`, MessageStripType.SUCCESS);
-			response = await invoiceDataResponse;
-			
-		} else {
-			
-			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
-
-			await validatedErrorResponse(invoiceDataResponse.status,invoiceResponseError ,
-				"Error en el servicio al enviar la factura.");
-		}
+		).then((data) => {
+			response = {status: data.status};
+		})
 
 	} catch (e) {
-		
+
 		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
 	}
 
@@ -253,7 +230,7 @@ export const cancelPreapproveInvoiceService = async (invoice: InvoiceToApprove)
 	try {
 
 		const jwt: string = await getJWT();
-		const invoiceDataResponse: Response = await fetch(
+		await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.cancelPrevalidator}`,
 			{
 				method: 'POST',
@@ -261,31 +238,19 @@ export const cancelPreapproveInvoiceService = async (invoice: InvoiceToApprove)
 				headers: {
 					'Content-Type': 'application/json',
 					'Authorization': `Bearer ${jwt}`,
-					'Access-Control-Allow-Origin':'*',
-					'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
 				}
 			}
-		);
-
-		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
-			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron rechazados con exito.`, MessageStripType.SUCCESS);
-			response = await invoiceDataResponse;
-			
-		} else {
-
-			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
-
-			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
-				"Error en el servicio al enviar la factura.");
-		}
-
+		).then( data => {
+			response = {status: data.status};
+		})
 	} catch (e) {
 		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
 	}
 
 	return response;
 }
-
 export const approveInvoiceService = async (invoice: InvoiceToApprove)
 	: Promise<InvoiceResponse> => {
 
@@ -294,7 +259,7 @@ export const approveInvoiceService = async (invoice: InvoiceToApprove)
 	try {
 
 		const jwt: string = await getJWT();
-		const invoiceDataResponse: Response = await fetch(
+		await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.approveInvoice}`,
 			{
 				method: 'POST',
@@ -304,22 +269,12 @@ export const approveInvoiceService = async (invoice: InvoiceToApprove)
 					'Authorization': `Bearer ${jwt}`
 				}
 			}
-		);
-
-		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
-			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron aprobados con exito.`, MessageStripType.SUCCESS);
-			response = await invoiceDataResponse;
-			
-		} else {
-			
-			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
-
-			await validatedErrorResponse(invoiceDataResponse.status,invoiceResponseError ,
-				"Error en el servicio al enviar la factura.");
-		}
+		).then(data => {
+			response = {status: data.status};
+		})
 
 	} catch (e) {
-		
+
 		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
 	}
 
@@ -333,7 +288,7 @@ export const cancelApproveInvoiceService = async (invoice: InvoiceToApprove)
 	try {
 
 		const jwt: string = await getJWT();
-		const invoiceDataResponse: Response = await fetch(
+		await fetch(
 			`${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.cancelApprove}`,
 			{
 				method: 'POST',
@@ -343,19 +298,9 @@ export const cancelApproveInvoiceService = async (invoice: InvoiceToApprove)
 					'Authorization': `Bearer ${jwt}`
 				}
 			}
-		);
-			
-		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
-			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron rechazados con exito.`, MessageStripType.SUCCESS);
-			response = await invoiceDataResponse;
-			
-		} else {
-
-			const invoiceResponseError: ErrorResponse = await invoiceDataResponse;
-
-			await validatedErrorResponse(invoiceDataResponse.status, invoiceResponseError,
-				"Error en el servicio al enviar la factura.");
-		}
+		).then(data => {
+			response = {status: data.status};
+		})
 
 	} catch (e) {
 		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);

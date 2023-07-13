@@ -34,6 +34,8 @@ import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
 import { getDocument } from "../service/Document.service";
 import { InvoiceStatus } from "../model/InvoiceStatus";
+import { showMsgStrip } from "../component/MessageStrip.component";
+import { MessageStripType } from "../model/MessageStripType";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -391,6 +393,10 @@ export default class Draft extends BaseController {
 
 		if (invoiceResponse != null) {
 			await this.AppController.navTo_home();
+			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+		} else {
+			await validatedErrorResponse(1000, null,
+				"Error en el servicio al enviar la factura.");
 		}
 		// }
 		// else {
@@ -530,6 +536,10 @@ export default class Draft extends BaseController {
 
 		if (invoiceResponse != null) {
 			await this.AppController.navTo_home();
+			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron guardados con exito.`, MessageStripType.SUCCESS);
+		} else {
+			await validatedErrorResponse(1000, null,
+				"Error en el servicio al guardar la factura.");
 		}
 		// }
 		// else {
