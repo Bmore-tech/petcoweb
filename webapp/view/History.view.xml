@@ -17,10 +17,10 @@
 							</OverflowToolbar>
 						</headerToolbar> 
 						<columns >
-							<Column width="12em">
+							<Column minScreenWidth="Desktop" demandPopin="true">
 								<Text text="Id de solicitud" />
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true">
+							<Column minScreenWidth="Desktop" demandPopin="true" >
 								<Text text="Id - Proveedor" />
 							</Column>
 							<Column minScreenWidth="Desktop" demandPopin="true" hAlign="End">
@@ -29,16 +29,16 @@
 							<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
 								<Text text="Monto" />
 							</Column>
-							<Column hAlign="End">
+							<Column hAlign="End" minScreenWidth="Desktop" demandPopin="true">
 								<Text text="Fecha de creación" />
 							</Column>
-							<Column hAlign="End">
+							<Column hAlign="End" minScreenWidth="Desktop" demandPopin="true">
 								<Text text="Concepto en especifico" />
 							</Column>
-							<Column hAlign="End">
+							<Column hAlign="End" minScreenWidth="Desktop" demandPopin="true">
 								<Text text="Última modificación" />
 							</Column>
-							<Column visible="true" hAlign="End">
+							<Column minScreenWidth="Desktop" demandPopin="true" visible="true" hAlign="End">
 								<Text text="Estatus" />
 							</Column>
 						</columns>

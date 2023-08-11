@@ -388,23 +388,23 @@ export default class Draft extends BaseController {
 			generalConcept: this.byId("generalConcept").getValue(),
 			uuid: this.uuid
 		}
-		// if (!this.uuidExist) {
-		const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
+		if (!this.uuidExist) {
+			const invoiceResponse: InvoiceResponse = await sendInvoiceService(invoice, this.filesData);
 
-		if (invoiceResponse != null) {
-			await this.AppController.navTo_home();
-			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
-		} else {
-			await validatedErrorResponse(1000, null,
-				"Error en el servicio al enviar la factura.");
+			if (invoiceResponse != null) {
+				await this.AppController.navTo_home();
+				showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+			} else {
+				await validatedErrorResponse(1000, null,
+					"Error en el servicio al enviar la factura.");
+			}
 		}
-		// }
-		// else {
-		// 	await validatedErrorResponse(1000, null,
-		// 		'La factura ya ha sido registrada en otro proceso.');
-		// 	BusyIndicator.hide();
-		// 	return;
-		// }
+		else {
+			await validatedErrorResponse(1000, null,
+				'La factura ya ha sido registrada en otro proceso.');
+			BusyIndicator.hide();
+			return;
+		}
 
 		BusyIndicator.hide();
 	}
@@ -531,23 +531,23 @@ export default class Draft extends BaseController {
 			uuid: this.uuid
 		}
 
-		// if (!this.uuidExist) {
-		const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
+		if (!this.uuidExist) {
+			const invoiceResponse: InvoiceResponse = await saveDrafInvoiceService(invoice, this.filesData);
 
-		if (invoiceResponse != null) {
-			await this.AppController.navTo_home();
-			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron guardados con exito.`, MessageStripType.SUCCESS);
-		} else {
-			await validatedErrorResponse(1000, null,
-				"Error en el servicio al guardar la factura.");
+			if (invoiceResponse != null) {
+				await this.AppController.navTo_home();
+				showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron guardados con exito.`, MessageStripType.SUCCESS);
+			} else {
+				await validatedErrorResponse(1000, null,
+					"Error en el servicio al guardar la factura.");
+			}
 		}
-		// }
-		// else {
-		// 	await validatedErrorResponse(1000, null,
-		// 		'La factura ya ha sido registrada en otro proceso.');
-		// 	BusyIndicator.hide();
-		// 	return;
-		// }
+		else {
+			await validatedErrorResponse(1000, null,
+				'La factura ya ha sido registrada en otro proceso.');
+			BusyIndicator.hide();
+			return;
+		}
 
 		BusyIndicator.hide();
 	}
@@ -592,15 +592,15 @@ export default class Draft extends BaseController {
 					await this.validatedXml(file);
 					await this.validatedXlsx(file);
 
-					// if (file.type == "text/xml") {
-					// 	if (this.uuidExist) {
-					// 		filesItems[0].destroy();
-					// 		await validatedErrorResponse(1000, null,
-					// 			'La factura ya ha sido registrada en otro proceso.');
-					// 		BusyIndicator.hide();
-					// 		return;
-					// 	}
-					// }
+					if (file.type == "text/xml") {
+						if (this.uuidExist) {
+							filesItems[0].destroy();
+							await validatedErrorResponse(1000, null,
+								'La factura ya ha sido registrada en otro proceso.');
+							BusyIndicator.hide();
+							return;
+						}
+					}
 					this.filesData.push(file);
 				}
 			});
