@@ -763,10 +763,12 @@ export default class Rejected extends BaseController {
 			uploadSetItem._setFileObject(file);
 			uploadFilesData.addItem(uploadSetItem);
 
-			this.validatedXml(file);
+			await this.validatedXml(file);
 			this.filesData.push(file);
 			this.filesArray.push(doc);
+			this.uuidExist = false;
 		})
+
 		uploadFilesData.setUploadEnabled(false);
 	}
 	public async loadDetails(): Promise<void> {

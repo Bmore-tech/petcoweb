@@ -38,6 +38,11 @@ export default class App extends BaseController {
 		this.byId("shell_bar_app").setShowMenuButton(false);
 		this.byId("shell_bar_app").setShowNavButton(false);
 		this.byId("navbar").setVisible(true);
+
+		let model: JSONModel = new JSONModel({
+			containerMessage : sap.ui.getCore().byId("__component0---app--stripContent")
+		});
+		sap.ui.getCore().setModel(model, "coreModel");
 	}
 	public async handlePopoverPress(oEvent:Event): Promise<void> {
 

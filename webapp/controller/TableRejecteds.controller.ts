@@ -33,7 +33,7 @@ export default class TableRejecteds extends BaseController {
     public async loadHistory(): Promise<historyDto[]> {
 
         const historyData: historyDto[] = await getHistoryByFilter(InvoiceStatus.REJECTED);
-
+        
         return historyData;
     }
 

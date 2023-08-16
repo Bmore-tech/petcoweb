@@ -268,7 +268,7 @@ export default class Draft extends BaseController {
 	}
 
 	public async sendInvoice(): Promise<void> {
-
+		
 		BusyIndicator.show(0);
 
 		// Check if there's a folio
@@ -763,10 +763,12 @@ export default class Draft extends BaseController {
 			uploadSetItem._setFileObject(file);
 			uploadFilesData.addItem(uploadSetItem);
 
-			this.validatedXml(file);
+			await this.validatedXml(file);
 			this.filesData.push(file);
 			this.filesArray.push(doc);
+			this.uuidExist = false;
 		})
+		
 		uploadFilesData.setUploadEnabled(false);
 	}
 	public async loadDetails(): Promise<void> {

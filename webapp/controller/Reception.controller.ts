@@ -386,7 +386,7 @@ export default class Reception extends BaseController {
 
 			if (invoiceResponse != null) {
 				await this.AppController.navTo_home();
-				showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron enviados con exito.`, MessageStripType.SUCCESS);
+				showMsgStrip(`Los datos de la factura fueron enviados con exito.`, MessageStripType.SUCCESS);
 			} else {
 				await validatedErrorResponse(1000, null,
 					"Error en el servicio al enviar la factura.");
@@ -529,7 +529,7 @@ export default class Reception extends BaseController {
 
 			if (invoiceResponse != null) {
 				await this.AppController.navTo_home();
-				showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron guardados con exito.`, MessageStripType.SUCCESS);
+				showMsgStrip(`Los datos de la factura fueron guardados con exito.`, MessageStripType.SUCCESS);
 			} else {
 				await validatedErrorResponse(1000, null,
 					"Error en el servicio al guardar la factura.");
