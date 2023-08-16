@@ -14,7 +14,7 @@ import ListItemBase from "sap/m/ListItemBase";
 /**
  * @namespace com.bmore.portalproveedores.controller
  */
-export default class TableRejecteds extends BaseController {
+export default class TableDrafts extends BaseController {
     private isDescendingConcepts: boolean = false;
     public async onAfterRendering(): Promise<void> {
         this.AppController = sap.ui.getCore().byId('__component0---app').getController();
