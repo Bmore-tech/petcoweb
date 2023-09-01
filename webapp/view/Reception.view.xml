@@ -129,7 +129,7 @@
                                         <m:cells>
                                             <layout:HorizontalLayout>
                                                 <layout:content>
-                                                    <m:Input value="{subsidiaryList>idSubsidiary}" editable="false" visible="false" />
+                                                    <m:Input value="{subsidiaryList>subsidiaryId}" editable="false" visible="false" />
                                                     <m:Input value="{subsidiaryList>subsidiary}" editable="false" />
                                                 </layout:content>
                                             </layout:HorizontalLayout>

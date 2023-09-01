@@ -10,7 +10,6 @@ import UI5Element from "sap/ui/core/Element";
 import MessageBox from "sap/m/MessageBox";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
-import Binding from "sap/ui/model/Binding";
 import Sorter from "sap/ui/model/Sorter";
 import BusyIndicator from "sap/ui/core/BusyIndicator";
 import {
@@ -18,26 +17,31 @@ import {
 	getInfoProrrateoXlsxService,
 	getInfoXmlService,
 	getInvoiceByIdService,
-	preapproveInvoiceService,
-	saveDrafInvoiceService,
-	sendInvoiceService
+	preapproveInvoiceService
 } from "com/bmore/portalproveedores/service/Reception.service";
 import { Invoice, InvoiceToApprove } from "com/bmore/portalproveedores/model/resquest/Invoice";
-import { Apportionment } from "com/bmore/portalproveedores/model/resquest/Apportionment";
 import { Comment } from "com/bmore/portalproveedores/model/resquest/Comment";
-import { Document, InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
+import { Apportionment, Document, InvoiceResponse } from "com/bmore/portalproveedores/model/response/InvoiceResponse";
 import { DocumentInfoXML } from "com/bmore/portalproveedores/model/response/DocumentInfoXML";
 import { validatedErrorResponse } from "../util/Util";
 import UploadSetItem from "sap/m/upload/UploadSetItem";
 import UploadSet from "sap/m/upload/UploadSet";
 import Table from "sap/m/Table";
 import ListItemBase from "sap/m/ListItemBase";
-import FileUploader from "sap/ui/unified/FileUploader";
 import HashChanger from "sap/ui/core/routing/HashChanger";
 import { getDocument } from "../service/Document.service";
 import { InvoiceStatus } from "../model/InvoiceStatus";
 import { showMsgStrip } from "../component/MessageStrip.component";
 import { MessageStripType } from "../model/MessageStripType";
+import SearchField from "sap/m/SearchField";
+import Control from "sap/ui/core/Control";
+import Event from "sap/ui/base/Event";
+import Text from "sap/m/Text";
+import Dialog from "sap/m/Dialog";
+import TextArea from "sap/m/TextArea";
+import Input from "sap/m/Input";
+import Button from "sap/m/Button";
+import ListBinding from "sap/ui/model/ListBinding";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -45,15 +49,15 @@ import { MessageStripType } from "../model/MessageStripType";
 export default class Preapprove extends BaseController {
 
 	private invoiceId: number = 0;
-	private subsidiaryList: Array<object> = [];
+	private subsidiaryList: Array<Apportionment> = [];
 	private filesData: Array<File> = [];
 	private isDescendingConcepts: boolean = false;
 	private isDescendingSubsidiaries: boolean = false;
 	private uuid: string = "";
 	private uuidExist: boolean = false;
-
+	private AppController: any;
 	public async onAfterRendering(): Promise<void> {
-		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
+		this.AppController = (sap.ui.getCore().byId('__component0---app') as View).getController();
 		await this.AppController.home_navbar();
 		this.disableAllInputs();
 	}
@@ -61,16 +65,16 @@ export default class Preapprove extends BaseController {
 
 		await this.loadDetails();
 
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData") as UploadSet;
 		uploadFilesData.getDefaultFileUploader().setTooltip("");
 		uploadFilesData.getDefaultFileUploader().setIconOnly(false);
 		uploadFilesData.getDefaultFileUploader().setIconFirst(true);
 		uploadFilesData.getDefaultFileUploader().setIcon("sap-icon://attachment");
 	}
 
-	public async _onSelectSubsidiary(oEvent): Promise<void> {
+	public async _onSelectSubsidiary(): Promise<void> {
 
-		const tableHelpSubsidiaries: UI5Element = this.byId("tableHelpSubsidiaries");
+		const tableHelpSubsidiaries: Table = this.byId("tableHelpSubsidiaries") as Table;
 
 		if (tableHelpSubsidiaries.getSelectedItem() == null) {
 			MessageBox.information("Debes seleccionar una sucursal para continuar.");
@@ -82,9 +86,9 @@ export default class Preapprove extends BaseController {
 			if (items.length > 0) {
 
 				items.forEach((itemData): void => {
-					const item = itemData.getCells();
+					const item = (itemData as any).getCells();
 					this.subsidiaryList.push({
-						idSubsidiary: item[0].getValue(),
+						subsidiaryId: item[0].getValue(),
 						subsidiary: item[1].getValue(),
 						amount: 0
 					})
@@ -114,20 +118,20 @@ export default class Preapprove extends BaseController {
 
 		await this.displayHelp("subsidiaryHelp");
 
-		this.byId("searchSubsidiary").setValue("");
+		(this.byId("searchSubsidiary") as SearchField).setValue("");
 		this.isDescendingSubsidiaries = false
 
 		BusyIndicator.hide();
 	}
 
-	public async _onDeleteRowSubsidiary(oEvent): Promise<void> {
+	public async _onDeleteRowSubsidiary(oEvent: Event): Promise<void> {
 
-		const item = oEvent.getSource().getBindingContext("subsidiaryList").getObject();
-		let subsidiaryListFilter: Array<object> = [];
+		const item: Apportionment = (oEvent.getSource() as Control).getBindingContext("subsidiaryList").getObject() as Apportionment;
+		let subsidiaryListFilter: Array<Apportionment> = [];
 		if (this.subsidiaryList.length > 0) {
 
 			subsidiaryListFilter = this.subsidiaryList
-				.filter(subsidiary => parseInt(subsidiary.idSubsidiary) != parseInt(item.idSubsidiary));
+				.filter(subsidiary => subsidiary.subsidiaryId != item.subsidiaryId);
 		}
 
 		this.subsidiaryList = subsidiaryListFilter;
@@ -138,21 +142,21 @@ export default class Preapprove extends BaseController {
 		await this.sumAmount();
 	}
 
-	public async sumAmount(oEvent): Promise<void> {
+	public async sumAmount(oEvent?: Event): Promise<void> {
 
 		//  Obtner state para montos
 		let item = null;
 		let valueSubsidiaryIdFind = 0;
 
 		if (oEvent != null) {
-			item = oEvent.getSource().getBindingContext("subsidiaryList").getObject();
-			valueSubsidiaryIdFind = item.idSubsidiary;
+			item = (oEvent.getSource() as Control).getBindingContext("subsidiaryList").getObject() as SubsidiaryDto;
+			valueSubsidiaryIdFind = item.subsidiaryId;
 		}
 
 		let valueAmountUpdate: number = 0;
 
 		//  Obtener state para sumar cantidades por tienda
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		const tableSubsidiaries: Table = this.byId("tableSubsidiaries") as Table;
 		const subsidiaryListData: Array<object> = tableSubsidiaries.getItems();
 
 		let sum: number = 0;
@@ -160,9 +164,9 @@ export default class Preapprove extends BaseController {
 
 			subsidiaryListData.forEach((subsidiary: object): void => {
 
-				const cellSubsidiaryId = subsidiary.getCells()[0];
+				const cellSubsidiaryId = (subsidiary as any).getCells()[0];
 				const valueSubsidiaryId = cellSubsidiaryId.mAggregations.content[0].mProperties.value;
-				const cellAmount = subsidiary.getCells()[1];
+				const cellAmount = (subsidiary as any).getCells()[1];
 				const valueAmount = cellAmount.mAggregations.content[0].mProperties.value;
 
 				if (Number(valueSubsidiaryId) == Number(valueSubsidiaryIdFind)) {
@@ -174,29 +178,29 @@ export default class Preapprove extends BaseController {
 
 			// Actualizar state subsidiaryList
 			this.subsidiaryList
-				.map(async (subsidiary: object) => {
+				.map(async (subsidiary: Apportionment) => {
 
-					if (Number(subsidiary.idSubsidiary) == Number(valueSubsidiaryIdFind)) {
+					if (Number(subsidiary.subsidiaryId) == Number(valueSubsidiaryIdFind)) {
 						subsidiary.amount = valueAmountUpdate;
 					}
 					return subsidiary;
 				});
 		}
-		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
+		(this.byId("subsidiarySum") as Text).setText(`Subtotal prorrateo $${sum}`);
 	}
 
-	public async _onSelectConcept(oEvent): Promise<void> {
+	public async _onSelectConcept(oEvent: Event): Promise<void> {
 
-		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
+		const tableHelpConceps: Table = this.byId("tableHelpConceps") as Table;
 
 		if (tableHelpConceps.getSelectedItem() == null) {
 			MessageBox.information("Debes seleccionar un concepto para continuar.");
 		} else {
 
-			const item = tableHelpConceps.getSelectedItem().getCells();
+			const item = (tableHelpConceps.getSelectedItem() as any).getCells();
 
-			this.byId("conceptId").setValue(item[0].getText());
-			this.byId("concept").setValue(item[1].getText());
+			(this.byId("conceptId") as Input).setValue(item[0].getText());
+			(this.byId("concept") as Input).setValue(item[1].getText());
 
 			await this._onClose("conceptHelp");
 		}
@@ -214,7 +218,7 @@ export default class Preapprove extends BaseController {
 
 		await this.displayHelp("conceptHelp");
 
-		this.byId("searchConcept").setValue("");
+		(this.byId("searchConcept") as SearchField).setValue("");
 		this.isDescendingConcepts = false
 
 		BusyIndicator.hide();
@@ -222,10 +226,10 @@ export default class Preapprove extends BaseController {
 
 	public async onFilterConcepts(): Promise<void> {
 
-		const searchConcept: string = this.byId("searchConcept").getValue();
-		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
+		const searchConcept: string = (this.byId("searchConcept") as SearchField).getValue();
+		const tableHelpConceps: Table = this.byId("tableHelpConceps") as Table;
 		const filter: Filter = new Filter("concept", FilterOperator.Contains, searchConcept);
-		const binding: Binding = tableHelpConceps.getBinding("items");
+		const binding: ListBinding = tableHelpConceps.getBinding("items") as ListBinding;
 
 		binding.filter([filter]);
 	}
@@ -234,11 +238,11 @@ export default class Preapprove extends BaseController {
 
 		this.isDescendingConcepts = !this.isDescendingConcepts;
 
-		const searchConcept: string = this.byId("searchConcept").getValue();
-		const tableHelpConceps: UI5Element = this.byId("tableHelpConceps");
+		const searchConcept: string = (this.byId("searchConcept") as SearchField).getValue();
+		const tableHelpConceps: Table = this.byId("tableHelpConceps") as Table;
 		const filter: Filter = new Filter("concept", FilterOperator.Contains, searchConcept);
-		const binding = tableHelpConceps.getBinding("items");
-		let sorters: Array<string> = [];
+		const binding = tableHelpConceps.getBinding("items") as ListBinding;
+		let sorters: Sorter[] = [];
 
 		sorters.push(new Sorter("concept", this.isDescendingConcepts));
 		binding.filter([filter]).sort(sorters);
@@ -246,10 +250,10 @@ export default class Preapprove extends BaseController {
 
 	public async onFilterSubsidiaries(): Promise<void> {
 
-		const searchConcept: string = this.byId("searchSubsidiary").getValue();
+		const searchConcept: string = (this.byId("searchSubsidiary") as SearchField).getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpSubsidiaries");
 		const filter: Filter = new Filter("subsidiary", FilterOperator.Contains, searchConcept);
-		const binding: Binding = tableHelpConceps.getBinding("items");
+		const binding: ListBinding = tableHelpConceps.getBinding("items") as ListBinding;
 
 		binding.filter([filter]);
 
@@ -259,11 +263,11 @@ export default class Preapprove extends BaseController {
 
 		this.isDescendingSubsidiaries = !this.isDescendingSubsidiaries;
 
-		const searchConcept: string = this.byId("searchSubsidiary").getValue();
+		const searchConcept: string = (this.byId("searchSubsidiary") as SearchField).getValue();
 		const tableHelpConceps: UI5Element = this.byId("tableHelpSubsidiaries");
 		const filter: Filter = new Filter("subsidiary", FilterOperator.Contains, searchConcept);
-		const binding = tableHelpConceps.getBinding("items");
-		let sorters: Array<string> = [];
+		const binding = tableHelpConceps.getBinding("items") as ListBinding;
+		let sorters: Sorter[] = [];
 
 		sorters.push(new Sorter("subsidiary", this.isDescendingSubsidiaries));
 		binding.filter([filter]).sort(sorters);
@@ -271,11 +275,11 @@ export default class Preapprove extends BaseController {
 	public async uploadFiles(): Promise<void> {
 
 		this.filesData = [];
-		const uploadFilesData: UploadSet = this.byId("uploadFilesData");
-		const filesItems: UploadSetItem[] = uploadFilesData.getItems();
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData") as UploadSet;
+		const filesItems: any[] = uploadFilesData.getItems();
 		if (filesItems.length > 0) {
 			let error: boolean = false;
-			filesItems.forEach(async (item): void => {
+			filesItems.forEach(async (item): Promise<void> => {
 				if (!error) {
 
 					const file: File = item.getFileObject();
@@ -326,28 +330,31 @@ export default class Preapprove extends BaseController {
 
 	public async downloadFiles(): Promise<void> {
 
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		uploadFilesData.getItems().forEach(async (item): void => {
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData") as UploadSet;
+		uploadFilesData.getItems().forEach(async (item): Promise<void> => {
 			if (item.getListItem().getSelected()) {
-				const exportUrl: string = URL.createObjectURL(item.getFileObject());
-				const aElement = document.createElement('a');
-				aElement.href = exportUrl;
-				aElement.setAttribute('download', item.getFileObject().name)
-				aElement.setAttribute('target', '_blank');
-				aElement.click();
-				URL.revokeObjectURL(href);
+				try {
+					const exportUrl: string = URL.createObjectURL(item.getFileObject());
+					const aElement = document.createElement('a');
+					aElement.href = exportUrl;
+					aElement.setAttribute('download', (item.getFileObject() as File).name)
+					aElement.setAttribute('target', '_blank');
+					aElement.click();
+				} catch (e) {
+
+				}
+
 			}
 		});
 	}
 
 	public async validatedXml(file: File): Promise<void> {
-
-		if (file.type == "text/xml") {
+		if (file.type == "text/xml" || file.type == "xml") {
 			let documentInfoXML: DocumentInfoXML = await getInfoXmlService(file);
 
 			this.uuid = documentInfoXML.uuid;
-			this.byId("folio").setValue(documentInfoXML.folio);
-			this.byId("amount").setValue(documentInfoXML.amount);
+			(this.byId("folio") as Input).setValue(documentInfoXML.folio);
+			(this.byId("amount") as Input).setValue(documentInfoXML.amount.toString());
 			this.uuidExist = documentInfoXML.existeUuid;
 		}
 	}
@@ -356,7 +363,7 @@ export default class Preapprove extends BaseController {
 
 		const typeXlsx: string = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 		if (file.type == typeXlsx) {
-			let documentInfoXlsx: DocumentInfoXLSX = await getInfoProrrateoXlsxService(file);
+			let documentInfoXlsx: Apportionment[] = await getInfoProrrateoXlsxService(file) as Apportionment[];
 
 			this.subsidiaryList = [...documentInfoXlsx];
 
@@ -373,23 +380,23 @@ export default class Preapprove extends BaseController {
 		const oView: View = this.getView();
 		if (!this.byId(idViewHelp)) {
 
-			const oDialog: Control = await Fragment.load({
+			const oDialog: Dialog = await Fragment.load({
 				id: oView.getId(),
 				name: `com.bmore.portalproveedores.view.fragments.${idViewHelp}`,
 				controller: this
-			});
+			}) as Dialog;
 
 			await oView.addDependent(oDialog);
 			oDialog.open();
 			oDialog.addStyleClass("sapUiSizeCompact");
 
 		} else {
-			this.byId(idViewHelp).open();
-			this.byId(idViewHelp).addStyleClass("sapUiSizeCompact");
+			(this.byId(idViewHelp) as Dialog).open();
+			(this.byId(idViewHelp) as Dialog).addStyleClass("sapUiSizeCompact");
 		}
 	}
 	public _onClose(idViewHelp: string): void {
-		this.byId(idViewHelp).close();
+		(this.byId(idViewHelp) as Dialog).close();
 	}
 
 	public clear(): void {
@@ -403,18 +410,18 @@ export default class Preapprove extends BaseController {
 		this.isDescendingSubsidiaries = false;
 
 		// Clear components view
-		this.byId("folio").setValue("");
-		this.byId("amount").setValue("");
-		this.byId("conceptId").setValue("");
-		this.byId("concept").setValue("");
-		this.byId("generalConcept").setValue("");
-		this.byId("comment").setValue("");
-		this.byId("subsidiarySum").setText('Subtotal prorrateo $0');
+		(this.byId("folio") as Input).setValue("");
+		(this.byId("amount") as Input).setValue("");
+		(this.byId("conceptId") as Input).setValue("");
+		(this.byId("concept") as Input).setValue("");
+		(this.byId("generalConcept") as Input).setValue("");
+		(this.byId("comment") as TextArea).setValue("");
+		(this.byId("subsidiarySum") as Text).setText('Subtotal prorrateo $0');
 
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData") as UploadSet;
 		uploadFilesData.removeAllItems();
 
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		const tableSubsidiaries: Table = this.byId("tableSubsidiaries") as Table;
 		tableSubsidiaries.removeAllItems();
 	}
 	public disableAllInputs(): void {
@@ -428,23 +435,13 @@ export default class Preapprove extends BaseController {
 		this.isDescendingSubsidiaries = false;
 
 		// Clear components view
-		this.byId("folio").setEnabled(false);
-		this.byId("amount").setEnabled(false);
-		this.byId("conceptId").setEnabled(false);
-		this.byId("concept").setEnabled(false);
-		this.byId("generalConcept").setEnabled(false);
-		this.byId("HComment").setEnabled(false);
-		this.byId("loadSubsidiariesBtn").setEnabled(false);
-
-
-		// this.byId("subsidiarySum").setEnabled(false);
-
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
-		// uploadFilesData.removeAllItems();
-
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
-		// tableSubsidiaries.removeAllItems();
-
+		(this.byId("folio") as Input).setEnabled(false);
+		(this.byId("amount") as Input).setEnabled(false);
+		(this.byId("conceptId") as Input).setEnabled(false);
+		(this.byId("concept") as Input).setEnabled(false);
+		(this.byId("generalConcept") as Input).setEnabled(false);
+		(this.byId("HComment") as TextArea).setEnabled(false);
+		(this.byId("loadSubsidiariesBtn") as Button).setEnabled(false);
 	}
 	public async fillAllInputs(invoiceDataResponse: InvoiceResponse): Promise<void> {
 
@@ -455,24 +452,24 @@ export default class Preapprove extends BaseController {
 		this.filesData = [];
 		this.isDescendingConcepts = false;
 		this.isDescendingSubsidiaries = false;
-		const uploadFilesData: UI5Element = this.byId("uploadFilesData");
+		const uploadFilesData: UploadSet = this.byId("uploadFilesData") as UploadSet;
 		uploadFilesData.removeAllItems();
 
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		const tableSubsidiaries: Table = this.byId("tableSubsidiaries") as Table;
 		tableSubsidiaries.removeAllItems();
 
 		let comments: string = "";
-		invoiceDataResponse.comments.forEach(element => {
+		invoiceDataResponse.comments.forEach((element): void => {
 			element.comment != "" ? comments += element.comment + '\n' : ""
-		})
+		});
 		// Clear components view
-		this.byId("folio").setValue(invoiceDataResponse.folio);
-		this.byId("amount").setValue(invoiceDataResponse.amount);
-		this.byId("conceptId").setValue(invoiceDataResponse.conceptId);
-		this.byId("concept").setValue(invoiceDataResponse.concept);
-		this.byId("generalConcept").setValue(invoiceDataResponse.generalConcept);
+		(this.byId("folio") as Input).setValue(invoiceDataResponse.folio);
+		(this.byId("amount") as Input).setValue(invoiceDataResponse.amount.toString());
+		(this.byId("conceptId") as Input).setValue(invoiceDataResponse.conceptId.toString());
+		(this.byId("concept") as Input).setValue(invoiceDataResponse.concept);
+		(this.byId("generalConcept") as Input).setValue(invoiceDataResponse.generalConcept);
 
-		this.byId("HComment").setValue(comments);
+		(this.byId("HComment") as TextArea).setValue(comments);
 
 
 		let model: JSONModel = new JSONModel();
@@ -481,24 +478,21 @@ export default class Preapprove extends BaseController {
 			...this.subsidiaryList
 		}), "subsidiaryList")
 
-		let sum: number = 0;
 		const oItems: ListItemBase[] = tableSubsidiaries.getItems();
 		for (let i: number = 0; i < oItems.length; i++) {
 
-			let oCells = oItems[i].getCells();
+			let oCells = (oItems[i] as any).getCells();
 			let oHorizontalLayout0 = oCells[0];
 			let oInput0 = oHorizontalLayout0.getContent()[1];
 			let oHorizontalLayout1 = oCells[1];
 			let oInput1 = oHorizontalLayout1.getContent()[0];
-			sum = +oInput1.getValue();
 			let oHorizontalLayout2 = oCells[2];
 			let oInput2 = oHorizontalLayout2.getContent()[0];
 			oInput0.setEnabled(false);
 			oInput1.setEnabled(false);
 			oInput2.setEnabled(false);
+			await this.sumAmount();
 		}
-
-		this.byId("subsidiarySum").setText(`Subtotal prorrateo $${sum}`);
 
 		invoiceDataResponse.documents.forEach(async (doc): Promise<void> => {
 			const documentData: Document = await getDocument(doc);
@@ -507,7 +501,7 @@ export default class Preapprove extends BaseController {
 			uploadSetItem.setFileName(doc.fileName);
 			uploadSetItem.setEnabledEdit(false);
 			uploadSetItem.setEnabledRemove(false);
-			uploadSetItem._setFileObject(file);
+			(uploadSetItem as any)._setFileObject(file);
 			uploadFilesData.addItem(uploadSetItem);
 			this.filesData.push(file);
 		})
@@ -517,10 +511,17 @@ export default class Preapprove extends BaseController {
 	}
 	public async loadDetails(): Promise<void> {
 		BusyIndicator.show(0);
-		const oHashChanger: HashChanger = sap.ui.core.routing.HashChanger.getInstance();
+		const oHashChanger: HashChanger = HashChanger.getInstance();
 		const sId: string = oHashChanger.getHash().split("/")[1];
 		let invoice: Invoice = {
-			applicationId: sId
+			applicationId: sId,
+			amount: 0,
+			apportionments: [],
+			comment: null,
+			conceptId: 0,
+			folio: "",
+			generalConcept: "",
+			uuid: ""
 		};
 		const response: InvoiceResponse = await getInvoiceByIdService(invoice);
 		if (response !== null) {
@@ -536,7 +537,7 @@ export default class Preapprove extends BaseController {
 		BusyIndicator.show(0);
 		const comment: Comment = {
 			commentId: 0,
-			comment: this.byId("comment").getValue()
+			comment: (this.byId("comment") as TextArea).getValue()
 		};
 
 		const invoice: InvoiceToApprove = {
@@ -547,7 +548,7 @@ export default class Preapprove extends BaseController {
 		if (invoiceResponse != null) {
 			await this.AppController.navTo_home();
 			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron prevalidados con exito.`, MessageStripType.SUCCESS);
-		}else{
+		} else {
 			await validatedErrorResponse(1000, null,
 				"Error en el servicio al enviar la factura.");
 		}
@@ -558,7 +559,7 @@ export default class Preapprove extends BaseController {
 		BusyIndicator.show(0);
 		const comment: Comment = {
 			commentId: 0,
-			comment: this.byId("comment").getValue()
+			comment: (this.byId("comment") as TextArea).getValue()
 		};
 
 		const invoice: InvoiceToApprove = {
@@ -566,12 +567,12 @@ export default class Preapprove extends BaseController {
 			comment
 		}
 		const invoiceResponse: InvoiceResponse = await cancelPreapproveInvoiceService(invoice);
-		
+
 		if (invoiceResponse != null) {
 			await this.AppController.navTo_home();
 			showMsgStrip(`Los datos de la factura ${invoice.applicationId} fueron rechazados con exito.`, MessageStripType.SUCCESS);
-			
-		}else{
+
+		} else {
 			await validatedErrorResponse(1000, null,
 				"Error en el servicio al enviar la factura.");
 		}

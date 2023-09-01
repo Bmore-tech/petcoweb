@@ -5,7 +5,7 @@ export interface Invoice {
 	amount:         number;
 	applicationId:  string;
 	apportionments: Apportionment[];
-	comment:        Comment[];
+	comment:        Comment;
 	conceptId:      number;
 	folio:          string;
 	generalConcept: string;

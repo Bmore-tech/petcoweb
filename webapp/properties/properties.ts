@@ -5,11 +5,11 @@ const VERSION_ENDPOINT : string = "-1.0.0"; // para prod es vacio
 export const SECURITY_ENDPOINT : string = `${URL_ENDPOINT}/MSV-PETCO-SECURITY${VERSION_ENDPOINT}/api/petco/security`;
 export const SOLICITUDES_ENDPOINT : string = `${URL_ENDPOINT}/MSV-PETCO-SOLICITUDES${VERSION_ENDPOINT}/api/petco/solicitudes`;
 
-export const SECURITY_SERVICES : object = {
+export const SECURITY_SERVICES: { [name: string]: string } = {
 	login: "/user/login"
 }
 
-export const SOLICITUD_SERVICES : object = {
+export const SOLICITUD_SERVICES: { [name: string]: string } = {
     dashboard: "/dashboard",
 	subsidiary : "/subsidiary",
 	concep: "/concept",

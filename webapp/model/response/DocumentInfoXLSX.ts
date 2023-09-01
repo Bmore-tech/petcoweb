@@ -1,5 +1,5 @@
 export interface DocumentInfoXLSX {
-	idSubsidiary: number;
+	subsidiaryId: number;
 	subsidiary:   string;
 	amount:       number;
 }

@@ -18,6 +18,15 @@ import {clearFieldsText, validatedFieldsText} from "com/bmore/portalproveedores/
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
 import Sorter from "sap/ui/model/Sorter";
+import Event from "sap/ui/base/Event";
+import Title from "sap/m/Title";
+import FormElement from "sap/ui/layout/form/FormElement";
+import Button from "sap/m/Button";
+import Table from "sap/m/Table";
+import Input from "sap/m/Input";
+import Dialog from "sap/m/Dialog";
+import SearchField from "sap/m/SearchField";
+import ListBinding from "sap/ui/model/ListBinding";
 
 /**
  * @namespace com.petco.portalproveedorespetco.controller
@@ -25,9 +34,9 @@ import Sorter from "sap/ui/model/Sorter";
 export default class Subsidiary extends BaseController {
 
 	private isDescendingSubsidiaries: boolean = false;
-
+	private AppController: any;
 	public async onAfterRendering(): Promise<void> {
-		this.AppController = sap.ui.getCore().byId('__component0---app').getController();
+		this.AppController = (sap.ui.getCore().byId('__component0---app') as View).getController();
 		await this.AppController.home_navbar();
 	}
 
@@ -38,7 +47,7 @@ export default class Subsidiary extends BaseController {
 		BusyIndicator.hide();
 	}
 
-	public async _onAddSubsidiary(oEvent): void {
+	public async _onAddSubsidiary(oEvent: Event): Promise<void> {
 
 		const fieldsClear: Array<string> = [
 			"idSubsidiary",
@@ -48,18 +57,18 @@ export default class Subsidiary extends BaseController {
 
 		await this.displayPopUp();
 
-		this.byId("titleSubsidiary").setText("Agregar Sucursal");
-		this.byId("formSectionId").setVisible(false);
-		this.byId("buttonSave").setVisible(true);
-		this.byId("buttonUpdate").setVisible(false);
+		(this.byId("titleSubsidiary") as Title).setText("Agregar Sucursal");
+		(this.byId("formSectionId") as FormElement).setVisible(false);
+		(this.byId("buttonSave") as Button).setVisible(true);
+		(this.byId("buttonUpdate") as Button).setVisible(false);
 
 		await clearFieldsText(fieldsClear, "__component0---Subsidiary--");
 	}
 
-	public async _onEditSubsidiary(oEvent): void {
+	public async _onEditSubsidiary(oEvent: Event): Promise<void> {
 
 		await closeMsgStrip();
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		const tableSubsidiaries: Table = this.byId("tableSubsidiaries") as Table;
 
 		if (tableSubsidiaries.getSelectedItem() == null) {
 			showMsgStrip("Debes seleccionar una sucursal para actualizar los datos.", MessageStripType.INFORMATION);
@@ -67,24 +76,24 @@ export default class Subsidiary extends BaseController {
 
 			await this.displayPopUp();
 
-			const item = tableSubsidiaries.getSelectedItem().getCells();
+			const item = (tableSubsidiaries.getSelectedItem() as any).getCells();
 
-			this.byId("titleSubsidiary").setText("Actualizar Sucursal");
-			this.byId("formSectionId").setVisible(true);
-			this.byId("buttonSave").setVisible(false);
-			this.byId("buttonUpdate").setVisible(true);
+			(this.byId("titleSubsidiary") as Title).setText("Actualizar Sucursal");
+			(this.byId("formSectionId") as FormElement).setVisible(true);
+			(this.byId("buttonSave") as Button).setVisible(false);
+			(this.byId("buttonUpdate") as Button).setVisible(true);
 
-			this.byId("idSubsidiary").setValue(item[0].getValue());
-			this.byId("subsidiary").setValue(item[1].getValue());
-			this.byId("costCenter").setValue(item[2].getValue());
+			(this.byId("idSubsidiary") as Input).setValue(item[0].getValue());
+			(this.byId("subsidiary") as Input).setValue(item[1].getValue());
+			(this.byId("costCenter") as Input).setValue(item[2].getValue());
 		}
 
 	}
 
-	public _onCloseSubsidiary(oEvent): void {
-		this.byId("addSubsidiary").close();
+	public _onCloseSubsidiary(oEvent: Event): void {
+		(this.byId("addSubsidiary") as Dialog).close();
 	}
-	public async _onSaveSubsidiary(oEvent): void {
+	public async _onSaveSubsidiary(oEvent: Event): Promise<void> {
 
 		const fieldsValidated: Array<string> = [
 			"subsidiary",
@@ -95,11 +104,11 @@ export default class Subsidiary extends BaseController {
 
 			BusyIndicator.show(0);
 
-			const subsidiaryRequest : Subsidiary = {
+			const subsidiaryRequest: SubsidiaryDto = {
 				id: null,
 				subsidiaryId: null,
-				subsidiary: this.byId("subsidiary").getValue(),
-				costCenter: this.byId("costCenter").getValue()
+				subsidiary: (this.byId("subsidiary") as Input).getValue(),
+				costCenter: Number.parseFloat((this.byId("costCenter") as Input).getValue())
 			};
 
 			if (await saveSubsidiary(subsidiaryRequest)) {
@@ -119,15 +128,15 @@ export default class Subsidiary extends BaseController {
 		}
 	}
 
-	public async _onUpdateSubsidiary(oEvent): void {
+	public async _onUpdateSubsidiary(oEvent: Event): Promise<void> {
 
 		BusyIndicator.show(0);
 
-		const subsidiaryRequest : Subsidiary = {
+		const subsidiaryRequest: SubsidiaryDto = {
 			id: null,
-			subsidiaryId: this.byId("idSubsidiary").getValue(),
-			subsidiary: this.byId("subsidiary").getValue(),
-			costCenter: this.byId("costCenter").getValue()
+			subsidiaryId: Number.parseInt((this.byId("idSubsidiary") as Input).getValue()),
+			subsidiary: (this.byId("subsidiary") as Input).getValue(),
+			costCenter: Number.parseFloat((this.byId("costCenter") as Input).getValue())
 		};
 
 		if (await updateSubsidiary(subsidiaryRequest)) {
@@ -138,24 +147,24 @@ export default class Subsidiary extends BaseController {
 
 		BusyIndicator.hide();
 	}
-	public async _onDeleteSubsidiary(oEvent): void {
+	public async _onDeleteSubsidiary(oEvent: Event): Promise<void> {
 
 		await closeMsgStrip();
-		const tableSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
+		const tableSubsidiaries: Table = this.byId("tableSubsidiaries") as Table;
 
 		if (tableSubsidiaries.getSelectedItem() == null) {
 			showMsgStrip("Debes seleccionar una sucursal para borrar los datos.", MessageStripType.INFORMATION);
 		} else {
 
-			const item = tableSubsidiaries.getSelectedItem().getCells();
+			const item = (tableSubsidiaries.getSelectedItem() as any).getCells();
 
-			const subsidiaryId : string = item[0].getValue();
-			const subsidiaryName : string = item[1].getValue();
+			const subsidiaryId: string = item[0].getValue();
+			const subsidiaryName: string = item[1].getValue();
 
 			MessageBox.alert(`¿Está seguro que desea eliminar la sucursal ${subsidiaryName}?`, {
 				actions: ["Aceptar", "Cancelar"],
 				emphasizedAction: "Aceptar",
-				onClose: async (sAction) => {
+				onClose: async (sAction: string) => {
 					if (sAction === "Aceptar") {
 						if (await deleteSubsidiary(subsidiaryId)) {
 							await this.loadSubsidiaries();
@@ -181,57 +190,57 @@ export default class Subsidiary extends BaseController {
 		const oView: View = this.getView();
 		if (!this.byId("addSubsidiary")) {
 
-			const oDialog: Control = await Fragment.load({
+			const oDialog: Dialog = await Fragment.load({
 				id: oView.getId(),
 				name: "com.bmore.portalproveedores.view.fragments.addSubsidiary",
 				controller: this
-			});
+			}) as Dialog;
 
 			oView.addDependent(oDialog);
 			oDialog.open();
 			oDialog.addStyleClass("sapUiSizeCompact");
 
 		} else {
-			this.byId("addSubsidiary").open();
-			this.byId("addSubsidiary").addStyleClass("sapUiSizeCompact");
+			(this.byId("addSubsidiary") as Dialog).open();
+			(this.byId("addSubsidiary") as Dialog).addStyleClass("sapUiSizeCompact");
 		}
 	}
 
 
-	public onSave(oEvent): void {
-		this.byId("editButton").setVisible(true);
-		this.byId("saveButton").setVisible(false);
-		this.byId("cancelButton").setVisible(false);
-		this.byId("AddSubsidiaryButton").setVisible(true);
-		this.byId("DeleteSubsidiary").setVisible(true);
+	public onSave(oEvent: Event): void {
+		(this.byId("editButton") as Button).setVisible(true);
+		(this.byId("saveButton") as Button).setVisible(false);
+		(this.byId("cancelButton") as Button).setVisible(false);
+		(this.byId("AddSubsidiaryButton") as Button).setVisible(true);
+		(this.byId("DeleteSubsidiary") as Button).setVisible(true);
 	}
-	public onCancel(oEvent): void {
-		this.byId("editButton").setVisible(true);
-		this.byId("saveButton").setVisible(false);
-		this.byId("cancelButton").setVisible(false);
-		this.byId("AddSubsidiaryButton").setVisible(true);
-		this.byId("DeleteSubsidiary").setVisible(true);
+	public onCancel(oEvent: Event): void {
+		(this.byId("editButton") as Button).setVisible(true);
+		(this.byId("saveButton") as Button).setVisible(false);
+		(this.byId("cancelButton") as Button).setVisible(false);
+		(this.byId("AddSubsidiaryButton") as Button).setVisible(true);
+		(this.byId("DeleteSubsidiary") as Button).setVisible(true);
 	}
 
-	public async onFilterSubsidiaries(): void {
+	public async onFilterSubsidiaries(): Promise<void> {
 
-		const searchSubsidiary: string = this.byId("searchSubsidiary").getValue();
+		const searchSubsidiary: string = (this.byId("searchSubsidiary") as SearchField).getValue();
 		const tableHelpSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
 		const filter: Filter = new Filter("subsidiary", FilterOperator.Contains, searchSubsidiary);
-		const binding: Binding = tableHelpSubsidiaries.getBinding("items");
+		const binding: ListBinding = tableHelpSubsidiaries.getBinding("items") as ListBinding;
 
 		binding.filter([filter]);
 	}
 
-	public async onSortSubsidiaries(): void {
+	public async onSortSubsidiaries(): Promise<void> {
 
 		this.isDescendingSubsidiaries = !this.isDescendingSubsidiaries;
 
-		const searchSubsidiary: string = this.byId("searchSubsidiary").getValue();
+		const searchSubsidiary: string = (this.byId("searchSubsidiary") as SearchField).getValue();
 		const tableHelpSubsidiaries: UI5Element = this.byId("tableSubsidiaries");
 		const filter: Filter = new Filter("subsidiary", FilterOperator.Contains, searchSubsidiary);
-		const binding = tableHelpSubsidiaries.getBinding("items");
-		let sorters: Array<string> = [];
+		const binding = tableHelpSubsidiaries.getBinding("items") as ListBinding;
+		let sorters: Sorter[] = [];
 
 		sorters.push(new Sorter("subsidiary", this.isDescendingSubsidiaries));
 		binding.filter([filter]).sort(sorters);

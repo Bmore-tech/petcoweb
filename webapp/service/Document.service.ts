@@ -11,7 +11,7 @@ export const getDocument = async (documentData: Document): Promise<Document> => 
     try {
 
         const jwt: string = await getJWT();
-        const documentDataResponse: Response = await fetch(
+        await fetch(
             `${SOLICITUDES_ENDPOINT}${SOLICITUD_SERVICES.getDocument}/${documentData.id}`,
             {
                 method: 'GET',

@@ -2,12 +2,13 @@ import UI5Element from "sap/ui/core/Element";
 import { ErrorResponse } from "com/bmore/portalproveedores/model/response/ErrorResponse";
 import { showMsgStrip } from "com/bmore/portalproveedores/component/MessageStrip.component";
 import { MessageStripType } from "com/bmore/portalproveedores/model/MessageStripType";
+import Input from "sap/m/Input";
 
 export const validatedFieldsText = async (fields: Array<string>, component: string): Promise<boolean> => {
 
 	const countValid: number = fields
 		.map((fieldId: string): number => {
-			const field: string = sap.ui.getCore().byId(`${component}${fieldId}`).getValue();
+			const field: string = (sap.ui.getCore().byId(`${component}${fieldId}`) as Input).getValue();
 			return field.length;
 		})
 		.filter((longitud: number): boolean => longitud === 0)
@@ -19,7 +20,7 @@ export const validatedFieldsText = async (fields: Array<string>, component: stri
 export const clearFieldsText = async (fields: Array<string>, component: string): Promise<void> => {
 
 	fields.forEach((fieldId: string): void => {
-		const field: UI5Element = sap.ui.getCore().byId(`${component}${fieldId}`);
+		const field: Input = sap.ui.getCore().byId(`${component}${fieldId}`) as Input;
 		field.setValue("");
 	});
 }

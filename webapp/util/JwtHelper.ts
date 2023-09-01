@@ -3,11 +3,12 @@ import UI5Element from "sap/ui/core/Element";
 import Controller from "sap/ui/core/mvc/Controller";
 import { Roles } from "com/bmore/portalproveedores/model/Roles";
 import MessageBox from "sap/m/MessageBox";
-import Log from "sap/base/Log";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import Model from "sap/ui/model/Model";
+import View from "sap/ui/core/mvc/View";
+import NavigationListItem from "sap/tnt/NavigationListItem";
+import SideNavigation from "sap/tnt/SideNavigation";
 
-export const decodeJWT = async (token: string): void => {
+export const decodeJWT = async (token: string): Promise<void> => {
 
 	const parts: Array<string> = token.split(".");
 	if (parts.length !== 3) {
@@ -26,17 +27,17 @@ export const decodeJWT = async (token: string): void => {
 
 }
 
-export const getJWT = async (): string => {
+export const getJWT = async (): Promise<string> => {
 
 	await validatedSession();
-	const token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
+	const token: string = (sap.ui.getCore().getModel("sessionData") as any)?.oData.jwt;
 
 	return token;
 }
 
-const validatedSession = async (): void => {
+const validatedSession = async (): Promise<void> => {
 
-	let token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
+	let token: string = (sap.ui.getCore().getModel("sessionData") as any)?.oData.jwt;
 	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
 
 	if (token === undefined) {
@@ -47,7 +48,7 @@ const validatedSession = async (): void => {
 
 		await decodeJWT(token);
 
-		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.oData.payload;
+		const payload: JwtData = (sap.ui.getCore().getModel("sessionData") as any)?.oData.payload;
 
 		const dateExpiration: number = new Date(Number(`${payload.exp}000`)).getTime();
 
@@ -58,15 +59,15 @@ const validatedSession = async (): void => {
 	}
 }
 
-export const messageCloseSession = async (message: string): void => {
+export const messageCloseSession = async (message: string): Promise<void> => {
 
-	const appController: Controller = sap.ui.getCore()
-		.byId('__component0---app').getController();
+	const appController: any = (sap.ui.getCore()
+		.byId('__component0---app') as View).getController();
 
 	MessageBox.information(message, {
 		actions: ["Aceptar"],
 		emphasizedAction: "Aceptar",
-		onClose: async (sAction) => {
+		onClose: async (sAction:string) => {
 			if (sAction == null || sAction === "Aceptar") {
 				appController._closeSession();
 			}
@@ -74,35 +75,34 @@ export const messageCloseSession = async (message: string): void => {
 	});
 }
 
-export const validatedRoles = async (): void => {
+export const validatedRoles = async (): Promise<void> => {
 
-	let token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
+	let token: string = (sap.ui.getCore().getModel("sessionData") as any)?.oData.jwt;
 	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
 
 	if (token !== undefined) {
 
 		await decodeJWT(token);
-		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.oData.payload;
+		const payload: JwtData = (sap.ui.getCore().getModel("sessionData") as any)?.oData.payload;
 
-		const roleUser: string = Object.values(payload.roles)
-			.find((role: string): boolean => Roles[role] != Roles.EXECUTE_APPLICATION);
-
+		const roleUser: Roles = Object.values(payload.roles)
+			.find((role: Roles): boolean => role.toString() != Roles[1].toString());		
 		await validatedMenu(roleUser);
 	}
 }
 
-export const validatedRoleProvider = async (): boolean => {
+export const validatedRoleProvider = async (): Promise<boolean> => {
 
-	let token: string = sap.ui.getCore().getModel("sessionData")?.oData.jwt;
+	let token: string = (sap.ui.getCore().getModel("sessionData") as any)?.oData.jwt;
 	token ??= JSON.parse(localStorage.getItem("sessionData"))?.jwt;
 
 	if (token !== undefined) {
 
 		await decodeJWT(token);
-		const payload: JwtData = sap.ui.getCore().getModel("sessionData")?.oData.payload;
+		const payload: JwtData = (sap.ui.getCore().getModel("sessionData") as any)?.oData.payload;
 
 		const roleUser: boolean =
-			payload.roles.find((role: string): boolean => ((Roles[role] === Roles.PROVIDER_ROLE) || (Roles[role] === Roles.ADMINGROUP)))
+			payload.roles.find((role: Roles): boolean => ((role.toString() === Roles[2].toString()) || (role.toString() === Roles[0].toString())))
 				=== undefined ? false : true;
 		// .find( );
 		return roleUser;
@@ -110,13 +110,13 @@ export const validatedRoleProvider = async (): boolean => {
 
 	} else return false;
 }
-export const validatedMenu = async (roleUser: Roles): void => {
+export const validatedMenu = async (roleUser: Roles): Promise<void> => {
 
 	// Se oculta catalogos
-	const itemCatalogs: UI5Element = await findMenu("Catálogos");
-	const itemDraft: UI5Element = await findMenu("CFDI");
-	const itemAprobadores: UI5Element = await findMenu("Aprobadores");
-	const itemPrevalidadores: UI5Element = await findMenu("Prevalidadores");
+	const itemCatalogs: NavigationListItem = await findMenu("Catálogos");
+	const itemDraft: NavigationListItem = await findMenu("CFDI");
+	const itemAprobadores: NavigationListItem = await findMenu("Aprobadores");
+	const itemPrevalidadores: NavigationListItem = await findMenu("Prevalidadores");
 
 	itemDraft.setVisible(false);
 	itemDraft.getItems()[2].setVisible(false);
@@ -124,34 +124,34 @@ export const validatedMenu = async (roleUser: Roles): void => {
 	itemAprobadores.setVisible(false);
 	itemPrevalidadores.setVisible(false);
 
-	switch (Roles[roleUser]) {
-		case Roles.ADMINGROUP:
+	switch (roleUser.toString()) {
+		case Roles[0].toString():
 			itemCatalogs.setVisible(true);
 			itemDraft.setVisible(true);
 			itemDraft.getItems()[2].setVisible(true);
 			itemAprobadores.setVisible(true);
 			break;
-		case Roles.PROVIDER_ROLE:
+		case Roles[2].toString():
 			itemDraft.setVisible(true);
 			itemDraft.getItems()[2].setVisible(true);
 			break;
-		case Roles.PREVALIDATOR_ROLE:
+		case Roles[4].toString():
 			itemPrevalidadores.setVisible(true);
 			break;
-		case Roles.APPROVER_ROLE:
+		case Roles[3].toString():
 			itemAprobadores.setVisible(true);
 			break;
 	}
 
 }
 
-export const findMenu = async (itemFind: Roles): UI5Element => {
+export const findMenu = async (itemFind: string): Promise<NavigationListItem> => {
 
-	const menu: UI5Element = sap.ui.getCore().byId('__component0---app--navbar');
-	const itemsMenu: Array<UI5Element> = menu.getItem().getItems();
+	const menu: SideNavigation = sap.ui.getCore().byId('__component0---app--navbar') as SideNavigation;
+	const itemsMenu: Array<NavigationListItem> = menu.getItem().getItems();
 
-	const responseItem: UI5Element = itemsMenu
-		.find((menuitem: UI5Element): boolean => menuitem.mProperties.text == itemFind);
+	const responseItem: NavigationListItem = itemsMenu
+		.find((menuitem): boolean => (menuitem as any).mProperties.text == itemFind);
 
 	return responseItem;
 }

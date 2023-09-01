@@ -44,7 +44,7 @@ export const signIn = async (userRequest : SignInRequest): Promise<boolean> => {
 			if (loginDataResponse.status == 404) {
 				await showMsgStrip("El usuario no existe.", MessageStripType.ERROR);
 			} else if (loginDataResponse.status == 409) {
-				await showMsgStrip(loginDataResponseError.mensaje, MessageStripType.ERROR);
+				await showMsgStrip(loginDataResponseError.message, MessageStripType.ERROR);
 			} else {
 				await showMsgStrip("Error interno, no se puede iniciar sesión.", MessageStripType.ERROR);
 			}

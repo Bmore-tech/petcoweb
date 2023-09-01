@@ -35,7 +35,7 @@ export const saveDrafInvoiceService = async (invoice: Invoice, filesData: Array<
 
 		if (invoiceDataResponse.status == 200 || invoiceDataResponse.status == 201) {
 			response = await invoiceDataResponse.json();
-			
+
 		}
 
 	} catch (e) {
@@ -155,9 +155,9 @@ export const getInfoXmlService = async (file: File)
 	return response;
 }
 export const getInfoProrrateoXlsxService = async (file: File)
-	: Promise<DocumentInfoXLSX> => {
+	: Promise<DocumentInfoXLSX[]> => {
 
-	let response: DocumentInfoXLSX = null;
+	let response: DocumentInfoXLSX[] = null;
 
 	try {
 
@@ -197,7 +197,6 @@ export const preapproveInvoiceService = async (invoice: InvoiceToApprove)
 	: Promise<InvoiceResponse> => {
 
 	let response: InvoiceResponse = null;
-
 	try {
 
 		const jwt: string = await getJWT();
@@ -212,7 +211,13 @@ export const preapproveInvoiceService = async (invoice: InvoiceToApprove)
 				}
 			}
 		).then((data) => {
-			response = {status: data.status};
+			response = {
+				status: data.status.toString(), amount: 0,
+				applicationId: 0,apportionments: null,
+				comments: null,concept: "",
+				conceptId: 0,documents: null,folio: "",
+				generalConcept: ""
+			};
 		})
 
 	} catch (e) {
@@ -242,8 +247,14 @@ export const cancelPreapproveInvoiceService = async (invoice: InvoiceToApprove)
 					'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS'
 				}
 			}
-		).then( data => {
-			response = {status: data.status};
+		).then(data => {
+			response = {
+				status: data.status.toString(), amount: 0,
+				applicationId: 0, apportionments: null,
+				comments: null, concept: "",
+				conceptId: 0, documents: null, folio: "",
+				generalConcept: ""
+			};
 		})
 	} catch (e) {
 		showMsgStrip("Error no se puede enviar la información de la factura.", MessageStripType.ERROR);
@@ -270,7 +281,13 @@ export const approveInvoiceService = async (invoice: InvoiceToApprove)
 				}
 			}
 		).then(data => {
-			response = {status: data.status};
+			response = {
+				status: data.status.toString(), amount: 0,
+				applicationId: 0, apportionments: null,
+				comments: null, concept: "",
+				conceptId: 0, documents: null, folio: "",
+				generalConcept: ""
+			};
 		})
 
 	} catch (e) {
@@ -299,7 +316,13 @@ export const cancelApproveInvoiceService = async (invoice: InvoiceToApprove)
 				}
 			}
 		).then(data => {
-			response = {status: data.status};
+			response = {
+				status: data.status.toString(), amount: 0,
+				applicationId: 0, apportionments: null,
+				comments: null, concept: "",
+				conceptId: 0, documents: null, folio: "",
+				generalConcept: ""
+			};
 		})
 
 	} catch (e) {
